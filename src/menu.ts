@@ -1044,3 +1044,162 @@ export const productsExampleMenu = {
 	companyC: { id: 'companyC', text: 'Company C', path: '/', subMenu: null },
 	companyD: { id: 'companyD', text: 'Company D', path: '/', subMenu: null },
 };
+
+export const MainMenu = {
+	mainmenu: {
+		id: 'main-menu',
+		text: 'Main Menu',
+	},
+};
+export const LmsDashboard = {
+	dashboard: {
+		id: 'dashboard',
+		text: 'Dashboard',
+		path: '/',
+		icon: 'Dashboard',
+		subMenu: null,
+	},
+};
+export const LmsUserManu = {
+	useraccount: {
+		id: 'user-account',
+		text: 'User Account',
+		path: 'user-account',
+		icon: 'account_circle',
+		notification: true,
+		subMenu: null,
+	},
+	userprofile: {
+		id: 'user-profile',
+		text: 'User Profile',
+		path: 'user-profile',
+		icon: 'person_outline',
+		subMenu: null,
+	},
+	changepassword: {
+		id: 'change-password',
+		text: 'Change Password',
+		path: 'change-password',
+		icon: 'RecentActors',
+	},
+	devicemanagement: {
+		id: 'device-management',
+		text: 'Device Management',
+		path: 'device-management',
+		icon: 'sticky_note_2',
+		subMenu: null,
+	},
+	emailverification: {
+		id: 'email-verification',
+		text: 'Email Verification',
+		path: 'email-verification',
+		icon: 'sticky_note_2',
+		subMenu: null,
+	},
+	smsverification: {
+		id: 'sms-verification',
+		text: 'Sms Verification',
+		path: 'sms-verification',
+		icon: 'sticky_note_2',
+		subMenu: null,
+	},
+	profilevisibilty: {
+		id: 'profile-visibilty',
+		text: 'Profile Visibilty',
+		path: 'profile-visibilty',
+		icon: 'sticky_note_2',
+		subMenu: null,
+	},
+	socialauthentication: {
+		id: 'social-authentication',
+		text: 'Social Authentication',
+		path: 'social-authentication',
+		icon: 'sticky_note_2',
+		subMenu: null,
+	},
+	subscriptionmanagement: {
+		id: 'subscription-management',
+		text: 'Subscription Management',
+		path: 'subscription-management',
+		icon: 'sticky_note_2',
+		subMenu: null,
+	},
+};
+
+export const LmsFeatures = {
+	features: {
+		id: 'features',
+		text: 'Features',
+		icon: 'Extension',
+	},
+	mycourses: {
+		id: 'my-courses',
+		text: 'My Courses',
+		path: 'my-courses',
+		icon: 'AutoStories',
+		subMenu: null,
+	},
+	livecourses: {
+		id: 'live-courses',
+		text: 'Live Courses',
+		path: 'live-courses',
+		icon: 'AutoStories',
+		subMenu: null,
+	},
+	mcqbank: {
+		id: 'mcq-bank',
+		text: 'MCQ Bank',
+		path: 'mcq-bank',
+		icon: 'AutoStories',
+		subMenu: null,
+	},
+	studyplanner: {
+		id: 'study-planner',
+		text: 'Study Planner',
+		path: 'study-planner',
+		icon: 'AutoStories',
+		subMenu: null,
+	},
+	studyassistant: {
+		id: 'study-assistant',
+		text: 'Study Assistant',
+		path: 'study-assistant',
+		icon: 'AutoStories',
+		subMenu: null,
+	},
+	messaging: {
+		id: 'messaging',
+		text: 'Messaging',
+		path: 'messaging',
+		icon: 'AutoStories',
+		subMenu: null,
+	},
+	knowledgebase: {
+		id: 'knowledge-base',
+		text: 'Knowledge Base',
+		path: 'knowledge-base',
+		icon: 'AutoStories',
+		subMenu: null,
+	},
+	supportcenter: {
+		id: 'support-center',
+		text: 'Support Center',
+		path: 'support-center',
+		icon: 'AutoStories',
+		subMenu: null,
+	},
+	myfavourites: {
+		id: 'my-favourites',
+		text: 'My Favourites',
+		path: 'my-favourites',
+		icon: 'AutoStories',
+		subMenu: null,
+	},
+	myfiles: {
+		id: 'my-files',
+		text: 'My Files',
+		path: 'my-files',
+		icon: 'AutoStories',
+		subMenu: null,
+	},
+};

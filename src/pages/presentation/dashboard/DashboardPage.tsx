@@ -26,6 +26,7 @@ import CommonDashboardWaitingAnswer from './common/CommonDashboardWaitingAnswer'
 import CommonMyWallet from '../../_common/CommonMyWallet';
 import CommonDashboardTopSeller from './common/CommonDashboardTopSeller';
 import ThemeContext from '../../../contexts/themeContext';
+import CommonDashboardBookingLists from '../../_common/BookingComponents/CommonDashboardBookingLists';
 
 const DashboardPage = () => {
 	const { mobileDesign } = useContext(ThemeContext);
@@ -73,8 +74,12 @@ const DashboardPage = () => {
 			</SubHeader>
 			<Page container='fluid'>
 				<div className='row'>
+					
 					<div className='col-12'>
 						<CommonDashboardAlert />
+					</div>
+					<div className='col-12'>
+						<CommonDashboardBookingLists />
 					</div>
 
 					<div className='col-xl-4'>

@@ -39,11 +39,14 @@ const User = () => {
 					/>
 				</div>
 				<div className='user-info'>
-					<div className='user-name d-flex align-items-center'>
+					<div className='user-name d-flex align-items-center d-flex justify-content-between'>
 						{`${userData?.name} ${userData?.surname}`}
-						<Icon icon='Verified' className='ms-1' color='info' />
+						{/* <Icon icon='Verified' className='ms-1' color='info' /> */}
+						<p style={{ fontSize: '10px' }} className='bg-info px-1 rounded-1'>
+							234
+						</p>
 					</div>
-					<div className='user-sub-title'>{userData?.position}</div>
+					<div className='user-sub-title'>{userData?.email}</div>
 				</div>
 			</div>
 			<DropdownMenu>

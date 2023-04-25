@@ -115,6 +115,7 @@ const CommonHeaderRight: FC<ICommonHeaderRightProps> = ({ beforeChildren, afterC
 							// eslint-disable-next-line react/jsx-props-no-spreading
 							{...styledBtn}
 							icon={fullScreenStatus ? 'FullscreenExit' : 'Fullscreen'}
+							data-tour='Fullscreen'
 							onClick={() => setFullScreenStatus(!fullScreenStatus)}
 							aria-label='Toggle dark mode'
 						/>

@@ -134,6 +134,25 @@ const LangSwitcherTour = () => {
 		</div>
 	);
 };
+const Fullscreen = () => {
+	const classes = useStyles();
+	return (
+		<div className='row'>
+			<div className='col-md-4'>
+				<img src={Susy2} className={classes.image} width='100%' alt='' />
+			</div>
+			<div className='col-md-8 d-flex align-items-center'>
+				<div>
+					<p className='lead'>Fullscreen</p>
+					<p>
+						Use full screen for see clear view and wasy use.
+					</p>
+				</div>
+			</div>
+			<TourNavigation />
+		</div>
+	);
+};
 
 const SearchTour = () => {
 	const classes = useStyles();
@@ -649,6 +668,13 @@ const steps = [
 		highlightedSelectors: [getTargetName('lang-selector-menu')],
 		mutationObservables: [getTargetName('lang-selector-menu')],
 		resizeObservables: [getTargetName('lang-selector-menu')],
+	},
+	{
+		selector: getTargetName('Fullscreen'),
+		content: () => <Fullscreen />,
+		highlightedSelectors: [getTargetName('Fullscreen')],
+		mutationObservables: [getTargetName('Fullscreen')],
+		resizeObservables: [getTargetName('Fullscreen')],
 	},
 	/**
 	 * Search

@@ -10,7 +10,12 @@ import {
 	demoPagesMenu,
 	gettingStartedPagesMenu,
 	pageLayoutTypesPagesMenu,
+	LmsDashboard,
+	LmsFeatures,
+	LmsUserManu,
+	MainMenu,
 } from '../../../menu';
+
 import ThemeContext from '../../../contexts/themeContext';
 import Card, { CardBody } from '../../../components/bootstrap/Card';
 import Hand from '../../../assets/img/hand.png';
@@ -19,6 +24,7 @@ import Icon from '../../../components/icon/Icon';
 import Button from '../../../components/bootstrap/Button';
 import useDarkMode from '../../../hooks/useDarkMode';
 import Aside, { AsideBody, AsideFoot, AsideHead } from '../../../layout/Aside/Aside';
+import { Link } from 'react-router-dom';
 
 const DefaultAside = () => {
 	const { asideStatus, setAsideStatus } = useContext(ThemeContext);
@@ -30,7 +36,7 @@ const DefaultAside = () => {
 	const { t } = useTranslation(['translation', 'menu']);
 
 	const { darkModeStatus } = useDarkMode();
-
+	const [mainmenu, setmainmenu] = useState(true);
 	return (
 		<Aside>
 			<AsideHead>
@@ -39,6 +45,18 @@ const DefaultAside = () => {
 			<AsideBody>
 				{!doc && (
 					<>
+						{/* {asideStatus && (
+							<h2 className='mx-4 mt-3 mb-2 text-bolder' id='main-menu'>
+								MAIN MENU
+							</h2>
+						)} */}
+						<Navigation menu={MainMenu} id='aside-dashboard' />
+						<Navigation menu={LmsDashboard} id='aside-dashboard' />
+						<NavigationLine />
+						<Navigation menu={LmsUserManu} id='aside-dashboard' />
+						{/* <NavigationLine />
+						<Navigation menu={LmsFeatures} id='aside-dashboard' /> */}
+
 						<Navigation menu={dashboardPagesMenu} id='aside-dashboard' />
 						<NavigationLine />
 						<Navigation menu={demoPagesMenu} id='aside-demo-pages' />

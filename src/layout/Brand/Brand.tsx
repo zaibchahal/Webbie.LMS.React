@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Icon from '../../components/icon/Icon';
 import Logo from '../../components/Logo';
+import WebbieLogo from '../../components/WebbieLogo';
+// import WebbieLogo from '../../assets/webbie/Webbie';
 
 interface IBrandProps {
 	asideStatus: boolean;
@@ -13,8 +15,13 @@ const Brand: FC<IBrandProps> = ({ asideStatus, setAsideStatus }) => {
 		<div className='brand'>
 			<div className='brand-logo'>
 				<h1 className='brand-title '>
-					<Link to='/' aria-label='Logo'>
-						<Logo height={32} />
+					<Link to='/' aria-label='Logo' style={{marginLeft:"10px"}}>
+						<WebbieLogo height={30} />
+						{/* <img
+							src={WebbieLogo}
+							alt='Webbie'
+							style={{ width: '110px', height: '80px' }}
+						/> */}
 					</Link>
 				</h1>
 			</div>

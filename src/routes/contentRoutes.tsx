@@ -2,10 +2,13 @@ import React, { lazy } from 'react';
 import { RouteProps } from 'react-router-dom';
 import {
 	componentPagesMenu,
-	dashboardPagesMenu,
+	dashboardPagesMenu, 
 	demoPagesMenu,
 	gettingStartedPagesMenu,
 	pageLayoutTypesPagesMenu,
+	LmsDashboard,
+	LmsFeatures,
+	LmsUserManu
 } from '../menu';
 import Login from '../pages/presentation/auth/Login';
 
@@ -189,7 +192,21 @@ const EXTRA = {
 	HOOKS: lazy(() => import('../pages/documentation/extras/HooksPage')),
 };
 
+const Lms ={
+//added by me
+LmsUserProfile: lazy(() => import('../LmsLayout/LmsUserProfile')),
+}
+
 const presentation: RouteProps[] = [
+	
+	/**
+	 * Lms Project
+	 */
+	{
+		path:LmsUserManu.userprofile.path,
+		element: <Lms.LmsUserProfile />
+	},
+	
 	/**
 	 * Landing
 	 */
@@ -251,6 +268,7 @@ const presentation: RouteProps[] = [
 	/**
 	 * Edit
 	 */
+
 	{
 		path: demoPagesMenu.editPages.subMenu.editModern.path,
 		element: <EDIT.MODERN />,
