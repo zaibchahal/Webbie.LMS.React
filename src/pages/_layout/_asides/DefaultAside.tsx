@@ -54,14 +54,14 @@ const DefaultAside = () => {
 						<Navigation menu={LmsDashboard} id='aside-dashboard' />
 						<NavigationLine />
 						<Navigation menu={LmsUserManu} id='aside-dashboard' />
-						{/* <NavigationLine />
-						<Navigation menu={LmsFeatures} id='aside-dashboard' /> */}
+						<NavigationLine />
+						<Navigation menu={LmsFeatures} id='aside-dashboard' />
 
-						<Navigation menu={dashboardPagesMenu} id='aside-dashboard' />
+						{/* <Navigation menu={dashboardPagesMenu} id='aside-dashboard' />
 						<NavigationLine />
 						<Navigation menu={demoPagesMenu} id='aside-demo-pages' />
 						<NavigationLine />
-						<Navigation menu={pageLayoutTypesPagesMenu} id='aside-menu' />
+						<Navigation menu={pageLayoutTypesPagesMenu} id='aside-menu' /> */}
 					</>
 				)}
 
