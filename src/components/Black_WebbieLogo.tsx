@@ -5,7 +5,7 @@ interface ILogoProps {
 	width?: number;
 	height?: number;
 }
-const White_WebbieLogo: FC<ILogoProps> = ({ width, height }) => {
+const whiteWebbieLogo: FC<ILogoProps> = ({ width, height }) => {
 	return (
 		<svg
 			xmlns='http://www.w3.org/2000/svg'
@@ -188,13 +188,13 @@ const White_WebbieLogo: FC<ILogoProps> = ({ width, height }) => {
 		</svg>
 	);
 };
-White_WebbieLogo.propTypes = {
+whiteWebbieLogo.propTypes = {
 	width: PropTypes.number,
 	height: PropTypes.number,
 };
-White_WebbieLogo.defaultProps = {
+whiteWebbieLogo.defaultProps = {
 	width: 21,
 	height: 85,
 };
 
-export default White_WebbieLogo;
+export default whiteWebbieLogo;
