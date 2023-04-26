@@ -81,7 +81,7 @@ const OnlyListChatPage = () => {
 					<span>
 						<Icon icon='Info' className='me-2' size='2x' color='danger' />
 						<span className='text-muted'>
-							You have <Icon icon='Chat5' color='danger' className='mx-1' size='lg' />{' '}
+							You have <Icon icon='Chat5' color='danger' className='mx-1' size='lg' />
 							14 unread messages.
 						</span>
 					</span>

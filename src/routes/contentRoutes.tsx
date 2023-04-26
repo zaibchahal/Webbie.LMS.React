@@ -2,13 +2,13 @@ import React, { lazy } from 'react';
 import { RouteProps } from 'react-router-dom';
 import {
 	componentPagesMenu,
-	dashboardPagesMenu, 
+	dashboardPagesMenu,
 	demoPagesMenu,
 	gettingStartedPagesMenu,
 	pageLayoutTypesPagesMenu,
 	LmsDashboard,
 	LmsFeatures,
-	LmsUserManu
+	LmsUserManu,
 } from '../menu';
 import Login from '../pages/presentation/auth/Login';
 
@@ -192,21 +192,52 @@ const EXTRA = {
 	HOOKS: lazy(() => import('../pages/documentation/extras/HooksPage')),
 };
 
-const Lms ={
-//added by me
-LmsUserProfile: lazy(() => import('../LmsLayout/LmsUserProfile')),
-}
+const Lms = {
+	//added by me
+	LmsUserProfile: lazy(() => import('../LmsLayout/LmsUserProfile')),
+};
 
 const presentation: RouteProps[] = [
-	
 	/**
 	 * Lms Project
 	 */
 	{
-		path:LmsUserManu.userprofile.path,
-		element: <Lms.LmsUserProfile />
+		path: LmsUserManu.userprofile.path,
+		element: <Lms.LmsUserProfile />,
 	},
-	
+	{
+		path: LmsUserManu.changepassword.path,
+		element: <Lms.LmsUserProfile />,
+	},
+	{
+		path: LmsUserManu.emailverification.path,
+		element: <Lms.LmsUserProfile />,
+	},
+	{
+		path: LmsUserManu.profilevisibilty.path,
+		element: <Lms.LmsUserProfile />,
+	},
+	{
+		path: LmsUserManu.smsverification.path,
+		element: <Lms.LmsUserProfile />,
+	},
+	{
+		path: LmsUserManu.devicemanagement.path,
+		element: <Lms.LmsUserProfile />,
+	},
+	{
+		path: LmsUserManu.socialauthentication.path,
+		element: <Lms.LmsUserProfile />,
+	},
+	{
+		path: LmsUserManu.subscriptionmanagement.path,
+		element: <Lms.LmsUserProfile />,
+	},
+	{
+		path: LmsUserManu.useraccount.path,
+		element: <Lms.LmsUserProfile />,
+	},
+
 	/**
 	 * Landing
 	 */

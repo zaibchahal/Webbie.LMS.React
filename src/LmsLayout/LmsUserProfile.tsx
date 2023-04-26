@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import dayjs, { Dayjs } from 'dayjs';
 import PageWrapper from '../layout/PageWrapper/PageWrapper';
@@ -34,11 +34,24 @@ import FormGroup from '../components/bootstrap/forms/FormGroup';
 import Input from '../components/bootstrap/forms/Input';
 import Breadcrumb from '../components/bootstrap/Breadcrumb';
 import Avatar from '../components/Avatar';
-import USERS from '../common/data/userDummyData';
+import USERS, { getUserDataWithId } from '../common/data/userDummyData';
 import CommonDesc from '../common/other/CommonDesc';
 import Label from '../components/bootstrap/forms/Label';
 import Checks, { ChecksGroup } from '../components/bootstrap/forms/Checks';
 import Alert from '../components/bootstrap/Alert';
+import Modal, {
+	ModalHeader,
+	ModalTitle,
+	ModalBody,
+	ModalFooter,
+} from '../components/bootstrap/Modal';
+import Logo from '../components/Logo';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useTour } from '@reactour/tour';
+import Img from '../assets/img/wanna/susy/susy9.png';
+import VerifyEmail from '../common/LMS_Common/VerifyEmail';
+import Verifynumber from '../common/LMS_Common/VerifyNumber';
+import ChatStatusBar from '../pages/_common/StatusBar';
 
 const LmsUserProfile = () => {
 	const { themeStatus } = useDarkMode();
@@ -59,12 +72,15 @@ const LmsUserProfile = () => {
 			"The user's account details have been successfully updated.",
 		);
 	};
+	// const { id } = useParams();
+	// const data = getUserDataWithId(id);
 
 	const formik = useFormik({
 		initialValues: {
 			firstName: 'John',
 			lastName: 'Doe',
 			displayName: 'johndoe',
+			address: 'New Yark',
 			emailAddress: 'johndoe@site.com',
 			phone: '',
 			currentPassword: '',
@@ -82,8 +98,21 @@ const LmsUserProfile = () => {
 	});
 
 	const [passwordChangeCTA, setPasswordChangeCTA] = useState<boolean>(false);
-	const [EmailVerification, setEmailVerification] = useState<boolean>(false);
-	
+
+	const navigate = useNavigate();
+	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+
+	useEffect(() => {
+		const timeout = setTimeout(() => setIsOpenModal(true), 3000);
+		return () => {
+			setIsOpenModal(false);
+			clearTimeout(timeout);
+		};
+	}, []);
+	const { setIsOpen } = useTour();
+
+	// const { id } = useParams();
+	const data = getUserDataWithId('1');
 
 	return (
 		<PageWrapper title={demoPagesMenu.editPages.subMenu.editModern.text}>
@@ -118,7 +147,7 @@ const LmsUserProfile = () => {
 						<Card>
 							<CardHeader>
 								<CardLabel icon='Person' iconColor='success'>
-									<CardTitle>account_circle</CardTitle>
+									<CardTitle>Profile Picture</CardTitle>
 									<CardSubTitle>Upload your profile picture</CardSubTitle>
 								</CardLabel>
 							</CardHeader>
@@ -193,7 +222,7 @@ const LmsUserProfile = () => {
 											/>
 										</FormGroup>
 									</div>
-									<div className='col-12'>
+									<div className='col-6'>
 										<FormGroup
 											id='displayName'
 											label='Display Name'
@@ -208,6 +237,25 @@ const LmsUserProfile = () => {
 												isValid={formik.isValid}
 												isTouched={formik.touched.displayName}
 												invalidFeedback={formik.errors.displayName}
+												validFeedback='Looks good!'
+											/>
+										</FormGroup>
+									</div>
+									<div className='col-6'>
+										<FormGroup
+											id='address'
+											label='Address'
+											isFloating
+											formText='This will be how your name will be displayed in the account section and in reviews'>
+											<Input
+												placeholder='Address'
+												autoComplete='username'
+												onChange={formik.handleChange}
+												onBlur={formik.handleBlur}
+												value={formik.values.address}
+												isValid={formik.isValid}
+												isTouched={formik.touched.address}
+												invalidFeedback={formik.errors.address}
 												validFeedback='Looks good!'
 											/>
 										</FormGroup>
@@ -242,20 +290,20 @@ const LmsUserProfile = () => {
 												validFeedback='Looks good!'
 											/>
 										</FormGroup>
-										<div className='d-flex justify-content-between align-items-center'>
-											<p className='pt-2'>verify your Email Address</p>
+										{/* <div className='d-flex justify-content-between align-items-center'>
+											<p className='pt-2 mx-3'>Verify Your Email Address</p>
 
 											<CardActions>
 												<Button
 													color='brand'
 													isLight
 													icon='PublishedWithChanges'
-													onClick={() => setEmailVerification(true)}
-												>
+													onClick={() => setEmailVerification(true)}>
 													Verify
 												</Button>
 											</CardActions>
-										</div>
+										</div> */}
+										<VerifyEmail />
 									</div>
 									{/* {EmailVerification && 
 									
@@ -275,6 +323,7 @@ const LmsUserProfile = () => {
 												validFeedback='Looks good!'
 											/>
 										</FormGroup>
+										<Verifynumber />
 									</div>
 								</div>
 							</CardBody>
@@ -363,7 +412,7 @@ const LmsUserProfile = () => {
 												/>
 											</FormGroup>
 										</div>
-									</div>{' '}
+									</div>
 								</CardBody>
 							)}
 							<CardFooter>
@@ -373,9 +422,82 @@ const LmsUserProfile = () => {
 								</CommonDesc>
 							</CardFooter>
 						</Card>
+						<Card>
+							<CardHeader>
+								<CardLabel icon='Person' iconColor='success'>
+									<CardTitle>Profile Visibility</CardTitle>
+									<CardSubTitle>
+										Change Your Profile's public appearance
+									</CardSubTitle>
+								</CardLabel>
+							</CardHeader>
+							<CardBody>
+								<ChatStatusBar />
+								<div className='row g-4 d-flex justify-content-end'>
+									<Button
+										color='primary'
+										isLight
+										icon='PublishedWithChanges'
+										className='px-5'
+										style={{ maxWidth: 'max-content' }}
+										// onClick={() => setPasswordChangeCTA(true)}
+									>
+										Visibility
+									</Button>
+								</div>
+							</CardBody>
+						</Card>
+						<Card>
+							<CardHeader>
+								<CardLabel icon='Person' iconColor='success'>
+									<CardTitle>Social Authentication</CardTitle>
+									<CardSubTitle>
+										Menage your social login authentication
+									</CardSubTitle>
+								</CardLabel>
+							</CardHeader>
+							<CardBody>
+								<ChatStatusBar />
+								<div className='row g-4'>
+									<Button
+										color='primary'
+										isLight
+										icon='PublishedWithChanges'
+										// className='px-3'
+										// onClick={() => setPasswordChangeCTA(true)}
+									>
+										Authentication
+									</Button>
+								</div>
+							</CardBody>
+						</Card>
+						<Card>
+							<CardHeader>
+								<CardLabel icon='Person' iconColor='success'>
+									<CardTitle>Subscription Management</CardTitle>
+									<CardSubTitle>
+										Check your Package details and also change
+									</CardSubTitle>
+								</CardLabel>
+							</CardHeader>
+							<CardBody>
+								<div className='row g-4 d-flex justify-content-end'>
+									<Button
+										color='primary'
+										isLight
+										icon='PublishedWithChanges'
+										className='px-5'
+										style={{ maxWidth: 'max-content' }}
+										// onClick={() => setPasswordChangeCTA(true)}
+									>
+										Package's
+									</Button>
+								</div>
+							</CardBody>
+						</Card>
 					</div>
 					<div className='col-md-4'>
-						<Card className='position-sticky sticky-top-size'>
+						{/* <Card className='position-sticky sticky-top-size'>
 							<CardHeader>
 								<CardLabel icon='MarkEmailUnread'>
 									<CardTitle>Email notification</CardTitle>
@@ -416,6 +538,54 @@ const LmsUserProfile = () => {
 												/>
 											</ChecksGroup>
 										</FormGroup>
+									</div>
+								</div>
+							</CardBody>
+						</Card> */}
+						<Card className='shadow-3d-info'>
+							<CardBody>
+								<div className='row g-5'>
+									<div className='col-12 d-flex justify-content-center'>
+										<Avatar
+											src={data.src}
+											srcSet={data.srcSet}
+											color={data.color}
+											isOnline={data.isOnline}
+										/>
+									</div>
+									<div className='col-12'>
+										<div className='row g-2'>
+											<div className='col-12'>
+												<div className='d-flex align-items-center'>
+													<div className='flex-shrink-0'>
+														<Icon icon='Mail' size='3x' color='info' />
+													</div>
+													<div className='flex-grow-1 ms-3'>
+														<div className='fw-bold fs-5 mb-0'>
+															{`${data.username}@site.com`}
+														</div>
+														<div className='text-muted'>
+															Email Address
+														</div>
+													</div>
+												</div>
+											</div>
+											<div className='col-12'>
+												<div className='d-flex align-items-center'>
+													<div className='flex-shrink-0'>
+														<Icon icon='Tag' size='3x' color='info' />
+													</div>
+													<div className='flex-grow-1 ms-3'>
+														<div className='fw-bold fs-5 mb-0'>
+															{`@${data.username}`}
+														</div>
+														<div className='text-muted'>
+															Social name
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</CardBody>
