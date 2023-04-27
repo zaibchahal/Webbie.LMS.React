@@ -52,6 +52,7 @@ import Img from '../assets/img/wanna/susy/susy9.png';
 import VerifyEmail from '../common/LMS_Common/VerifyEmail';
 import Verifynumber from '../common/LMS_Common/VerifyNumber';
 import ChatStatusBar from '../pages/_common/StatusBar';
+import Progress from '../components/bootstrap/Progress';
 
 const LmsUserProfile = () => {
 	const { themeStatus } = useDarkMode();
@@ -609,8 +610,40 @@ const LmsUserProfile = () => {
 						<Card className='shadow-3d-info'>
 							<CardBody>
 								<div className='row g-5'>
-									<div className='col-12 d-flex justify-content-between px-4'>
-										<Avatar
+									<div className='col-12'>
+										<div className='d-flex justify-content-end'>
+											<Icon icon='Contacts' size='3x' color='info' />
+
+											<div className='ms-1'>
+												<span className='h5 fw-bold text-info'>
+													Student ID
+												</span>
+												<br />
+												<span className=' fw-bolder text-info'>3654</span>
+											</div>
+										</div>
+										<div
+											className='d-flex align-items-center mt-0 pt-0'
+											style={{ paddingTop: '-30px' }}>
+											<div className='flex-shrink-0'>
+												<Avatar
+													src={data.src}
+													srcSet={data.srcSet}
+													color={data.color}
+													isOnline={data.isOnline}
+													className='rounded-circle'
+												/>
+											</div>
+											<div className='flex-grow-1 ms-4 align-items-center mt-1'>
+												<div className='h2 fw-bold'>
+													<span>
+														{`${data.name + ' ' + data.surname}`}
+													</span>
+												</div>
+												<div className='h5 text-muted'>Founder</div>
+											</div>
+										</div>
+										{/* <Avatar
 											src={data.src}
 											srcSet={data.srcSet}
 											color={data.color}
@@ -628,7 +661,7 @@ const LmsUserProfile = () => {
 												</div>
 												<div className='text-muted'>premium</div>
 											</div>
-										</div>
+										</div> */}
 									</div>
 									<div className='col-12'>
 										<div className='row g-2'>
@@ -695,6 +728,52 @@ const LmsUserProfile = () => {
 										</div>
 									</div>
 								</div>
+							</CardBody>
+						</Card>
+						{/* Complete Your Profile */}
+						<Card>
+							<CardBody>
+								<div className='d-flex justify-content-between'>
+									<p>Complete Your Profile</p>
+									<p className='fw-bold'>90%</p>
+								</div>
+								<Progress value={90} />
+							</CardBody>
+						</Card>
+						{/* About Me */}
+						<Card>
+							<CardHeader>
+								<CardLabel>
+									<CardTitle>About Me</CardTitle>
+								</CardLabel>
+							</CardHeader>
+							<CardBody>
+								<p>
+									Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
+									vitae velit efficitur nulla dignissim commodo nec vitae odio.
+									Proin ut risus metus. Aenean dui lectus, laoreet at ornare et,
+									pellentesque id mauris. Morbi a molestie elit. Nunc eget mi in
+									lectus rutrum venenatis. Duis dapibus porta justo, nec dapibus
+									tellus condimentum ultrices. In hac habitasse platea dictumst.
+									Nulla facilisi. Aenean consequat gravida felis vitae vestibulum.
+									Suspendisse lacinia ex sed tellus imperdiet, ut lacinia odio
+									rutrum.
+								</p>
+								<p>
+									Pellentesque vel sem bibendum, tristique urna a, lacinia tortor.
+									Suspendisse dapibus lectus id venenatis tincidunt. Proin tempor
+									lorem non arcu rutrum interdum. Cras sit amet ultricies lacus,
+									vitae luctus nunc. Sed commodo hendrerit augue, et aliquet sem
+									commodo in. Pellentesque in diam eros. Sed quis sapien eros. Sed
+									eleifend at arcu vitae sagittis.
+								</p>
+								<p>
+									Morbi at fringilla lorem. Nulla eu odio a ante vulputate
+									finibus. Duis congue finibus nibh fermentum egestas. Maecenas
+									risus neque, dapibus vitae porttitor vel, efficitur ac dolor.
+									Sed nec ante ac orci dictum laoreet vitae eget odio. Proin at
+									consequat ipsum.
+								</p>
 							</CardBody>
 						</Card>
 					</div>
