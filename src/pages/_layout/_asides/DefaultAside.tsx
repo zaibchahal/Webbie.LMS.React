@@ -38,106 +38,114 @@ const DefaultAside = () => {
 	const { darkModeStatus } = useDarkMode();
 	const [mainmenu, setmainmenu] = useState(true);
 	return (
-		<Aside>
-			<AsideHead>
-				<Brand asideStatus={asideStatus} setAsideStatus={setAsideStatus} />
-			</AsideHead>
-			<AsideBody>
-				{!doc && (
-					<>
-						{/* {asideStatus && (
-							<h2 className='mx-4 mt-3 mb-2 text-bolder' id='main-menu'>
-								MAIN MENU
-							</h2>
-						)} */}
-						<Navigation menu={MainMenu} id='aside-dashboard' />
-						<Navigation menu={LmsDashboard} id='aside-dashboard' />
-						<NavigationLine />
-						<Navigation menu={LmsUserManu} id='aside-dashboard' />
-						<NavigationLine />
-						<Navigation menu={LmsFeatures} id='aside-dashboard' />
+		<>
+			<Aside>
+				<AsideHead>
+					<Brand asideStatus={asideStatus} setAsideStatus={setAsideStatus} />
+				</AsideHead>
+				<AsideBody>
+					{!doc && (
+						<>
+							{/* {asideStatus && (
+                <h2 className='mx-4 mt-3 mb-2 text-bolder' id='main-menu'>
+                    MAIN MENU
+                </h2>
+            )} */}
+							<Navigation menu={MainMenu} id='aside-dashboard' />
+							<Navigation menu={LmsDashboard} id='aside-dashboard' />
+							<NavigationLine />
+							<Navigation menu={LmsUserManu} id='aside-dashboard' />
+							<NavigationLine />
+							<Navigation menu={LmsFeatures} id='aside-dashboard' />
 
-						<Navigation menu={dashboardPagesMenu} id='aside-dashboard' />
-						<NavigationLine />
-						<Navigation menu={demoPagesMenu} id='aside-demo-pages' />
-						<NavigationLine />
-						<Navigation menu={pageLayoutTypesPagesMenu} id='aside-menu' />
-					</>
-				)}
+							<Navigation menu={dashboardPagesMenu} id='aside-dashboard' />
+							<NavigationLine />
+							<Navigation menu={demoPagesMenu} id='aside-demo-pages' />
+							<NavigationLine />
+							<Navigation menu={pageLayoutTypesPagesMenu} id='aside-menu' />
+						</>
+					)}
 
-				{doc && (
-					<>
-						<Navigation menu={gettingStartedPagesMenu} id='aside-docMenu' />
-						<NavigationLine />
-						<Navigation menu={componentPagesMenu} id='aside-componentsMenu' />
-						<NavigationLine />
-					</>
-				)}
+					{doc && (
+						<>
+							<Navigation menu={gettingStartedPagesMenu} id='aside-docMenu' />
+							<NavigationLine />
+							<Navigation menu={componentPagesMenu} id='aside-componentsMenu' />
+							<NavigationLine />
+						</>
+					)}
 
-				{asideStatus && doc && (
-					<Card className='m-3 '>
-						<CardBody className='pt-0'>
-							<img srcSet={HandWebp} src={Hand} alt='Hand' width={130} height={130} />
-							<p
-								className={classNames('h4', {
-									'text-dark': !darkModeStatus,
-									'text-light': darkModeStatus,
-								})}>
-								{t('Everything is ready!') as ReactNode}
-							</p>
-							<Button
-								color='info'
-								isLight
-								className='w-100'
+					{asideStatus && doc && (
+						<Card className='m-3 '>
+							<CardBody className='pt-0'>
+								<img
+									srcSet={HandWebp}
+									src={Hand}
+									alt='Hand'
+									width={130}
+									height={130}
+								/>
+								<p
+									className={classNames('h4', {
+										'text-dark': !darkModeStatus,
+										'text-light': darkModeStatus,
+									})}>
+									{t('Everything is ready!') as ReactNode}
+								</p>
+								<Button
+									color='info'
+									isLight
+									className='w-100'
+									onClick={() => {
+										localStorage.setItem('facit_asideDocStatus', 'false');
+										setDoc(false);
+									}}>
+									{t('Demo Pages') as ReactNode}
+								</Button>
+							</CardBody>
+						</Card>
+					)}
+				</AsideBody>
+				<AsideFoot>
+					<nav aria-label='aside-bottom-menu'>
+						<div className='navigation'>
+							<div
+								role='presentation'
+								className='navigation-item cursor-pointer'
 								onClick={() => {
-									localStorage.setItem('facit_asideDocStatus', 'false');
-									setDoc(false);
-								}}>
-								{t('Demo Pages') as ReactNode}
-							</Button>
-						</CardBody>
-					</Card>
-				)}
-			</AsideBody>
-			<AsideFoot>
-				<nav aria-label='aside-bottom-menu'>
-					<div className='navigation'>
-						<div
-							role='presentation'
-							className='navigation-item cursor-pointer'
-							onClick={() => {
-								localStorage.setItem('facit_asideDocStatus', String(!doc));
-								setDoc(!doc);
-							}}
-							data-tour='documentation'>
-							<span className='navigation-link navigation-link-pill'>
-								<span className='navigation-link-info'>
-									<Icon
-										icon={doc ? 'ToggleOn' : 'ToggleOff'}
-										color={doc ? 'success' : undefined}
-										className='navigation-icon'
-									/>
-									<span className='navigation-text'>
-										{t('menu:Documentation') as ReactNode}
+									localStorage.setItem('facit_asideDocStatus', String(!doc));
+									setDoc(!doc);
+								}}
+								data-tour='documentation'>
+								<span className='navigation-link navigation-link-pill'>
+									<span className='navigation-link-info'>
+										<Icon
+											icon={doc ? 'ToggleOn' : 'ToggleOff'}
+											color={doc ? 'success' : undefined}
+											className='navigation-icon'
+										/>
+										<span className='navigation-text'>
+											{t('menu:Documentation') as ReactNode}
+										</span>
+									</span>
+									<span className='navigation-link-extra'>
+										<Icon
+											icon='Circle'
+											className={classNames(
+												'navigation-notification',
+												'text-success',
+												'animate__animated animate__heartBeat animate__infinite animate__slower',
+											)}
+										/>
 									</span>
 								</span>
-								<span className='navigation-link-extra'>
-									<Icon
-										icon='Circle'
-										className={classNames(
-											'navigation-notification',
-											'text-success',
-											'animate__animated animate__heartBeat animate__infinite animate__slower',
-										)}
-									/>
-								</span>
-							</span>
+							</div>
 						</div>
-					</div>
-				</nav>
-				<User />
-			</AsideFoot>
-		</Aside>
+					</nav>
+					<User />
+				</AsideFoot>
+			</Aside>
+		</>
 	);
 };
 

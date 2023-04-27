@@ -1064,10 +1064,10 @@ export const LmsUserManu = {
 	useraccount: {
 		id: 'user-account',
 		text: 'User Account',
-		path: 'user-account',
-		icon: 'account_circle',
-		notification: true,
-		subMenu: null,
+		// path: 'user-account',
+		// icon: 'account_circle',
+		// notification: true,
+		// subMenu: null,
 	},
 	userprofile: {
 		id: 'user-profile',

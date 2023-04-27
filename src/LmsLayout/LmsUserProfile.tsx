@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import dayjs, { Dayjs } from 'dayjs';
 import PageWrapper from '../layout/PageWrapper/PageWrapper';
@@ -46,7 +46,7 @@ import Modal, {
 	ModalFooter,
 } from '../components/bootstrap/Modal';
 import Logo from '../components/Logo';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTour } from '@reactour/tour';
 import Img from '../assets/img/wanna/susy/susy9.png';
 import VerifyEmail from '../common/LMS_Common/VerifyEmail';
@@ -102,8 +102,43 @@ const LmsUserProfile = () => {
 	const navigate = useNavigate();
 	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
+	const location = useLocation();
+	const [activeSection, setActiveSection] = useState('');
+
+	// const StartRef = useRef<HTMLDivElement>(null);
+	const ChangePasswordRef = useRef<HTMLDivElement>(null);
+	const verificationRef = useRef<HTMLDivElement>(null);
+	const ProfileVisibilityRef = useRef<HTMLDivElement>(null);
+	const SocialAuthRef = useRef<HTMLDivElement>(null);
+	const SubScriptionRef = useRef<HTMLDivElement>(null);
+	const DeviceRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const path = location.pathname;
+		console.log(path.slice(1));
+
+		{
+			path === '/user-profile' && window.scrollTo({ top: 0, behavior: 'smooth' });
+			path === '/email-verification' &&
+				verificationRef.current?.scrollIntoView({ behavior: 'smooth' });
+			path === '/sms-verification' &&
+				verificationRef.current?.scrollIntoView({ behavior: 'smooth' });
+			path === '/change-password' &&
+				ChangePasswordRef.current?.scrollIntoView({ behavior: 'smooth' });
+			path === '/device-management' &&
+				DeviceRef.current?.scrollIntoView({ behavior: 'smooth' });
+			path === '/profile-visibilty' &&
+				ProfileVisibilityRef.current?.scrollIntoView({ behavior: 'smooth' });
+			path === '/social-authentication' &&
+				SocialAuthRef.current?.scrollIntoView({ behavior: 'smooth' });
+			path === '/subscription-management' &&
+				SubScriptionRef.current?.scrollIntoView({ behavior: 'smooth' });
+		}
+	}, [location.pathname]);
+
 	useEffect(() => {
 		const timeout = setTimeout(() => setIsOpenModal(true), 3000);
+
 		return () => {
 			setIsOpenModal(false);
 			clearTimeout(timeout);
@@ -144,6 +179,7 @@ const LmsUserProfile = () => {
 			<Page>
 				<div className='row h-100 align-content-start'>
 					<div className='col-md-8'>
+						{/* Profile Picture */}
 						<Card>
 							<CardHeader>
 								<CardLabel icon='Person' iconColor='success'>
@@ -183,7 +219,8 @@ const LmsUserProfile = () => {
 								</div>
 							</CardBody>
 						</Card>
-						<Card>
+						{/* Personal Information */}
+						<Card ref={verificationRef}>
 							<CardHeader>
 								<CardLabel icon='Person' iconColor='success'>
 									<CardTitle>Personal Information</CardTitle>
@@ -263,7 +300,8 @@ const LmsUserProfile = () => {
 								</div>
 							</CardBody>
 						</Card>
-						<Card>
+						{/* Contact Information */}
+						<Card ref={ChangePasswordRef}>
 							<CardHeader>
 								<CardLabel icon='Phonelink' iconColor='danger'>
 									<CardTitle>Contact Information</CardTitle>
@@ -329,7 +367,7 @@ const LmsUserProfile = () => {
 							</CardBody>
 						</Card>
 						<Card>
-							<CardHeader>
+							<CardHeader ref={ProfileVisibilityRef}>
 								<CardLabel icon='LocalPolice' iconColor='primary'>
 									<CardTitle>Password</CardTitle>
 									<CardSubTitle>Password change operations</CardSubTitle>
@@ -424,14 +462,14 @@ const LmsUserProfile = () => {
 						</Card>
 						<Card>
 							<CardHeader>
-								<CardLabel icon='Person' iconColor='success'>
+								<CardLabel icon='VisibilityOff' iconColor='warning'>
 									<CardTitle>Profile Visibility</CardTitle>
 									<CardSubTitle>
 										Change Your Profile's public appearance
 									</CardSubTitle>
 								</CardLabel>
 							</CardHeader>
-							<CardBody>
+							<CardBody ref={SocialAuthRef}>
 								<ChatStatusBar />
 								<div className='row g-4 d-flex justify-content-end'>
 									<Button
@@ -447,9 +485,9 @@ const LmsUserProfile = () => {
 								</div>
 							</CardBody>
 						</Card>
-						<Card>
+						<Card ref={SubScriptionRef}>
 							<CardHeader>
-								<CardLabel icon='Person' iconColor='success'>
+								<CardLabel icon='Security' iconColor='primary'>
 									<CardTitle>Social Authentication</CardTitle>
 									<CardSubTitle>
 										Menage your social login authentication
@@ -458,12 +496,13 @@ const LmsUserProfile = () => {
 							</CardHeader>
 							<CardBody>
 								<ChatStatusBar />
-								<div className='row g-4'>
+								<div className='row g-4 d-flex justify-content-end'>
 									<Button
 										color='primary'
 										isLight
 										icon='PublishedWithChanges'
-										// className='px-3'
+										className='px-5'
+										style={{ maxWidth: 'max-content' }}
 										// onClick={() => setPasswordChangeCTA(true)}
 									>
 										Authentication
@@ -471,9 +510,9 @@ const LmsUserProfile = () => {
 								</div>
 							</CardBody>
 						</Card>
-						<Card>
+						<Card ref={DeviceRef}>
 							<CardHeader>
-								<CardLabel icon='Person' iconColor='success'>
+								<CardLabel icon='Subscriptions' iconColor='danger'>
 									<CardTitle>Subscription Management</CardTitle>
 									<CardSubTitle>
 										Check your Package details and also change
@@ -491,6 +530,31 @@ const LmsUserProfile = () => {
 										// onClick={() => setPasswordChangeCTA(true)}
 									>
 										Package's
+									</Button>
+								</div>
+							</CardBody>
+						</Card>
+
+						<Card>
+							<CardHeader>
+								<CardLabel icon='ImportantDevices' iconColor='info'>
+									<CardTitle>Device Management</CardTitle>
+									<CardSubTitle>
+										Check Device's detail and also add more devices
+									</CardSubTitle>
+								</CardLabel>
+							</CardHeader>
+							<CardBody>
+								<div className='row g-4 d-flex justify-content-end'>
+									<Button
+										color='primary'
+										isLight
+										icon='PublishedWithChanges'
+										className='px-5'
+										style={{ maxWidth: 'max-content' }}
+										// onClick={() => setPasswordChangeCTA(true)}
+									>
+										Device Management
 									</Button>
 								</div>
 							</CardBody>
@@ -545,13 +609,26 @@ const LmsUserProfile = () => {
 						<Card className='shadow-3d-info'>
 							<CardBody>
 								<div className='row g-5'>
-									<div className='col-12 d-flex justify-content-center'>
+									<div className='col-12 d-flex justify-content-between px-4'>
 										<Avatar
 											src={data.src}
 											srcSet={data.srcSet}
 											color={data.color}
 											isOnline={data.isOnline}
 										/>
+										<div className='d-flex align-items-center'>
+											<div className='flex-grow-1 ms-3'>
+												<div className='user-name d-flex align-items-center d-flex justify-content-between fw-bold fs-3 mb-0'>
+													{`${data.name +' '+ data.surname}`} 
+													<p
+														style={{ fontSize: '10px' }}
+														className='bg-info px-1 rounded-1'>
+														234
+													</p>
+												</div>
+												<div className='text-muted'>premium</div>
+											</div>
+										</div>
 									</div>
 									<div className='col-12'>
 										<div className='row g-2'>
@@ -581,6 +658,36 @@ const LmsUserProfile = () => {
 														</div>
 														<div className='text-muted'>
 															Social name
+														</div>
+													</div>
+												</div>
+											</div>
+											<div className='col-12'>
+												<div className='d-flex align-items-center'>
+													<div className='flex-shrink-0'>
+														<Icon icon='Home' size='3x' color='info' />
+													</div>
+													<div className='flex-grow-1 ms-3'>
+														<div className='fw-bold fs-5 mb-0'>
+															{`${data.address}`}
+														</div>
+														<div className='text-muted'>
+															Home Address
+														</div>
+													</div>
+												</div>
+											</div>
+											<div className='col-12'>
+												<div className='d-flex align-items-center'>
+													<div className='flex-shrink-0'>
+														<Icon icon='Call' size='3x' color='info' />
+													</div>
+													<div className='flex-grow-1 ms-3'>
+														<div className='fw-bold fs-5 mb-0'>
+															{`${data.phoneNumber}`}
+														</div>
+														<div className='text-muted'>
+															Contect Number
 														</div>
 													</div>
 												</div>

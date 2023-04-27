@@ -22,6 +22,8 @@ export interface IUserProps {
 	username: string;
 	name: string;
 	surname: string;
+	address:string;
+	phoneNumber:string;
 	position: string;
 	email?: string;
 	src: string;
@@ -48,6 +50,8 @@ const john: IUserProps = {
 	color: 'primary',
 	services: [SERVICES.SURFING, SERVICES.KITE_SURFING, SERVICES.TENNIS],
 	password: '@ABC123',
+	address: 'New Yark',
+	phoneNumber: '+3645868455'
 };
 
 const grace: IUserProps = {
@@ -63,6 +67,8 @@ const grace: IUserProps = {
 	color: 'warning',
 	services: [SERVICES.SNOWBOARDING, SERVICES.ICE_SKATING, SERVICES.KITE_SURFING],
 	password: '@ABC123',
+	address: 'America',
+	phoneNumber: '+4857485795'
 };
 
 const jane: IUserProps = {
@@ -78,6 +84,8 @@ const jane: IUserProps = {
 	color: 'secondary',
 	services: [SERVICES.YOGA, SERVICES.HANDBALL, SERVICES.CRICKET],
 	password: '@ABC123',
+	address: 'Pakistan',
+	phoneNumber: '+92305757674'
 };
 
 const ryan: IUserProps = {
@@ -93,6 +101,8 @@ const ryan: IUserProps = {
 	color: 'info',
 	services: [SERVICES.HIKING, SERVICES.FOOTBALL, SERVICES.HANDBALL],
 	password: '@ABC123',
+	address: 'Lahore',
+	phoneNumber: '+92302367674'
 };
 
 const ella: IUserProps = {
@@ -108,6 +118,8 @@ const ella: IUserProps = {
 	color: 'success',
 	services: [SERVICES.ICE_SKATING, SERVICES.TENNIS, SERVICES.SNOWBOARDING, SERVICES.YOGA],
 	password: '@ABC123',
+	address: 'Karachi',
+	phoneNumber: '+92309897674'
 };
 
 const chloe: IUserProps = {
@@ -123,6 +135,8 @@ const chloe: IUserProps = {
 	color: 'warning',
 	services: [SERVICES.VOLLEYBALL, SERVICES.CRICKET],
 	password: '@ABC123',
+	address: 'Dubhai',
+	phoneNumber: '+877394545'
 };
 
 const sam: IUserProps = {
@@ -138,6 +152,8 @@ const sam: IUserProps = {
 	color: 'danger',
 	fullImage: User7Landing,
 	password: '@ABC123',
+	address: 'UAE',
+	phoneNumber: '+676487454'
 };
 
 const USERS: { [key: string]: IUserProps } = {

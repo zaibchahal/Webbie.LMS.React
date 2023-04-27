@@ -233,10 +233,6 @@ const presentation: RouteProps[] = [
 		path: LmsUserManu.subscriptionmanagement.path,
 		element: <Lms.LmsUserProfile />,
 	},
-	{
-		path: LmsUserManu.useraccount.path,
-		element: <Lms.LmsUserProfile />,
-	},
 
 	/**
 	 * Landing

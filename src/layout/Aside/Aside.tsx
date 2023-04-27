@@ -45,6 +45,7 @@ const Aside: FC<IAsideProps> = ({ children }) => {
 				className={classNames(
 					'aside',
 					{ open: asideStatus },
+					{ scrollY: true },
 					{
 						'aside-touch-bar': hasTouchButton && isModernDesign,
 						'aside-touch-bar-close': !touchStatus && hasTouchButton && isModernDesign,
