@@ -11,6 +11,7 @@ import {
 	LmsUserManu,
 } from '../menu';
 import Login from '../pages/presentation/auth/Login';
+import DeviceManagement from '../LmsLayout/LmsPages/DeviceManagement';
 
 const LANDING = {
 	DASHBOARD: lazy(() => import('../pages/presentation/dashboard/DashboardPage')),
@@ -198,6 +199,13 @@ const Lms = {
 };
 
 const presentation: RouteProps[] = [
+	/**
+	 * Lms Project
+	 */
+	{
+		path: 'devices',
+		element: <DeviceManagement />,
+	},
 	/**
 	 * Lms Project
 	 */

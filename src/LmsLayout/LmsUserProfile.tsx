@@ -46,13 +46,15 @@ import Modal, {
 	ModalFooter,
 } from '../components/bootstrap/Modal';
 import Logo from '../components/Logo';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useNavigation, useParams } from 'react-router-dom';
 import { useTour } from '@reactour/tour';
 import Img from '../assets/img/wanna/susy/susy9.png';
 import VerifyEmail from '../common/LMS_Common/VerifyEmail';
 import Verifynumber from '../common/LMS_Common/VerifyNumber';
 import ChatStatusBar from '../pages/_common/StatusBar';
 import Progress from '../components/bootstrap/Progress';
+// import { Google, Facebook, Twitter, GitHub } from '@mui/icons-material';
+import { FaFacebook, FaGithub, FaGoogle, FaTwitter } from 'react-icons/fa';
 
 const LmsUserProfile = () => {
 	const { themeStatus } = useDarkMode();
@@ -146,9 +148,12 @@ const LmsUserProfile = () => {
 		};
 	}, []);
 	const { setIsOpen } = useTour();
-
-	// const { id } = useParams();
 	const data = getUserDataWithId('1');
+
+	// const navigate=useNavigation()
+	const handleDeviceManagement = () => {
+		navigate('device-management');
+	};
 
 	return (
 		<PageWrapper title={demoPagesMenu.editPages.subMenu.editModern.text}>
@@ -496,7 +501,77 @@ const LmsUserProfile = () => {
 								</CardLabel>
 							</CardHeader>
 							<CardBody>
-								<ChatStatusBar />
+								{/* <ChatStatusBar /> */}
+								<div className='container my-5'>
+									<h2 className='text-center mb-4'>Sign in with social media</h2>
+									<div className='row justify-content-center'>
+										<div className='col-md-6'>
+											{/* <button
+												className='btn btn-primary btn-lg w-100 mb-3'
+												disabled={loading}
+												onClick={handleGoogleLogin}>
+												<FaGoogle className='me-2' fontSize={30} />
+												Sign in with Google
+											</button> */}
+											<Button
+												color='primary'
+												isLight
+												// icon='Google'
+												className='btn-lg w-100 mb-3'>
+												<FaGoogle className='me-2' fontSize={30} />
+												Sign in with Google
+											</Button>
+										</div>
+										<div className='col-md-6'>
+											<Button
+												color='primary'
+												isLight
+												className='btn-lg w-100 mb-3'>
+												<FaFacebook className='me-2' fontSize={30} />
+												Sign in with Facebook
+											</Button>
+											{/* <button
+												className='btn btn-primary btn-lg w-100 mb-3'
+												disabled={loading}
+												onClick={handleFacebookLogin}>
+												<FaFacebook className='me-2' fontSize={30} />
+												Sign in with Facebook
+											</button> */}
+										</div>
+										<div className='col-md-6'>
+											<Button
+												color='primary'
+												isLight
+												className='btn-lg w-100 mb-3'>
+												<FaTwitter className='me-2' fontSize={30} />
+												Sign in with Twitter
+											</Button>
+											{/* <button
+												className='btn btn-primary btn-lg w-100 mb-3'
+												disabled={loading}
+												onClick={handleTwitterLogin}>
+												<FaTwitter className='me-2' fontSize={30} />
+												Sign in with Twitter
+											</button> */}
+										</div>
+										<div className='col-md-6'>
+											<Button
+												color='primary'
+												isLight
+												className='btn-lg w-100 mb-3'>
+												<FaGithub className='me-2' fontSize={30} />
+												Sign in with GitHub
+											</Button>
+											{/* <button
+												className='btn btn-primary btn-lg w-100 mb-3'
+												disabled={loading}
+												onClick={handleGitHubLogin}>
+												<FaGithub className='me-2' fontSize={30} />
+												Sign in with GitHub
+											</button> */}
+										</div>
+									</div>
+								</div>
 								<div className='row g-4 d-flex justify-content-end'>
 									<Button
 										color='primary'
@@ -553,8 +628,7 @@ const LmsUserProfile = () => {
 										icon='PublishedWithChanges'
 										className='px-5'
 										style={{ maxWidth: 'max-content' }}
-										// onClick={() => setPasswordChangeCTA(true)}
-									>
+										onClick={() => navigate('../devices')}>
 										Device Management
 									</Button>
 								</div>
@@ -562,51 +636,6 @@ const LmsUserProfile = () => {
 						</Card>
 					</div>
 					<div className='col-md-4'>
-						{/* <Card className='position-sticky sticky-top-size'>
-							<CardHeader>
-								<CardLabel icon='MarkEmailUnread'>
-									<CardTitle>Email notification</CardTitle>
-								</CardLabel>
-							</CardHeader>
-							<CardBody>
-								<div className='row'>
-									<div className='col-12'>
-										<FormGroup>
-											<Label>
-												Choose what messages you’d like to receive for each
-												of your accounts.
-											</Label>
-											<ChecksGroup>
-												<Checks
-													type='switch'
-													id='inlineCheckOne'
-													label='Successful Payments'
-													name='checkOne'
-													onChange={formik.handleChange}
-													checked={formik.values.checkOne}
-												/>
-												<Checks
-													type='switch'
-													id='inlineCheckTwo'
-													label='Payouts'
-													name='checkTwo'
-													onChange={formik.handleChange}
-													checked={formik.values.checkTwo}
-												/>
-												<Checks
-													type='switch'
-													id='inlineCheckThree'
-													label='Application fees'
-													name='checkThree'
-													onChange={formik.handleChange}
-													checked={formik.values.checkThree}
-												/>
-											</ChecksGroup>
-										</FormGroup>
-									</div>
-								</div>
-							</CardBody>
-						</Card> */}
 						<Card className='shadow-3d-info'>
 							<CardBody>
 								<div className='row g-5'>
@@ -643,25 +672,6 @@ const LmsUserProfile = () => {
 												<div className='h5 text-muted'>Founder</div>
 											</div>
 										</div>
-										{/* <Avatar
-											src={data.src}
-											srcSet={data.srcSet}
-											color={data.color}
-											isOnline={data.isOnline}
-										/>
-										<div className='d-flex align-items-center'>
-											<div className='flex-grow-1 ms-3'>
-												<div className='user-name d-flex align-items-center d-flex justify-content-between fw-bold fs-3 mb-0'>
-													{`${data.name +' '+ data.surname}`} 
-													<p
-														style={{ fontSize: '10px' }}
-														className='bg-info px-1 rounded-1'>
-														234
-													</p>
-												</div>
-												<div className='text-muted'>premium</div>
-											</div>
-										</div> */}
 									</div>
 									<div className='col-12'>
 										<div className='row g-2'>
