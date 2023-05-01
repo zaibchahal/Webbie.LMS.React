@@ -80,8 +80,8 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		<>
 			<Card stretch={isFluid}>
 				<CardHeader borderSize={1}>
-					<CardLabel icon='Alarm' iconColor='info'>
-						<CardTitle>Upcoming Appointments</CardTitle>
+					<CardLabel icon='BookmarkAdd' iconColor='info'>
+						<CardTitle>List of my fsvourits</CardTitle>
 					</CardLabel>
 					<CardActions>
 						<Button

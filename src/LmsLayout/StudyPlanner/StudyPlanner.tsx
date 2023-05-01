@@ -4,50 +4,45 @@ import classNames from 'classnames';
 import { Calendar, dayjsLocalizer, View as TView, Views } from 'react-big-calendar';
 import { useFormik } from 'formik';
 import { Calendar as DatePicker } from 'react-date-range';
-import SubHeader, { SubHeaderLeft, SubHeaderRight } from '../../../layout/SubHeader/SubHeader';
-
-import Page from '../../../layout/Page/Page';
-import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
-import Icon from '../../../components/icon/Icon';
-import Button from '../../../components/bootstrap/Button';
-import Card, {
-	CardActions,
-	CardBody,
-	CardHeader,
-	CardLabel,
-	CardTitle,
-} from '../../../components/bootstrap/Card';
-import CommonUpcomingEvents from '../../_common/CommonUpcomingEvents';
-import eventList, { IEvents } from '../../../common/data/events';
-import OffCanvas, {
-	OffCanvasBody,
-	OffCanvasHeader,
-	OffCanvasTitle,
-} from '../../../components/bootstrap/OffCanvas';
-import FormGroup from '../../../components/bootstrap/forms/FormGroup';
-import Input from '../../../components/bootstrap/forms/Input';
-import Checks from '../../../components/bootstrap/forms/Checks';
-import Select from '../../../components/bootstrap/forms/Select';
-import USERS, { getUserDataWithUsername, IUserProps } from '../../../common/data/userDummyData';
-import Avatar, { AvatarGroup } from '../../../components/Avatar';
-import useMinimizeAside from '../../../hooks/useMinimizeAside';
-import Popovers from '../../../components/bootstrap/Popovers';
+import USERS, { getUserDataWithUsername, IUserProps } from '../../common/data/userDummyData';
+import eventList, { IEvents } from '../../common/data/events';
 import {
 	CalendarTodayButton,
 	CalendarViewModeButtons,
 	getLabel,
 	getUnitType,
 	getViews,
-} from '../../../components/extras/calendarHelper';
-import { demoPagesMenu } from '../../../menu';
-import SERVICES, { getServiceDataWithServiceName } from '../../../common/data/serviceDummyData';
-import Option from '../../../components/bootstrap/Option';
-import CommonApprovedAppointmentChart from '../../_common/CommonApprovedAppointmentChart';
-import CommonPercentageOfLoadChart from '../../_common/CommonPercentageOfLoadChart';
-import CommonDashboardBookingLists from '../../_common/BookingComponents/CommonDashboardBookingLists';
-import CommonRightPanel from '../../_common/BookingComponents/CommonRightPanel';
-import useDarkMode from '../../../hooks/useDarkMode';
-import { TColor } from '../../../type/color-type';
+} from '../../components/extras/calendarHelper';
+import SERVICES, { getServiceDataWithServiceName } from '../../common/data/serviceDummyData';
+import PageWrapper from '../../layout/PageWrapper/PageWrapper';
+import { demoPagesMenu } from '../../menu';
+import SubHeader, { SubHeaderLeft, SubHeaderRight } from '../../layout/SubHeader/SubHeader';
+import Icon from '../../components/icon/Icon';
+import Button from '../../components/bootstrap/Button';
+import Popovers from '../../components/bootstrap/Popovers';
+import Page from '../../layout/Page/Page';
+import Avatar, { AvatarGroup } from '../../components/Avatar';
+import Card, {
+	CardActions,
+	CardBody,
+	CardHeader,
+	CardLabel,
+	CardSubTitle,
+	CardTitle,
+} from '../../components/bootstrap/Card';
+import OffCanvas, {
+	OffCanvasBody,
+	OffCanvasHeader,
+	OffCanvasTitle,
+} from '../../components/bootstrap/OffCanvas';
+import FormGroup from '../../components/bootstrap/forms/FormGroup';
+import Select from '../../components/bootstrap/forms/Select';
+import Option from '../../components/bootstrap/Option';
+import Checks from '../../components/bootstrap/forms/Checks';
+import Input from '../../components/bootstrap/forms/Input';
+import Tooltips from '../../components/bootstrap/Tooltips';
+import useDarkMode from '../../hooks/useDarkMode';
+import { TColor } from '../../type/color-type';
 
 const localizer = dayjsLocalizer(dayjs);
 const now = new Date();
@@ -97,6 +92,7 @@ const MyEvent = (data: { event: IEvent }) => {
 		</div>
 	);
 };
+
 const MyWeekEvent = (data: { event: IEvent }) => {
 	const { darkModeStatus } = useDarkMode();
 
@@ -138,11 +134,40 @@ const MyWeekEvent = (data: { event: IEvent }) => {
 	);
 };
 
-const DashboardBookingPage = () => {
-	const { darkModeStatus, themeStatus } = useDarkMode();
-	useMinimizeAside();
+const MyEventDay = (data: { event: IEvent }) => {
+	const { event } = data;
+	return (
+		<Tooltips
+			title={`${event?.name} / ${dayjs(event.start).format('LT')} - ${dayjs(event.end).format(
+				'LT',
+			)}`}>
+			<div className='row g-2'>
+				{event?.user?.src && (
+					<div className='col-auto'>
+						<Avatar src={event?.user?.src} srcSet={event?.user?.srcSet} size={16} />
+					</div>
+				)}
+				{event?.users && (
+					<div className='col'>
+						<AvatarGroup size={16}>
+							{event.users.map((user) => (
+								// eslint-disable-next-line react/jsx-props-no-spreading
+								<Avatar key={user.src} {...user} />
+							))}
+						</AvatarGroup>
+					</div>
+				)}
+				<small className='col text-truncate'>
+					{event?.icon && <Icon icon={event?.icon} size='lg' className='me-2' />}
+					{event?.name}
+				</small>
+			</div>
+		</Tooltips>
+	);
+};
 
-	const [toggleRightPanel, setToggleRightPanel] = useState(true);
+const CalendarPage = () => {
+	const { darkModeStatus, themeStatus } = useDarkMode();
 
 	// BEGIN :: Calendar
 	// Active employee
@@ -175,9 +200,9 @@ const DashboardBookingPage = () => {
 	// Calendar Date
 	const [date, setDate] = useState(new Date());
 	// Item edit panel status
-	const [toggleInfoEventCanvas, setToggleInfoEventCanvas] = useState<boolean>(false);
+	const [toggleInfoEventCanvas, setToggleInfoEventCanvas] = useState(false);
 	const setInfoEvent = () => setToggleInfoEventCanvas(!toggleInfoEventCanvas);
-	const [eventAdding, setEventAdding] = useState<boolean>(false);
+	const [eventAdding, setEventAdding] = useState(false);
 
 	// Calendar Unit Type
 	const unitType = getUnitType(viewMode);
@@ -189,13 +214,14 @@ const DashboardBookingPage = () => {
 		setDate(dayjs(e).toDate());
 		setViewMode(Views.DAY);
 	};
+
 	// View modes; Month, Week, Work Week, Day and Agenda
 	const views = getViews();
 
 	// New Event
 	const handleSelect = ({ start, end }: { start: any; end: any }) => {
 		setEventAdding(true);
-		setEventItem({ ...initialEventItem, start, end });
+		setEventItem({ start, end });
 	};
 
 	useEffect(() => {
@@ -205,14 +231,6 @@ const DashboardBookingPage = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [eventAdding]);
 
-	/**
-	 * Calendar Item Container Style
-	 * @param event
-	 * @param start
-	 * @param end
-	 * @param isSelected
-	 * @returns {{className: string}}
-	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const eventStyleGetter = (
 		event: { color?: TColor },
@@ -282,9 +300,6 @@ const DashboardBookingPage = () => {
 		//	eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [eventItem]);
 	// END:: Calendar
-
-	const [toggleCalendar, setToggleCalendar] = useState(true);
-
 	return (
 		<PageWrapper title={demoPagesMenu.appointment.subMenu.dashboard.text}>
 			<SubHeader>
@@ -295,22 +310,10 @@ const DashboardBookingPage = () => {
 						<Icon icon='Check Circle ' color='success' className='mx-1' size='lg' /> 12
 						approved appointments and{' '}
 						<Icon icon='pending_actions ' color='danger' className='mx-1' size='lg' /> 3
-						pending appointments for today.jjjj
+						pending appointments for today.
 					</span>
 				</SubHeaderLeft>
 				<SubHeaderRight>
-					<Button
-						icon='Groups'
-						onClick={() => setToggleRightPanel(!toggleRightPanel)}
-						color={toggleRightPanel ? 'dark' : 'light'}
-						aria-label='Toggle right panel'
-					/>
-					<Button
-						icon='AreaChart'
-						onClick={() => setToggleCalendar(!toggleCalendar)}
-						color={toggleCalendar ? 'dark' : 'light'}
-						aria-label='Toggle calendar & charts'
-					/>
 					<Popovers
 						desc={
 							<DatePicker
@@ -322,180 +325,172 @@ const DashboardBookingPage = () => {
 						placement='bottom-end'
 						className='mw-100'
 						trigger='click'>
-						<Button color={darkModeStatus ? 'light' : 'dark'} isLight>
-							{calendarDateLabel}
-						</Button>
+						<Button color='light'>{calendarDateLabel}</Button>
 					</Popovers>
 				</SubHeaderRight>
 			</SubHeader>
 			<Page container='fluid'>
-				{toggleCalendar && (
-					<>
-						<div className='row mb-4 g-3'>
-							{Object.keys(USERS).map((u) => (
-								<div key={USERS[u].username} className='col-auto'>
-									<Popovers
-										trigger='hover'
-										desc={
-											<>
-												<div className='h6'>{`${USERS[u].name} ${USERS[u].surname}`}</div>
-												<div>
-													<b>Event: </b>
-													{
-														events.filter(
-															(i) =>
-																i.user?.username ===
-																USERS[u].username,
-														).length
-													}
-												</div>
-												<div>
-													<b>Approved: </b>
-													{
-														events.filter(
-															(i) =>
-																i.user?.username ===
-																	USERS[u].username &&
-																i.color === 'info',
-														).length
-													}
-												</div>
-											</>
-										}>
-										<div className='position-relative'>
-											<Avatar
-												srcSet={USERS[u].srcSet}
-												src={USERS[u].src}
-												color={USERS[u].color}
-												size={64}
-												border={4}
-												className='cursor-pointer'
-												borderColor={
-													employeeList[USERS[u].username]
-														? 'info'
-														: themeStatus
-												}
-												onClick={() =>
-													setEmployeeList({
-														...employeeList,
-														[USERS[u].username]:
-															!employeeList[USERS[u].username],
-													})
-												}
-											/>
-											{!!events.filter(
-												(i) =>
-													i.user?.username === USERS[u].username &&
-													i.start &&
-													i.start < now &&
-													i.end &&
-													i.end > now,
-											).length && (
-												<span className='position-absolute top-85 start-85 translate-middle badge border border-2 border-light rounded-circle bg-success p-2'>
-													<span className='visually-hidden'>
-														Online user
-													</span>
-												</span>
-											)}
+				<div className='row mb-4 g-3'>
+					{Object.keys(USERS).map((u) => (
+						<div key={USERS[u].username} className='col-auto'>
+							<Popovers
+								trigger='hover'
+								desc={
+									<>
+										<div className='h6'>{`${USERS[u].name} ${USERS[u].surname}`}</div>
+										<div>
+											<b>Event: </b>
+											{
+												events.filter(
+													(i) => i.user?.username === USERS[u].username,
+												).length
+											}
 										</div>
-									</Popovers>
-								</div>
-							))}
-						</div>
-						<div className='row h-100'>
-							<div
-								className={classNames({
-									'col-xxl-8': !toggleRightPanel,
-									'col-12': toggleRightPanel,
-								})}>
-								<Card stretch style={{ minHeight: 680 }}>
-									<CardHeader>
-										<CardActions>
-											<CalendarTodayButton
-												unitType={unitType}
-												date={date}
-												setDate={setDate}
-												viewMode={viewMode}
-											/>
-										</CardActions>
-										<CardActions>
-											<CalendarViewModeButtons
-												setViewMode={setViewMode}
-												viewMode={viewMode}
-											/>
-										</CardActions>
-									</CardHeader>
-									<CardBody isScrollable>
-										<Calendar
-											selectable
-											toolbar={false}
-											localizer={localizer}
-											events={events.filter(
-												(i) => i?.user && employeeList[i.user.username],
-											)}
-											defaultView={Views.WEEK}
-											views={views}
-											view={viewMode}
-											date={date}
-											onNavigate={(_date) => setDate(_date)}
-											scrollToTime={new Date(1970, 1, 1, 6)}
-											defaultDate={new Date()}
-											onSelectEvent={(event) => {
-												setInfoEvent();
-												setEventItem(event);
-											}}
-											onSelectSlot={handleSelect}
-											onView={handleViewMode}
-											onDrillDown={handleViewMode}
-											components={{
-												event: MyEvent, // used by each view (Month, Day, Week)
-												week: {
-													event: MyWeekEvent,
-												},
-												work_week: {
-													event: MyWeekEvent,
-												},
-											}}
-											eventPropGetter={eventStyleGetter}
-										/>
-									</CardBody>
-								</Card>
-							</div>
-							<div
-								className={classNames({
-									'col-xxl-4': !toggleRightPanel,
-									'col-12': toggleRightPanel,
-								})}>
-								<div className='row'>
-									<div
-										className={classNames(
+										<div>
+											<b>Approved: </b>
 											{
-												'col-xxl-12': !toggleRightPanel,
-											},
-											'col-md-6',
-										)}>
-										<CommonApprovedAppointmentChart />
-									</div>
-									<div
-										className={classNames(
-											{
-												'col-xxl-12': !toggleRightPanel,
-											},
-											'col-md-6',
-										)}>
-										<CommonPercentageOfLoadChart />
-									</div>
+												events.filter(
+													(i) =>
+														i.user?.username === USERS[u].username &&
+														i.color === 'info',
+												).length
+											}
+										</div>
+									</>
+								}>
+								<div className='position-relative'>
+									{/* <Avatar
+										srcSet={USERS[u].srcSet}
+										src={USERS[u].src}
+										color={USERS[u].color}
+										size={64}
+										border={4}
+										className='cursor-pointer'
+										borderColor={
+											employeeList[USERS[u].username] ? 'info' : themeStatus
+										}
+										onClick={() =>
+											setEmployeeList({
+												...employeeList,
+												[USERS[u].username]:
+													!employeeList[USERS[u].username],
+											})
+										}
+									/> */}
+									{/* {!!events.filter(
+										(i) =>
+											i.user?.username === USERS[u].username &&
+											i.start &&
+											i.start < now &&
+											i.end &&
+											i.end > now,
+									).length && (
+										<span className='position-absolute top-85 start-85 translate-middle badge border border-2 border-light rounded-circle bg-success p-2'>
+											<span className='visually-hidden'>Online user</span>
+										</span>
+									)} */}
 								</div>
-							</div>
+							</Popovers>
 						</div>
-					</>
-				)}
-				<div className='row'>
-					<div className='col-12'>
-						<CommonDashboardBookingLists />
+					))}
+				</div>
+				<div className='row h-100'>
+					<div className='col-xl-9'>
+						<Card stretch style={{ minHeight: 600 }}>
+							<CardHeader>
+								<CardActions>
+									<CalendarTodayButton
+										unitType={unitType}
+										date={date}
+										setDate={setDate}
+										viewMode={viewMode}
+									/>
+								</CardActions>
+								<CardActions>
+									<CalendarViewModeButtons
+										setViewMode={setViewMode}
+										viewMode={viewMode}
+									/>
+								</CardActions>
+							</CardHeader>
+							<CardBody isScrollable>
+								<Calendar
+									selectable
+									toolbar={false}
+									localizer={localizer}
+									events={events.filter(
+										(i) => i?.user && employeeList[i.user.username],
+									)}
+									defaultView={Views.WEEK}
+									views={views}
+									view={viewMode}
+									date={date}
+									onNavigate={(_date) => setDate(_date)}
+									scrollToTime={new Date(1970, 1, 1, 6)}
+									defaultDate={new Date()}
+									onSelectEvent={(event) => {
+										setInfoEvent();
+										setEventItem(event);
+									}}
+									onSelectSlot={handleSelect}
+									onView={handleViewMode}
+									onDrillDown={handleViewMode}
+									components={{
+										event: MyEvent, // used by each view (Month, Day, Week)
+										week: {
+											event: MyWeekEvent,
+										},
+										work_week: {
+											event: MyWeekEvent,
+										},
+									}}
+									eventPropGetter={eventStyleGetter}
+								/>
+							</CardBody>
+						</Card>
 					</div>
-					<div className='col-12'>
-						<CommonUpcomingEvents />
+					<div className='col-xl-3'>
+						<Card stretch style={{ minHeight: 600 }}>
+							<CardHeader>
+								<CardLabel icon='Today' iconColor='info'>
+									<CardTitle>{dayjs(date).format('MMMM Do YYYY')}</CardTitle>
+									<CardSubTitle>{dayjs(date).fromNow()}</CardSubTitle>
+								</CardLabel>
+								<CardActions>
+									<CalendarTodayButton
+										unitType={Views.DAY}
+										date={date}
+										setDate={setDate}
+										viewMode={Views.DAY}
+									/>
+								</CardActions>
+							</CardHeader>
+							<CardBody isScrollable>
+								<Calendar
+									selectable
+									toolbar={false}
+									localizer={localizer}
+									events={events}
+									defaultView={Views.WEEK}
+									views={views}
+									view={Views.DAY}
+									date={date}
+									scrollToTime={new Date(1970, 1, 1, 6)}
+									defaultDate={new Date()}
+									onSelectEvent={(event) => {
+										setInfoEvent();
+										setEventItem(event);
+									}}
+									onSelectSlot={handleSelect}
+									onView={handleViewMode}
+									onDrillDown={handleViewMode}
+									components={{
+										event: MyEventDay, // used by each view (Month, Day, Week)
+									}}
+									eventPropGetter={eventStyleGetter}
+								/>
+							</CardBody>
+						</Card>
 					</div>
 				</div>
 
@@ -638,11 +633,9 @@ const DashboardBookingPage = () => {
 						</div>
 					</OffCanvasBody>
 				</OffCanvas>
-
-				<CommonRightPanel setOpen={setToggleRightPanel} isOpen={toggleRightPanel} />
 			</Page>
 		</PageWrapper>
 	);
 };
 
-export default DashboardBookingPage;
+export default CalendarPage;

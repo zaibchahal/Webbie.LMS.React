@@ -196,6 +196,15 @@ const EXTRA = {
 const Lms = {
 	//added by me
 	LmsUserProfile: lazy(() => import('../LmsLayout/LmsUserProfile')),
+	LmsMyCourses: lazy(() => import('../LmsLayout/Courses/MyCourses')),
+	LmsLiveCourses: lazy(() => import('../LmsLayout/Courses/LiveCourses')),
+	LmsStudyPlanner: lazy(() => import('../LmsLayout/StudyPlanner/StudyPlanner')),
+	LmsStudyAssistant: lazy(() => import('../LmsLayout/StudyPlanner/StudyAssistant')),
+	LmsMessaging: lazy(() => import('../LmsLayout/Messages/messagings')),
+	LmsknowledgeBase: lazy(() => import('../LmsLayout/knowledge/KnowledgeGridPage')),
+	LmsMyFavourites: lazy(() => import('../LmsLayout/MyFavourits/MyFavourits')),
+	LmsMyFiles: lazy(() => import('../LmsLayout/MyFile/MyFile')),
+
 };
 
 const presentation: RouteProps[] = [
@@ -241,6 +250,56 @@ const presentation: RouteProps[] = [
 		path: LmsUserManu.subscriptionmanagement.path,
 		element: <Lms.LmsUserProfile />,
 	},
+	/**
+	 * Lms Project
+	 */
+	{
+		path: LmsFeatures.mycourses.path,
+		element: <Lms.LmsMyCourses />,
+	},
+	{
+		path: LmsFeatures.livecourses.path,
+		element: <Lms.LmsLiveCourses />,
+	},
+	{
+		path: LmsFeatures.studyplanner.path,
+		element: <Lms.LmsStudyPlanner />,
+	},
+	{
+		path: LmsFeatures.studyassistant.path,
+		element: <Lms.LmsStudyAssistant />,
+	},
+	{
+		path: LmsFeatures.messaging.path,
+		element: <Lms.LmsMessaging />,
+	},
+	{
+		path: LmsFeatures.knowledgebase.path,
+		element: <Lms.LmsknowledgeBase />,
+	},
+	{
+		path: LmsFeatures.myfavourites.path,
+		element: <Lms.LmsMyFavourites />,
+	},
+	{
+		path: LmsFeatures.myfiles.path,
+		element: <Lms.LmsMyFiles />,
+	},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	/**
 	 * Landing
