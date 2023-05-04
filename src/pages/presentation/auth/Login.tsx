@@ -110,6 +110,9 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
 		}, 1000);
 	};
 
+	const [tenent, setTenent] = useState('');
+
+
 	return (
 		<PageWrapper
 			isProtected={false}
@@ -133,6 +136,28 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
 										<Logo width={200} />
 									</Link>
 								</div>
+								<FormGroup
+									id='Tenancy'
+									label='Tenancy Name'
+									className='mb-3'
+									isFloating>
+									<Input
+										placeholder=''
+										onBlur={formik.handleBlur}
+										value={tenent}
+										onChange={(e: any) => {
+											setTenent(e.target.value);
+										}}
+										validFeedback='Looks good!'
+									/>
+									<Button
+										color={darkModeStatus ? 'light' : 'dark'}
+										isLight={!singUpStatus}
+										className='rounded-1 w-50 d-flex justify-content-center'
+										size='lg'>
+										Tenency Check
+									</Button>
+								</FormGroup>
 								<div
 									className={classNames('rounded-3', {
 										'bg-l10-dark': !darkModeStatus,
