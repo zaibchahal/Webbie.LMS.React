@@ -349,8 +349,8 @@ const LmsUserProfile = () => {
 										</div> */}
 										<VerifyEmail />
 									</div>
-									{/* {EmailVerification && 
-									
+									{/* {EmailVerification &&
+
 									} */}
 									<div className='col-md-6'>
 										<FormGroup id='phone' label='Phone Number' isFloating>
@@ -502,23 +502,23 @@ const LmsUserProfile = () => {
 							</CardHeader>
 							<CardBody>
 								{/* <ChatStatusBar /> */}
-								<div className='container my-5'>
+								<div className='container mb-3'>
 									<h2 className='text-center mb-4'>Sign in with social media</h2>
 									<div className='row justify-content-center'>
 										<div className='col-md-6'>
 											{/* <button
-												className='btn btn-primary btn-lg w-100 mb-3'
+												className='btn btn-primary btn-lg w-100 mb-3 d-flex align-items-center'
 												disabled={loading}
 												onClick={handleGoogleLogin}>
-												<FaGoogle className='me-2' fontSize={30} />
+												<FaGoogle className='me-2' fontSize={20} />
 												Sign in with Google
 											</button> */}
 											<Button
 												color='primary'
 												isLight
 												// icon='Google'
-												className='btn-lg w-100 mb-3'>
-												<FaGoogle className='me-2' fontSize={30} />
+												className='btn-lg w-100 mb-3 d-flex align-items-center'>
+												<FaGoogle className='me-2' fontSize={20} />
 												Sign in with Google
 											</Button>
 										</div>
@@ -526,15 +526,15 @@ const LmsUserProfile = () => {
 											<Button
 												color='primary'
 												isLight
-												className='btn-lg w-100 mb-3'>
-												<FaFacebook className='me-2' fontSize={30} />
+												className='btn-lg w-100 mb-3 d-flex align-items-center'>
+												<FaFacebook className='me-2' fontSize={20} />
 												Sign in with Facebook
 											</Button>
 											{/* <button
-												className='btn btn-primary btn-lg w-100 mb-3'
+												className='btn btn-primary btn-lg w-100 mb-3 d-flex align-items-center'
 												disabled={loading}
 												onClick={handleFacebookLogin}>
-												<FaFacebook className='me-2' fontSize={30} />
+												<FaFacebook className='me-2' fontSize={20} />
 												Sign in with Facebook
 											</button> */}
 										</div>
@@ -542,15 +542,15 @@ const LmsUserProfile = () => {
 											<Button
 												color='primary'
 												isLight
-												className='btn-lg w-100 mb-3'>
-												<FaTwitter className='me-2' fontSize={30} />
+												className='btn-lg w-100 mb-3 d-flex align-items-center'>
+												<FaTwitter className='me-2' fontSize={20} />
 												Sign in with Twitter
 											</Button>
 											{/* <button
-												className='btn btn-primary btn-lg w-100 mb-3'
+												className='btn btn-primary btn-lg w-100 mb-3 d-flex align-items-center'
 												disabled={loading}
 												onClick={handleTwitterLogin}>
-												<FaTwitter className='me-2' fontSize={30} />
+												<FaTwitter className='me-2' fontSize={20} />
 												Sign in with Twitter
 											</button> */}
 										</div>
@@ -558,15 +558,15 @@ const LmsUserProfile = () => {
 											<Button
 												color='primary'
 												isLight
-												className='btn-lg w-100 mb-3'>
-												<FaGithub className='me-2' fontSize={30} />
+												className='btn-lg w-100 mb-3 d-flex align-items-center'>
+												<FaGithub className='me-2' fontSize={20} />
 												Sign in with GitHub
 											</Button>
 											{/* <button
-												className='btn btn-primary btn-lg w-100 mb-3'
+												className='btn btn-primary btn-lg w-100 mb-3 d-flex align-items-center'
 												disabled={loading}
 												onClick={handleGitHubLogin}>
-												<FaGithub className='me-2' fontSize={30} />
+												<FaGithub className='me-2' fontSize={20} />
 												Sign in with GitHub
 											</button> */}
 										</div>

@@ -8,15 +8,22 @@ import reportWebVitals from './reportWebVitals';
 import { ThemeContextProvider } from './contexts/themeContext';
 import { AuthContextProvider } from './contexts/authContext';
 import './i18n';
+import { persistor, store } from './store';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const children = (
 	<AuthContextProvider>
 		<ThemeContextProvider>
-			<Router>
-				<React.StrictMode>
-					<App />
-				</React.StrictMode>
-			</Router>
+			<React.StrictMode>
+				<Provider store={store}>
+					{/* <PersistGate loading={null} persistor={persistor}> */}
+						<Router>
+							<App />
+						</Router>
+					{/* </PersistGate> */}
+				</Provider>
+			</React.StrictMode>
 		</ThemeContextProvider>
 	</AuthContextProvider>
 );

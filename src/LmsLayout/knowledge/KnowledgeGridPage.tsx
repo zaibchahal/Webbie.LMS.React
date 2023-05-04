@@ -200,7 +200,7 @@ const KnowledgeGridPage = () => {
 							<div className='col-md-2'>
 								<Button
 									size='lg'
-									icon='Close'
+									icon='Search'
 									color='primary'
 									className='w-100'
 									rounded={1}

@@ -204,6 +204,7 @@ const Lms = {
 	LmsknowledgeBase: lazy(() => import('../LmsLayout/knowledge/KnowledgeGridPage')),
 	LmsMyFavourites: lazy(() => import('../LmsLayout/MyFavourits/MyFavourits')),
 	LmsMyFiles: lazy(() => import('../LmsLayout/MyFile/MyFile')),
+	LmsSupportCenter: lazy(() => import('../LmsLayout/SupportCenter/SupportCenter')),
 
 };
 
@@ -284,6 +285,10 @@ const presentation: RouteProps[] = [
 	{
 		path: LmsFeatures.myfiles.path,
 		element: <Lms.LmsMyFiles />,
+	},
+	{
+		path: LmsFeatures.supportcenter.path,
+		element: <Lms.LmsSupportCenter />,
 	},
 
 
