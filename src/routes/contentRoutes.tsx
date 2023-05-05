@@ -205,6 +205,7 @@ const Lms = {
 	LmsMyFavourites: lazy(() => import('../LmsLayout/MyFavourits/MyFavourits')),
 	LmsMyFiles: lazy(() => import('../LmsLayout/MyFile/MyFile')),
 	LmsSupportCenter: lazy(() => import('../LmsLayout/SupportCenter/SupportCenter')),
+	LmsCoursePage: lazy(() => import('../LmsLayout/Courses/Coursepage')),
 
 };
 
@@ -289,6 +290,10 @@ const presentation: RouteProps[] = [
 	{
 		path: LmsFeatures.supportcenter.path,
 		element: <Lms.LmsSupportCenter />,
+	},
+	{
+		path: 'courses-page',
+		element: <Lms.LmsCoursePage />,
 	},
 
 
