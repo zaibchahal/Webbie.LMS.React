@@ -39,6 +39,7 @@ import Page from '../../layout/Page/Page';
 import { Calendar as DatePicker } from 'react-date-range';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import { LmsFeatures, demoPagesMenu } from '../../menu';
+import ZoomMeeting from '../ZoomMeeting/ZoomMeeting';
 
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
@@ -124,6 +125,9 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					</SubHeaderRight>
 				</SubHeader>
 				<Page>
+					<React.StrictMode>
+						<ZoomMeeting />
+					</React.StrictMode>
 					<Card stretch={isFluid}>
 						<CardHeader borderSize={1}>
 							<CardLabel icon='LiveTv' iconColor='info'>

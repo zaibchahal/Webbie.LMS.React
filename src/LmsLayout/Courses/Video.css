@@ -1,0 +1,19 @@
+.video-container {
+	position: relative;
+	width: 100%;
+	/* padding-top: 56.25%; 16:9 aspect ratio */
+}
+
+.video {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.fullscreen-button {
+	position: absolute;
+	top: 125px;
+	right: 43px;
+}

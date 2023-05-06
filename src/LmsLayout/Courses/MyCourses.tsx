@@ -48,7 +48,7 @@ const Item: FC<IItemProps> = ({
 	const { darkModeStatus } = useDarkMode();
 	const navigate = useNavigate();
 	const handleOnClickToProjectPage = useCallback(
-		() => navigate(`../${demoPagesMenu.projectManagement.subMenu.itemID.path}/1`),
+		() => navigate(`../courses-page`),
 		[navigate],
 	);
 	return (
