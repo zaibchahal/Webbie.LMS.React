@@ -11,9 +11,10 @@ import { NavigationLine } from '../Navigation/Navigation';
 import Icon from '../../components/icon/Icon';
 import useNavigationItemHandle from '../../hooks/useNavigationItemHandle';
 import AuthContext from '../../contexts/authContext';
+import { ISessionProps, IUserProps } from '../../common/data/userSessionService';
 
 const User = () => {
-    const { userData, setUser } = useContext(AuthContext);
+    const { userData, handleSetSession, handleSetProfileData, profilePicture } = useContext(AuthContext);
 
     const navigate = useNavigate();
     const handleItem = useNavigationItemHandle();
@@ -31,8 +32,7 @@ const User = () => {
                 onClick={() => setCollapseStatus(!collapseStatus)}>
                 <div className='user-avatar'>
                     <img
-                        srcSet={userData?.srcSet}
-                        src={userData?.src}
+                        src={profilePicture}
                         alt='Avatar'
                         width={128}
                         height={128}
@@ -46,7 +46,7 @@ const User = () => {
                             234
                         </p>
                     </div>
-                    <div className='user-sub-title'>{userData?.email}</div>
+                    <div className='user-sub-title'>{userData?.emailAddress}</div>
                 </div>
             </div>
             <DropdownMenu>
@@ -124,9 +124,8 @@ const User = () => {
                             role='presentation'
                             className='navigation-item cursor-pointer'
                             onClick={() => {
-                                if (setUser) {
-                                    setUser('');
-                                }
+                                if (handleSetSession) { handleSetSession({} as ISessionProps); }
+                                if (handleSetProfileData) { handleSetProfileData(`wrong`); }
                                 navigate(`../${demoPagesMenu.login.path}`);
                             }}>
                             <span className='navigation-link navigation-link-pill'>

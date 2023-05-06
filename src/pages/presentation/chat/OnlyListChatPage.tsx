@@ -18,7 +18,7 @@ import Card, {
 	CardTitle,
 } from '../../../components/bootstrap/Card';
 import Chat, { ChatGroup, ChatHeader, ChatListItem } from '../../../components/Chat';
-import USERS, { IUserProps } from '../../../common/data/userDummyData';
+import USERS, { IUserProps } from '../../../common/data/userSessionService';
 import OffCanvas, { OffCanvasBody, OffCanvasHeader } from '../../../components/bootstrap/OffCanvas';
 import InputGroup from '../../../components/bootstrap/forms/InputGroup';
 import Textarea from '../../../components/bootstrap/forms/Textarea';

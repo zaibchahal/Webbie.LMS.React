@@ -254,7 +254,7 @@ interface IChatGroupProps extends HTMLAttributes<HTMLDivElement> {
 	user: {
 		src?: string;
 		srcSet?: string;
-		username?: string;
+		userName?: string;
 		name?: string;
 		surname?: string;
 		isOnline?: boolean;
@@ -314,7 +314,7 @@ ChatGroup.propTypes = {
 	user: PropTypes.shape({
 		src: PropTypes.string,
 		srcSet: PropTypes.string,
-		username: PropTypes.string,
+		userName: PropTypes.string,
 		name: PropTypes.string,
 		surname: PropTypes.string,
 		isOnline: PropTypes.bool,

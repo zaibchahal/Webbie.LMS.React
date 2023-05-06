@@ -8,11 +8,14 @@ export const Auth_Urls = {
 
 export const Profile_Urls = {
     GetCurrentUserProfileForEdit: API_BASE_URL + '/services/app/Profile/GetCurrentUserProfileForEdit',
-    GetProfilePicture: API_BASE_URL + '/services/app/Profile/GetProfilePicture'
+    GetProfilePicture: API_BASE_URL + '/services/app/Profile/GetProfilePicture',
+    ChangePassword: API_BASE_URL + '/services/app/Profile/ChangePassword'
 }
 
 export const AppConst = {
     TenantID: 'Abp.TenantId',
     TenantName: 'Abp.TenantName',
-    CurrentUser: 'Abp.Current.User'
+    CurrentUser: 'Abp.Current.User',
+    CurrentSession: 'Abp.Current.Session',
+    ProfilePic: 'Abp.Current.User.ProfilePic'
 }

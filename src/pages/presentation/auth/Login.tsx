@@ -12,11 +12,12 @@ import Logo from '../../../components/Logo';
 import useDarkMode from '../../../hooks/useDarkMode';
 import { useFormik } from 'formik';
 import AuthContext from '../../../contexts/authContext';
-import USERS, { getUserDataWithUsername } from '../../../common/data/userDummyData';
+import USERS from '../../../common/data/userSessionService';
 import Spinner from '../../../components/bootstrap/Spinner';
 import Alert from '../../../components/bootstrap/Alert';
 import { AppConst, Auth_Urls } from '../../../common/data/constants';
 import { setCookie, getCookie } from '../../../common/data/helper';
+import axios from 'axios';
 
 interface ILoginHeaderProps {
     isNewUser?: boolean;
@@ -42,7 +43,7 @@ interface ILoginProps {
     isSignUp?: boolean;
 }
 const Login: FC<ILoginProps> = ({ isSignUp }) => {
-    const { setUser } = useContext(AuthContext);
+    const { handleSetSession, handleSetProfileData } = useContext(AuthContext);
 
     const { darkModeStatus } = useDarkMode();
 
@@ -67,21 +68,20 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
     const checkTenantAvailability = async (tenancyName: string) => {
         setIsLoading(true);
         try {
-            const response = await fetch(
+            const response = await axios.post(
                 Auth_Urls.IsTenantAvailable,
+                { tenancyName: tenancyName },
                 {
-                    method: 'POST',
                     headers: {
                         Accept: 'text/plain',
                         'Content-Type': 'application/json-patch+json',
                         'X-XSRF-TOKEN': 'null',
                     },
-                    credentials: 'include',
-                    body: JSON.stringify({ tenancyName: tenancyName }),
-                },
+                    withCredentials: true,
+                }
             );
 
-            const data = await response.json();
+            const data = await response.data;
 
             if (data.success && data.result.state == 1) {
                 console.log('Tenant is available');
@@ -104,26 +104,28 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
     const SubmitLoginForm = async (values: any) => {
         setIsLoading(true);
         try {
-            const response = await fetch(
+            const response = await axios.post(
                 Auth_Urls.TokenAuth_Authenticate,
                 {
-                    method: 'POST',
+                    userNameOrEmailAddress: values.loginuserName,
+                    password: values.loginPassword,
+                    rememberClient: true,
+                },
+                {
                     headers: {
                         Accept: 'text/plain',
                         'Content-Type': 'application/json-patch+json',
                         'X-XSRF-TOKEN': 'null',
                     },
-                    credentials: 'include',
-                    body: JSON.stringify({ userNameOrEmailAddress: values.loginUsername, password: values.loginPassword, rememberClient: true }),
+                    withCredentials: true,
                 },
             );
 
-            const data = await response.json();
+            const data = await response.data;
 
             if (data.success) {
-                if (setUser) {
-                    setUser(data.result);
-                }
+                if (handleSetSession) { handleSetSession(data.result); }
+                if (handleSetProfileData) { handleSetProfileData(data.result.accessToken); }
                 handleOnClick();
             } else {
                 formik.setFieldError('loginPassword', data.error.message);
@@ -146,14 +148,14 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: {
-            loginUsername: USERS.GRACE.username,
+            loginuserName: USERS.GRACE.userName,
             loginPassword: USERS.GRACE.password,
         },
         validate: (values) => {
-            const errors: { loginUsername?: string; loginPassword?: string } = {};
+            const errors: { loginuserName?: string; loginPassword?: string } = {};
 
-            if (!values.loginUsername) {
-                errors.loginUsername = 'Required';
+            if (!values.loginuserName) {
+                errors.loginuserName = 'Required';
             }
 
             if (!values.loginPassword) {
@@ -238,7 +240,7 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
                                         <Alert isLight icon='Lock' isDismissible>
                                             <div className='row'>
                                                 <div className='col-12'>
-                                                    <strong>Username:</strong> {USERS.JOHN.username}
+                                                    <strong>userName:</strong> {USERS.JOHN.userName}
                                                 </div>
                                                 <div className='col-12'>
                                                     <strong>Password:</strong> {USERS.JOHN.password}
@@ -286,18 +288,18 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
                                         <>
                                             <div className='col-12'>
                                                 <FormGroup
-                                                    id='loginUsername'
+                                                    id='loginuserName'
                                                     isFloating
-                                                    label='Your email or username'
+                                                    label='Your email or userName'
                                                     className={classNames({
                                                         'd-none': signInPassword,
                                                     })}>
                                                     <Input
-                                                        autoComplete='username'
-                                                        value={formik.values.loginUsername}
-                                                        isTouched={formik.touched.loginUsername}
+                                                        autoComplete='userName'
+                                                        value={formik.values.loginuserName}
+                                                        isTouched={formik.touched.loginuserName}
                                                         invalidFeedback={
-                                                            formik.errors.loginUsername
+                                                            formik.errors.loginuserName
                                                         }
                                                         isValid={formik.isValid}
                                                         onChange={formik.handleChange}
@@ -309,7 +311,7 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
                                                 </FormGroup>
                                                 {signInPassword && (
                                                     <div className='text-center h4 mb-3 fw-bold'>
-                                                        Hi, {formik.values.loginUsername}.
+                                                        Hi, {formik.values.loginuserName}.
                                                     </div>
                                                 )}
                                                 <FormGroup
@@ -339,7 +341,7 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
                                                     <Button
                                                         color='warning'
                                                         className='w-100 py-3'
-                                                        isDisable={!formik.values.loginUsername}
+                                                        isDisable={!formik.values.loginuserName}
                                                         onClick={handleContinue}>
                                                         {isLoading && (
                                                             <Spinner isSmall inButton isGrow />

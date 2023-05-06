@@ -28,7 +28,7 @@ import Textarea from '../../../components/bootstrap/forms/Textarea';
 import Checks from '../../../components/bootstrap/forms/Checks';
 import Popovers from '../../../components/bootstrap/Popovers';
 import data from '../../../common/data/dummyEventsData';
-import USERS from '../../../common/data/userDummyData';
+import USERS from '../../../common/data/userSessionService';
 import { demoPagesMenu } from '../../../menu';
 import useDarkMode from '../../../hooks/useDarkMode';
 

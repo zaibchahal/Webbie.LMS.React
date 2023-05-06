@@ -13,7 +13,7 @@ import Dropdown, {
 	DropdownToggle,
 } from '../../../../components/bootstrap/Dropdown';
 import Button from '../../../../components/bootstrap/Button';
-import USERS from '../../../../common/data/userDummyData';
+import USERS from '../../../../common/data/userSessionService';
 import useDarkMode from '../../../../hooks/useDarkMode';
 import { TColor } from '../../../../type/color-type';
 import Chart, { IChartOptions } from '../../../../components/extras/Chart';

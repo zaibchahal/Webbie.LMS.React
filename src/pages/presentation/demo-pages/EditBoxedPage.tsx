@@ -32,7 +32,7 @@ import Select from '../../../components/bootstrap/forms/Select';
 import validate from './helper/editPagesValidate';
 import validateAddress from './helper/editPageAddressValidate';
 import CommonMyWallet from '../../_common/CommonMyWallet';
-import USERS from '../../../common/data/userDummyData';
+import USERS from '../../../common/data/userSessionService';
 import {
 	CalendarTodayButton,
 	CalendarViewModeButtons,
@@ -437,7 +437,7 @@ const EditBoxedPage = () => {
 												formText='This will be how your name will be displayed in the account section and in reviews'>
 												<Input
 													placeholder='Display Name'
-													autoComplete='username'
+													autoComplete='userName'
 													onChange={formik.handleChange}
 													onBlur={formik.handleBlur}
 													value={formik.values.displayName}

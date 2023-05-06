@@ -1,6 +1,6 @@
 import React, { FC, HTMLAttributes, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import USERS from '../../common/data/userDummyData';
+import USERS from '../../common/data/userSessionService';
 import CommonAvatarTeam from '../../common/other/CommonAvatarTeam';
 import Avatar, { AvatarGroup } from '../../components/Avatar';
 import Button from '../../components/bootstrap/Button';

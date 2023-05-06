@@ -65,7 +65,7 @@ const InputGroupPage = () => {
 
 	const formik = useFormik({
 		initialValues: {
-			exampleUsername: '',
+			exampleuserName: '',
 			exampleMailAddress: '',
 			exampleUrl: '',
 			examplePrice: '',
@@ -85,7 +85,7 @@ const InputGroupPage = () => {
 			exampleInputCheck: true,
 			exampleInput2: '',
 			exampleInputCheck2: false,
-			exampleInputRadio: 'username',
+			exampleInputRadio: 'userName',
 			exampleInput3: '',
 			exampleInput4: '',
 			exampleInput5: '',
@@ -157,17 +157,17 @@ const InputGroupPage = () => {
 								</p>
 								<div className='row g-4'>
 									<FormGroup>
-										<Label htmlFor='exampleUsername'>Username</Label>
+										<Label htmlFor='exampleuserName'>userName</Label>
 										<InputGroup>
 											<InputGroupText id='addon1'>@</InputGroupText>
 											<Input
-												id='exampleUsername'
-												placeholder='Username'
-												aria-label='Username'
-												autoComplete='username'
+												id='exampleuserName'
+												placeholder='userName'
+												aria-label='userName'
+												autoComplete='userName'
 												ariaDescribedby='addon1'
 												onChange={formik.handleChange}
-												value={formik.values.exampleUsername}
+												value={formik.values.exampleuserName}
 											/>
 										</InputGroup>
 									</FormGroup>
@@ -176,8 +176,8 @@ const InputGroupPage = () => {
 										<InputGroup>
 											<Input
 												id='exampleMailAddress'
-												placeholder="Recipient's username"
-												aria-label="Recipient's username"
+												placeholder="Recipient's userName"
+												aria-label="Recipient's userName"
 												autoComplete='email'
 												ariaDescribedby='addon2'
 												onChange={formik.handleChange}
@@ -225,8 +225,8 @@ const InputGroupPage = () => {
 										<InputGroup>
 											<Input
 												id='exampleCompanyEmail'
-												placeholder='Username'
-												aria-label='Username'
+												placeholder='userName'
+												aria-label='userName'
 												onChange={formik.handleChange}
 												value={formik.values.exampleCompanyEmail}
 											/>
@@ -357,8 +357,8 @@ const InputGroupPage = () => {
 									<InputGroup isWrap>
 										<InputGroupText id='addon-wrapping'>@</InputGroupText>
 										<Input
-											placeholder='Username'
-											ariaLabel='Username'
+											placeholder='userName'
+											ariaLabel='userName'
 											ariaDescribedby='addon-wrapping'
 										/>
 									</InputGroup>
@@ -404,10 +404,10 @@ const InputGroupPage = () => {
 													</InputGroupText>
 													<Input
 														id='exampleInput'
-														placeholder='Username'
-														ariaLabel='Username'
+														placeholder='userName'
+														ariaLabel='userName'
 														ariaDescribedby='addon-wrapping'
-														autoComplete='username'
+														autoComplete='userName'
 														onChange={formikCR.handleChange}
 														value={formikCR.values.exampleInput}
 														disabled={
@@ -459,7 +459,7 @@ const InputGroupPage = () => {
 															name='exampleInputRadio'
 															type='radio'
 															onChange={formikCR.handleChange}
-															value='username'
+															value='userName'
 															checked={
 																!!formikCR.values.exampleInputRadio
 															}
@@ -467,15 +467,15 @@ const InputGroupPage = () => {
 													</InputGroupText>
 													<Input
 														id='exampleInput3'
-														placeholder='Username'
-														ariaLabel='Username'
+														placeholder='userName'
+														ariaLabel='userName'
 														ariaDescribedby='addon-wrapping-radio'
-														autoComplete='username'
+														autoComplete='userName'
 														onChange={formikCR.handleChange}
 														value={formikCR.values.exampleInput3}
 														disabled={
 															formikCR.values.exampleInputRadio !==
-															'username'
+															'userName'
 														}
 													/>
 												</InputGroup>
@@ -622,8 +622,8 @@ const InputGroupPage = () => {
 									</InputGroup>
 									<InputGroup>
 										<Input
-											placeholder="Recipient's username"
-											ariaLabel="Recipient's username"
+											placeholder="Recipient's userName"
+											ariaLabel="Recipient's userName"
 											ariaDescribedby='button-addon2'
 										/>
 										<Button isOutline color='primary' id='button-addon2'>
@@ -641,8 +641,8 @@ const InputGroupPage = () => {
 									</InputGroup>
 									<InputGroup>
 										<Input
-											placeholder="Recipient's username"
-											ariaLabel="Recipient's username with two button addons"
+											placeholder="Recipient's userName"
+											ariaLabel="Recipient's userName with two button addons"
 										/>
 										<Button isOutline color='primary'>
 											Button
@@ -826,12 +826,12 @@ const InputGroupPage = () => {
 					</ModalHeader>
 					<ModalBody>
 						<div className='row g-4'>
-							{formik.values.exampleUsername && (
+							{formik.values.exampleuserName && (
 								<>
 									<div className='col-3'>
-										<b>Username:</b>
+										<b>userName:</b>
 									</div>
-									<div className='col-9'>{`@${formik.values.exampleUsername}`}</div>
+									<div className='col-9'>{`@${formik.values.exampleuserName}`}</div>
 								</>
 							)}
 							{formik.values.exampleMailAddress && (

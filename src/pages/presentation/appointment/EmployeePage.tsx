@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
-import { getUserDataWithId } from '../../../common/data/userDummyData';
+import { getUserDataWithId } from '../../../common/data/userSessionService';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
 import SubHeader, {
@@ -105,7 +105,7 @@ const EmployeePage = () => {
         },
     });
 
-    const userTasks = dummyEventsData.filter((f) => f.assigned.username === data.username);
+    const userTasks = dummyEventsData.filter((f) => f.assigned.userName === data.userName);
 
     return (
         <PageWrapper title={`${data.name} ${data.surname}`}>
@@ -158,7 +158,7 @@ const EmployeePage = () => {
                                                     </div>
                                                     <div className='flex-grow-1 ms-3'>
                                                         <div className='fw-bold fs-5 mb-0'>
-                                                            {`${data.username}@site.com`}
+                                                            {`${data.userName}@site.com`}
                                                         </div>
                                                         <div className='text-muted'>
                                                             Email Address
@@ -173,7 +173,7 @@ const EmployeePage = () => {
                                                     </div>
                                                     <div className='flex-grow-1 ms-3'>
                                                         <div className='fw-bold fs-5 mb-0'>
-                                                            {`@${data.username}`}
+                                                            {`@${data.userName}`}
                                                         </div>
                                                         <div className='text-muted'>
                                                             Social name

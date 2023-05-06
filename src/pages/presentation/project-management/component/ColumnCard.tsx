@@ -31,7 +31,7 @@ import CHATS from '../../../../common/data/chatDummyData';
 import InputGroup from '../../../../components/bootstrap/forms/InputGroup';
 import Select from '../../../../components/bootstrap/forms/Select';
 import Option from '../../../../components/bootstrap/Option';
-import USERS from '../../../../common/data/userDummyData';
+import USERS from '../../../../common/data/userSessionService';
 import TAGS from '../../../../common/data/boardTagsData';
 import { TCard, TCards, TColumnsData } from '../type/types';
 import { move } from '../helper/helper';
@@ -60,7 +60,7 @@ const ColumnCard: FC<IColumnCard> = ({
 			cardName: card.title || '',
 			groupId: columnKey || '',
 			description: card.description || '',
-			assignee: card.user.username || '',
+			assignee: card.user.userName || '',
 			task:
 				(card.tasks && card.tasks.filter((f) => f.status).map((m) => m.id.toString())) ||
 				[],
@@ -320,7 +320,7 @@ const ColumnCard: FC<IColumnCard> = ({
 										value={formik.values.assignee}>
 										{Object.keys(USERS).map((u) => (
 											// @ts-ignore
-											<Option key={USERS[u].id} value={USERS[u].username}>
+											<Option key={USERS[u].id} value={USERS[u].userName}>
 												{
 													// @ts-ignore
 													`${USERS[u].name} ${USERS[u].surname}`

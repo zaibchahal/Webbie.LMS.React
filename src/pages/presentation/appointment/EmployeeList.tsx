@@ -6,7 +6,7 @@ import Icon from '../../../components/icon/Icon';
 import Page from '../../../layout/Page/Page';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Card, { CardBody } from '../../../components/bootstrap/Card';
-import USERS from '../../../common/data/userDummyData';
+import USERS from '../../../common/data/userSessionService';
 import Badge from '../../../components/bootstrap/Badge';
 import Button from '../../../components/bootstrap/Button';
 import Dropdown, { DropdownMenu, DropdownToggle } from '../../../components/bootstrap/Dropdown';
@@ -38,7 +38,7 @@ const EmployeeList = () => {
 	const searchUsers = Object.keys(USERS)
 		.filter(
 			(key) =>
-				USERS[key].username
+				USERS[key].userName
 					.toLowerCase()
 					.includes(formik.values.searchInput.toLowerCase()) ||
 				USERS[key].name.toLowerCase().includes(formik.values.searchInput.toLowerCase()) ||
@@ -159,7 +159,7 @@ const EmployeeList = () => {
 			<Page container='fluid'>
 				<div className='row row-cols-xxl-3 row-cols-lg-3 row-cols-md-2'>
 					{searchUsers.map((user) => (
-						<div key={user.username} className='col'>
+						<div key={user.userName} className='col'>
 							<Card>
 								<CardBody>
 									<div className='row g-3'>
@@ -207,7 +207,7 @@ const EmployeeList = () => {
 															</div>
 
 															<div className='text-muted'>
-																@{user.username}
+																@{user.userName}
 															</div>
 														</div>
 														<div className='col-auto'>

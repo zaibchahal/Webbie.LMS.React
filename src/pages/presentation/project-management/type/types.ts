@@ -13,7 +13,7 @@ export type TCard = {
 	label: string;
 	img?: string;
 	user: {
-		username: string;
+		userName: string;
 		src: string;
 		srcSet: string;
 		color: TColor | 'link' | 'brand' | 'brand-two' | 'storybook';

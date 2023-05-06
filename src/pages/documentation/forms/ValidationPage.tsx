@@ -88,7 +88,7 @@ const ValidationPage = () => {
 		initialValues: {
 			validationFirstName: '',
 			validationLastName: '',
-			validationCustomUsername: '',
+			validationCustomuserName: '',
 			validationCity: '',
 			validationState: '',
 			validationZip: '',
@@ -100,7 +100,7 @@ const ValidationPage = () => {
 			const errors: {
 				validationFirstName?: string;
 				validationLastName?: string;
-				validationCustomUsername?: string;
+				validationCustomuserName?: string;
 				validationCity?: string;
 				validationState?: string;
 				validationZip?: string;
@@ -120,12 +120,12 @@ const ValidationPage = () => {
 				errors.validationLastName = 'Must be 20 characters or less';
 			}
 
-			if (!values.validationCustomUsername) {
-				errors.validationCustomUsername = 'Required';
+			if (!values.validationCustomuserName) {
+				errors.validationCustomuserName = 'Required';
 			} else if (
-				!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.validationCustomUsername)
+				!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.validationCustomuserName)
 			) {
-				errors.validationCustomUsername = 'Invalid email address';
+				errors.validationCustomuserName = 'Invalid email address';
 			}
 
 			if (!values.validationCity) {
@@ -256,21 +256,21 @@ const ValidationPage = () => {
 									</FormGroup>
 
 									<FormGroup className='col-md-4'>
-										<Label htmlFor='validationUsername'>Mail address</Label>
+										<Label htmlFor='validationuserName'>Mail address</Label>
 										<InputGroup>
 											<InputGroupText id='inputGroupPrepend'>
 												@
 											</InputGroupText>
 											<Input
-												id='validationCustomUsername'
+												id='validationCustomuserName'
 												ariaDescribedby='inputGroupPrepend'
 												onChange={formik.handleChange}
 												onBlur={formik.handleBlur}
-												value={formik.values.validationCustomUsername}
+												value={formik.values.validationCustomuserName}
 												isValid={formik.isValid}
-												isTouched={formik.touched.validationCustomUsername}
+												isTouched={formik.touched.validationCustomuserName}
 												invalidFeedback={
-													formik.errors.validationCustomUsername
+													formik.errors.validationCustomuserName
 												}
 												validFeedback='Looks good!'
 											/>

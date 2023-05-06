@@ -18,7 +18,7 @@ import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import Chat, { ChatAvatar, ChatGroup, ChatListItem } from '../../components/Chat';
 import InputGroup from '../../components/bootstrap/forms/InputGroup';
 import Textarea from '../../components/bootstrap/forms/Textarea';
-import USERS, { IUserProps } from '../../common/data/userDummyData';
+import USERS, { IUserProps } from '../../common/data/userSessionService';
 import Icon from '../../components/icon/Icon';
 import ThemeContext from '../../contexts/themeContext';
 import { demoPagesMenu } from '../../menu';
