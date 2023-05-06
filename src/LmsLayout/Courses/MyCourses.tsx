@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import USERS from '../../common/data/userDummyData';
 import CommonAvatarTeam from '../../common/other/CommonAvatarTeam';
 import Avatar, { AvatarGroup } from '../../components/Avatar';
-import Button from '../../components/bootstrap/Button';
 import Card, {
 	CardHeader,
 	CardLabel,
