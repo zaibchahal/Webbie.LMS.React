@@ -2,7 +2,7 @@ import React from 'react';
 import { RouteProps } from 'react-router-dom';
 import {
 	componentPagesMenu,
-	dashboardPagesMenu,
+	dashboardPagesMenu, 
 	demoPagesMenu,
 	gettingStartedPagesMenu,
 	pageLayoutTypesPagesMenu,
@@ -33,7 +33,6 @@ const headers: RouteProps[] = [
 	{ path: demoPagesMenu.login.path, element: null },
 	{ path: demoPagesMenu.signUp.path, element: null },
 	{ path: demoPagesMenu.page404.path, element: null },
-	// { path: 'zoom-meeting', element: null },
 	{ path: demoPagesMenu.knowledge.subMenu.grid.path, element: null },
 	{ path: dashboardPagesMenu.dashboard.path, element: <DashboardHeader /> },
 	{
