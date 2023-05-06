@@ -127,6 +127,7 @@
 		"@storybook/react": "^6.5.16",
 		"@storybook/theming": "^6.5.16",
 		"@svgr/cli": "^7.0.0",
+		"@types/gapi": "^0.0.44",
 		"@types/pascalcase": "^1.0.1",
 		"@types/payment": "^2.1.4",
 		"@types/prismjs": "^1.26.0",
