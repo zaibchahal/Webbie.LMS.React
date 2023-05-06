@@ -206,7 +206,7 @@ const Lms = {
 	LmsMyFiles: lazy(() => import('../LmsLayout/MyFile/MyFile')),
 	LmsSupportCenter: lazy(() => import('../LmsLayout/SupportCenter/SupportCenter')),
 	LmsCoursePage: lazy(() => import('../LmsLayout/Courses/Coursepage')),
-
+	LmsZoomMeeting: lazy(() => import('../LmsLayout/ZoomMeeting/JoinMeeting')),
 };
 
 const presentation: RouteProps[] = [
@@ -256,6 +256,10 @@ const presentation: RouteProps[] = [
 	 * Lms Project
 	 */
 	{
+		path: 'zoom-meeting',
+		element: <Lms.LmsZoomMeeting />,
+	},
+	{
 		path: LmsFeatures.mycourses.path,
 		element: <Lms.LmsMyCourses />,
 	},
@@ -295,21 +299,6 @@ const presentation: RouteProps[] = [
 		path: 'courses-page',
 		element: <Lms.LmsCoursePage />,
 	},
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	/**
 	 * Landing

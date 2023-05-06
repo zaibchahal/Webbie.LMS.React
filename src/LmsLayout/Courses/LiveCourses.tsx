@@ -39,13 +39,15 @@ import Page from '../../layout/Page/Page';
 import { Calendar as DatePicker } from 'react-date-range';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import { LmsFeatures, demoPagesMenu } from '../../menu';
-import ZoomMeeting from '../ZoomMeeting/ZoomMeeting';
+import { useNavigate } from 'react-router-dom';
 
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
 }
 const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const { darkModeStatus } = useDarkMode();
+	const [startCall, setStartCall] = useState(false);
+	const navigate = useNavigate();
 
 	// BEGIN :: Upcoming Events
 	const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
@@ -125,9 +127,6 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					</SubHeaderRight>
 				</SubHeader>
 				<Page>
-					<React.StrictMode>
-						<ZoomMeeting />
-					</React.StrictMode>
 					<Card stretch={isFluid}>
 						<CardHeader borderSize={1}>
 							<CardLabel icon='LiveTv' iconColor='info'>
@@ -296,8 +295,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 														'border-light': !darkModeStatus,
 													})}
 													icon='Add'
-													// onClick={handleUpcomingEdit}
-												>
+													onClick={() => navigate('../zoom-meeting')}>
 													Join
 												</Button>
 											</td>
