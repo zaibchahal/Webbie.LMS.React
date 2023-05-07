@@ -25,7 +25,7 @@ const JoinMeeting = () => {
 		ZoomMtg.prepareWebSDK();
 
 		joinMeeting();
-	}, []);
+	});
 
 	const joinMeeting = () => {
 		ZoomMtg.generateSDKSignature({
@@ -69,12 +69,12 @@ const JoinMeeting = () => {
 		});
 	};
 
-	const resizeMeeting = () => {
-		if (meetingContainerRef.current) {
-			const { clientWidth, clientHeight } = meetingContainerRef.current;
-			// ZoomMtg.resize(clientWidth, clientHeight);
-		}
-	};
+	// const resizeMeeting = () => {
+	// 	if (meetingContainerRef.current) {
+	// 		const { clientWidth, clientHeight } = meetingContainerRef.current;
+	// 		// ZoomMtg.resize(clientWidth, clientHeight);
+	// 	}
+	// };
 
 	useEffect(() => {
 		// ZoomMtg.leaveMeeting({
@@ -108,7 +108,8 @@ const JoinMeeting = () => {
 							borderRadius: '10px',
 						}}
 						ref={meetingContainerRef}
-						onResize={resizeMeeting}></div>
+						// onResize={() => resizeMeeting()}
+						></div>
 				</div>
 			) : (
 				<div

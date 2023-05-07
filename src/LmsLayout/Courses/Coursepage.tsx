@@ -3,19 +3,12 @@ import { useFormik } from 'formik';
 import dayjs, { Dayjs } from 'dayjs';
 import { useLocation, useNavigate, useNavigation, useParams } from 'react-router-dom';
 import { useTour } from '@reactour/tour';
-import Img from '../assets/img/wanna/susy/susy9.png';
 import { FaFacebook, FaGithub, FaGoogle, FaTwitter } from 'react-icons/fa';
 import useDarkMode from '../../hooks/useDarkMode';
-import showNotification from '../../components/extras/showNotification';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import { LmsFeatures } from '../../menu';
-import SubHeader, {
-	SubHeaderLeft,
-	SubHeaderRight,
-	SubheaderSeparator,
-} from '../../layout/SubHeader/SubHeader';
+import SubHeader, { SubHeaderLeft } from '../../layout/SubHeader/SubHeader';
 import Breadcrumb from '../../components/bootstrap/Breadcrumb';
-import Button from '../../components/bootstrap/Button';
 import Page from '../../layout/Page/Page';
 import Card, {
 	CardBody,
