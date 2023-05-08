@@ -10,6 +10,7 @@ export interface IAuthContextProps {
     profilePicture: string;
     handleSetSession: (data: ISessionProps) => void;
     handleSetProfileData: (token: string) => void;
+
 }
 const AuthContext = createContext<Partial<IAuthContextProps>>({});
 
