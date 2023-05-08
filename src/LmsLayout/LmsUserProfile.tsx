@@ -55,6 +55,7 @@ import ChatStatusBar from '../pages/_common/StatusBar';
 import Progress from '../components/bootstrap/Progress';
 // import { Google, Facebook, Twitter, GitHub } from '@mui/icons-material';
 import { FaFacebook, FaGithub, FaGoogle, FaTwitter } from 'react-icons/fa';
+import SocialAuth from './SocialAuthentication/SocialAuth';
 
 const LmsUserProfile = () => {
 	const { themeStatus } = useDarkMode();
@@ -501,89 +502,7 @@ const LmsUserProfile = () => {
 								</CardLabel>
 							</CardHeader>
 							<CardBody>
-								{/* <ChatStatusBar /> */}
-								<div className='container mb-3'>
-									<h2 className='text-center mb-4'>Sign in with social media</h2>
-									<div className='row justify-content-center'>
-										<div className='col-md-6'>
-											{/* <button
-												className='btn btn-primary btn-lg w-100 mb-3 d-flex align-items-center'
-												disabled={loading}
-												onClick={handleGoogleLogin}>
-												<FaGoogle className='me-2' fontSize={20} />
-												Sign in with Google
-											</button> */}
-											<Button
-												color='primary'
-												isLight
-												// icon='Google'
-												className='btn-lg w-100 mb-3 d-flex align-items-center'>
-												<FaGoogle className='me-2' fontSize={20} />
-												Sign in with Google
-											</Button>
-										</div>
-										<div className='col-md-6'>
-											<Button
-												color='primary'
-												isLight
-												className='btn-lg w-100 mb-3 d-flex align-items-center'>
-												<FaFacebook className='me-2' fontSize={20} />
-												Sign in with Facebook
-											</Button>
-											{/* <button
-												className='btn btn-primary btn-lg w-100 mb-3 d-flex align-items-center'
-												disabled={loading}
-												onClick={handleFacebookLogin}>
-												<FaFacebook className='me-2' fontSize={20} />
-												Sign in with Facebook
-											</button> */}
-										</div>
-										<div className='col-md-6'>
-											<Button
-												color='primary'
-												isLight
-												className='btn-lg w-100 mb-3 d-flex align-items-center'>
-												<FaTwitter className='me-2' fontSize={20} />
-												Sign in with Twitter
-											</Button>
-											{/* <button
-												className='btn btn-primary btn-lg w-100 mb-3 d-flex align-items-center'
-												disabled={loading}
-												onClick={handleTwitterLogin}>
-												<FaTwitter className='me-2' fontSize={20} />
-												Sign in with Twitter
-											</button> */}
-										</div>
-										<div className='col-md-6'>
-											<Button
-												color='primary'
-												isLight
-												className='btn-lg w-100 mb-3 d-flex align-items-center'>
-												<FaGithub className='me-2' fontSize={20} />
-												Sign in with GitHub
-											</Button>
-											{/* <button
-												className='btn btn-primary btn-lg w-100 mb-3 d-flex align-items-center'
-												disabled={loading}
-												onClick={handleGitHubLogin}>
-												<FaGithub className='me-2' fontSize={20} />
-												Sign in with GitHub
-											</button> */}
-										</div>
-									</div>
-								</div>
-								<div className='row g-4 d-flex justify-content-end'>
-									<Button
-										color='primary'
-										isLight
-										icon='PublishedWithChanges'
-										className='px-5'
-										style={{ maxWidth: 'max-content' }}
-										// onClick={() => setPasswordChangeCTA(true)}
-									>
-										Authentication
-									</Button>
-								</div>
+								<SocialAuth />
 							</CardBody>
 						</Card>
 						<Card ref={DeviceRef}>

@@ -207,8 +207,10 @@ const Lms = {
 	LmsSupportCenter: lazy(() => import('../LmsLayout/SupportCenter/SupportCenter')),
 	LmsCoursePage: lazy(() => import('../LmsLayout/Courses/Coursepage')),
 	LmsZoomMeeting: lazy(() => import('../LmsLayout/ZoomMeeting/JoinMeeting')),
+	LmsGoogleClass: lazy(() => import('../LmsLayout/GoogleClass/GoogleClass')),
+	LmsTwitter: lazy(() => import('../LmsLayout/SocialAuthentication/TwitterCallBack')),
 };
-
+const location = window.location;
 const presentation: RouteProps[] = [
 	/**
 	 * Lms Project
@@ -216,6 +218,10 @@ const presentation: RouteProps[] = [
 	{
 		path: 'devices',
 		element: <DeviceManagement />,
+	},
+	{
+		path: 'twitter',
+		element: <Lms.LmsTwitter location={location} />,
 	},
 	/**
 	 * Lms Project
@@ -258,6 +264,10 @@ const presentation: RouteProps[] = [
 	{
 		path: 'zoom-meeting',
 		element: <Lms.LmsZoomMeeting />,
+	},
+	{
+		path: 'google-class',
+		element: <Lms.LmsGoogleClass />,
 	},
 	{
 		path: LmsFeatures.mycourses.path,
