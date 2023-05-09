@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-interface UseGoogleAuthReturnType {
+interface UseGoogleAuthReturn {
 	isSignedIn: boolean;
 	signIn: () => Promise<void>;
 	signOut: () => Promise<void>;
@@ -14,7 +14,7 @@ interface Profile {
 	imageUrl: string;
 }
 
-export function useGoogleAuth(): UseGoogleAuthReturnType {
+export function useGoogleAuth(): UseGoogleAuthReturn {
 	const [isSignedIn, setIsSignedIn] = useState(false);
 	const [profile, setProfile] = useState<Profile | null>(null);
 
@@ -23,13 +23,12 @@ export function useGoogleAuth(): UseGoogleAuthReturnType {
 			gapi.client
 				.init({
 					clientId:
-						'328801390833-4dfc6agjmng54gr3io8a3mqolni3kshk.apps.googleusercontent.com',
+						'910444537344-mu95pf7nm7j2e5l2kp2g8ri2bi00jjj9.apps.googleusercontent.com',
 					scope: 'openid profile email',
 				})
 				.then(() => {
 					const auth2 = (gapi as any).auth2;
 					const isSignedIn = auth2.getAuthInstance().isSignedIn.get();
-					console.log(isSignedIn);
 					const currentUser = auth2.getAuthInstance().currentUser.get();
 					const userProfile = currentUser.getBasicProfile();
 					setIsSignedIn(!isSignedIn);
@@ -38,10 +37,10 @@ export function useGoogleAuth(): UseGoogleAuthReturnType {
 						email: userProfile.getEmail(),
 						imageUrl: userProfile.getImageUrl(),
 					});
-                    console.log(profile?.name);
+					console.log(profile?.name);
 				});
 		});
-	}, []);
+	});
 
 	const loadClient = (): Promise<void> => {
 		return new Promise((resolve, reject) => {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ZoomMtg } from '@zoomus/websdk';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
-import './Meeting.css';
+// import './Meeting.css';
 import { useLocation } from 'react-router-dom';
 
 const JoinMeeting = () => {
@@ -18,6 +18,22 @@ const JoinMeeting = () => {
 		leaveUrl: 'http://localhost:3000/live-courses',
 		role: '0',
 	};
+
+	useEffect(() => {
+		const zoomMeetingContainer = document.querySelector<HTMLElement>('#zoom-meeting-container');
+		const zmmtgRoot = document.querySelector<HTMLElement>('#zmmtg-root');
+		const videoWrap = document.querySelector<HTMLElement>('.zm-video-wrap');
+
+		if (zmmtgRoot && videoWrap) {
+			// zmmtgRoot.style.position = 'relative';
+			// videoWrap.style.width = '20%';
+			// videoWrap.style.height = '20%';
+			// videoWrap.style.position = 'absolute';
+			// videoWrap.style.top = '50%';
+			// videoWrap.style.left = '50%';
+			// videoWrap.style.transform = 'translate(-50%, -50%)';
+		}
+	}, []);
 
 	useEffect(() => {
 		ZoomMtg.setZoomJSLib('https://source.zoom.us/2.12.0/lib', '/av');
@@ -69,12 +85,12 @@ const JoinMeeting = () => {
 		});
 	};
 
-	// const resizeMeeting = () => {
-	// 	if (meetingContainerRef.current) {
-	// 		const { clientWidth, clientHeight } = meetingContainerRef.current;
-	// 		// ZoomMtg.resize(clientWidth, clientHeight);
-	// 	}
-	// };
+	const resizeMeeting = () => {
+		if (meetingContainerRef.current) {
+			const { clientWidth, clientHeight } = meetingContainerRef.current;
+			// ZoomMtg.resize(clientWidth, clientHeight);
+		}
+	};
 
 	useEffect(() => {
 		// ZoomMtg.leaveMeeting({
@@ -91,36 +107,37 @@ const JoinMeeting = () => {
 
 	return (
 		<PageWrapper title='Zoom Meeting'>
-			{meetingStarted ? (
-				<div
-					style={{
-						width: '100%',
-						height: 'calc(100vh - 60px)',
-						display: 'flex',
-						justifyContent: 'center',
-						alignItems: 'center',
-					}}>
+			<div id='zoom-meeting-container' className=''>
+				{meetingStarted ? (
 					<div
 						style={{
-							width: '80%',
-							height: '80%',
-							border: '1px solid black',
-							borderRadius: '10px',
-						}}
-						ref={meetingContainerRef}
-						// onResize={() => resizeMeeting()}
-						></div>
-				</div>
-			) : (
-				<div
-					style={{
-						display: 'flex',
-						flexDirection: 'column',
-						justifyContent: 'center',
-						alignItems: 'center',
-						height: 'calc(30vh - 30px)',
-					}}></div>
-			)}
+							width: '100%',
+							height: 'calc(100vh - 60px)',
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}>
+						<div
+							style={{
+								width: '80%',
+								height: '80%',
+								border: '1px solid black',
+								borderRadius: '10px',
+							}}
+							ref={meetingContainerRef}
+							onResize={() => resizeMeeting()}></div>
+					</div>
+				) : (
+					<div
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							justifyContent: 'center',
+							alignItems: 'center',
+							height: 'calc(30vh - 30px)',
+						}}></div>
+				)}
+			</div>
 		</PageWrapper>
 	);
 };

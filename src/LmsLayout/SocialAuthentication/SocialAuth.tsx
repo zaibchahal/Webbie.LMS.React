@@ -2,6 +2,8 @@ import React from 'react';
 import Button from '../../components/bootstrap/Button';
 import { FaFacebook, FaGoogle, FaMicrosoft, FaTwitter } from 'react-icons/fa';
 import { useGoogleAuth } from './useGoogleAuth';
+import MicrosoftLoginComponent from './MicrosoftAuth/MicrosoftAuth';
+import MicrosoftAuth from './MicrosoftAuth/MicrosoftAuth';
 
 const SocialAuth = () => {
 	const { isSignedIn, signIn, signOut } = useGoogleAuth();
@@ -14,22 +16,12 @@ const SocialAuth = () => {
 		await signOut();
 	};
 
-	// const handleTwitterLogin = () => {
-	// 	const twitterUrl = `https://api.twitter.com/oauth/authenticate?oauth_token=xmQ5ZLU0Pmr5Rs2yRbeX86Chw`;
-
-	// 	window.open(twitterUrl, '_self');
-	// };
-
 	return (
 		<>
 			<div className='container mb-3'>
 				<h2 className='text-center mb-4'>Sign in with social media</h2>
 				<div className='row justify-content-center'>
 					<div className='col-md-6'>
-						{/* <GoogleLoginButton
-							className=' d-flex align-items-center rounded-3'
-							onClick={() => handleSocialLogin('google')}
-						/> */}
 						<div>
 							{isSignedIn ? (
 								<Button
@@ -63,19 +55,11 @@ const SocialAuth = () => {
 								handleTwitterLogin();
 							}}>
 							<FaTwitter className='me-2' fontSize={20} />
-							Sign in with Twitter
+							Sign in with Apple
 						</Button> */}
-						{/* <TwitterAuth /> */}
-						{/* <AuthenticateTwitter /> */}
 					</div>
 					<div className='col-md-6'>
-						<Button
-							color='primary'
-							isLight
-							className='btn-lg w-100 mb-3 d-flex align-items-center'>
-							<FaMicrosoft className='me-2' fontSize={20} />
-							Sign in with GitHub
-						</Button>
+						<MicrosoftAuth />
 					</div>
 				</div>
 			</div>

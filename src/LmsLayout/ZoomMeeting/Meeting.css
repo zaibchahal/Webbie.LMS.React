@@ -1,14 +1,12 @@
-.meeting-container {
-	width: 100%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+#zmmtg-root {
+	position: relative;
 }
 
-.meeting-window {
-	width: 80%;
-	height: 80%;
-	border: 1px solid black;
-	border-radius: 10px;
+#zmmtg-root .zm-video-wrap {
+	width: 50%;
+	height: 50%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }

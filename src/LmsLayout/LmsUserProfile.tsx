@@ -54,7 +54,7 @@ import Verifynumber from '../common/LMS_Common/VerifyNumber';
 import ChatStatusBar from '../pages/_common/StatusBar';
 import Progress from '../components/bootstrap/Progress';
 // import { Google, Facebook, Twitter, GitHub } from '@mui/icons-material';
-import { FaFacebook, FaGithub, FaGoogle, FaTwitter } from 'react-icons/fa';
+// import { FaFacebook, FaGithub, FaGoogle, FaTwitter } from 'react-icons/fa';
 import SocialAuth from './SocialAuthentication/SocialAuth';
 
 const LmsUserProfile = () => {
