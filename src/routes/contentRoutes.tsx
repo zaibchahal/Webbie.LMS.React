@@ -208,6 +208,7 @@ const Lms = {
 	LmsCoursePage: lazy(() => import('../LmsLayout/Courses/Coursepage')),
 	LmsZoomMeeting: lazy(() => import('../LmsLayout/ZoomMeeting/ZoomIndex')),
 	LmsGoogleClass: lazy(() => import('../LmsLayout/GoogleClass/GoogleClass')),
+	// LmsGoogleMeeting: lazy(() => import('../LmsLayout/GoogleMeeting/MeetComponent')),
 };
 const location = window.location;
 const presentation: RouteProps[] = [
@@ -218,6 +219,10 @@ const presentation: RouteProps[] = [
 		path: 'devices',
 		element: <DeviceManagement />,
 	},
+	// {
+	// 	path: 'Google-Meet',
+	// 	element: <Lms.LmsGoogleMeeting />,
+	// },
 	/**
 	 * Lms Project
 	 */

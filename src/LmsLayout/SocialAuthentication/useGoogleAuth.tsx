@@ -19,6 +19,8 @@ export function useGoogleAuth(): UseGoogleAuthReturn {
 	const [profile, setProfile] = useState<Profile | null>(null);
 
 	useEffect(() => {
+		const script = document.createElement('script');
+		script.src = 'https://apis.google.com/js/api.js';
 		gapi.load('client:auth2', () => {
 			gapi.client
 				.init({
