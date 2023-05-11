@@ -41,12 +41,7 @@ const SupportCenter = () => {
 	const onFormSubmit = (values: { category: any; search: any }) => {
 		const searchValue = values.search.toString().toLowerCase();
 	};
-	const dispatch = useDispatch<AppDispatch>();
-	let user = useSelector((store: RootState) => store.user);
-	useEffect(() => {
-		dispatch(UpdateName('Support Center'));
-		console.log(user);
-	}, []);
+
 	const formik = useFormik({
 		initialValues: {
 			search: '',

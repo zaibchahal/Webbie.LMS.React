@@ -39,7 +39,7 @@ import Page from '../../layout/Page/Page';
 import { Calendar as DatePicker } from 'react-date-range';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import { LmsFeatures, demoPagesMenu } from '../../menu';
-import ZoomMeeting from '../ZoomMeeting/ZoomMeeting';
+import { useNavigate } from 'react-router-dom';
 
 interface IFavouriteVideosProps {
 	isFluid?: boolean;
@@ -81,7 +81,7 @@ const FavouriteVideos: FC<IFavouriteVideosProps> = ({ isFluid }) => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items, requestSort, getClassNamesFor } = useSortableData(data);
-
+	const Navigate = useNavigate();
 	const { themeStatus } = useDarkMode();
 
 	const [date, setDate] = useState<Date>(new Date());
@@ -125,9 +125,6 @@ const FavouriteVideos: FC<IFavouriteVideosProps> = ({ isFluid }) => {
 					</SubHeaderRight>
 				</SubHeader>
 				<Page>
-					<React.StrictMode>
-						<ZoomMeeting />
-					</React.StrictMode>
 					<Card stretch={isFluid}>
 						<CardHeader borderSize={1}>
 							<CardLabel icon='LiveTv' iconColor='info'>
@@ -296,8 +293,7 @@ const FavouriteVideos: FC<IFavouriteVideosProps> = ({ isFluid }) => {
 														'border-light': !darkModeStatus,
 													})}
 													icon='Add'
-													// onClick={handleUpcomingEdit}
-												>
+													onClick={() => Navigate('../zoom-meeting')}>
 													Join
 												</Button>
 											</td>

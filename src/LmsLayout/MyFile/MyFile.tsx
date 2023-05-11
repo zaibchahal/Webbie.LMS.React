@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { LmsDashboard, LmsFeatures } from '../../menu';
+import React from 'react';
+import { LmsFeatures } from '../../menu';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import Alert from '../../components/bootstrap/Alert';
 import Button from '../../components/bootstrap/Button';
@@ -16,28 +16,14 @@ import FormGroup from '../../components/bootstrap/forms/FormGroup';
 import Input from '../../components/bootstrap/forms/Input';
 
 import { useFormik } from 'formik';
-import { useNavigate } from 'react-router-dom';
 import showNotification from '../../components/extras/showNotification';
 import Icon from '../../components/icon/Icon';
+import CommonUpcomingEvents from '../../pages/_common/CommonUpcomingEvents';
 import useDarkMode from '../../hooks/useDarkMode';
 import FavouriteVideos from '../../pages/_common/CommonUpcomingEvents';
 import Page from '../../layout/Page/Page';
-import ListFluidPage from '../../pages/presentation/demo-pages/ListFluidPage';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppDispatch, RootState } from '../../store';
-import { UpdateName } from '../../@features/User/userSlice';
 
 const MyFiles = () => {
-	const { darkModeStatus } = useDarkMode();
-	const dispatch = useDispatch<AppDispatch>();
-	let user = useSelector((store: RootState) => store.user);
-
-	useEffect(() => {
-		dispatch(UpdateName('My File'));
-		console.log(user);
-	}, []);
-
-	const navigate = useNavigate();
 	const formik = useFormik({
 		initialValues: {
 			formPrefix: 'Prof.',

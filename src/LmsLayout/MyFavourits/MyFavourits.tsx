@@ -1,10 +1,12 @@
 import { LmsFeatures } from '../../menu';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import Card, { CardTabItem } from '../../components/bootstrap/Card';
-import FavouriteVideos from '../MyFavourits/FavouriteVideos';
-import FavouriteMcqs from '../MyFavourits/FavouriteMcqs';
+// import FavouriteVideos from '../MyFavourits/FavouriteVideos';
+// import FavouriteMcqs from '../MyFavourits/FavouriteMcqs';
 import FavouritePDF from '../MyFavourits/FavouritePdf';
 import Page from '../../layout/Page/Page';
+import FavouriteVideos from './FavouriteVideos';
+import FavouriteMcqs from './FavouriteMcqs';
 
 const MyFavourits = () => {
     return (

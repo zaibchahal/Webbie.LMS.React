@@ -152,7 +152,7 @@ const DeviceManagement = () => {
 				<CardBody isScrollable>
 					<div className='todo h-100'>
 						{list.map((i, index) => (
-							<div className='todo-item mb-5 mx-3'>
+							<div key={index} className='todo-item mb-5 mx-3'>
 								<div className='todo-check'>
 									<Icon
 										icon={
