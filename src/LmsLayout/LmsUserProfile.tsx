@@ -1,33 +1,18 @@
 import React, { useEffect, useRef, useContext, useState } from 'react';
 import { useFormik } from 'formik';
+import { v4 as uuidv4 } from 'uuid';
 import dayjs, { Dayjs } from 'dayjs';
 import PageWrapper from '../layout/PageWrapper/PageWrapper';
 import { demoPagesMenu } from '../menu';
-import SubHeader, {
-    SubHeaderLeft,
-    SubHeaderRight,
-    SubheaderSeparator,
-} from '../layout/SubHeader/SubHeader';
+import SubHeader, { SubHeaderLeft, SubHeaderRight, SubheaderSeparator, } from '../layout/SubHeader/SubHeader';
 import Page from '../layout/Page/Page';
-// import validate from './helper/editPagesValidate';
 import validate from '../pages/presentation/demo-pages/helper/editPagesValidate';
+import pswvalidate from '../pages/presentation/demo-pages/helper/editPasswordValidate';
 import showNotification from '../components/extras/showNotification';
 import Icon from '../components/icon/Icon';
-import Card, {
-    CardActions,
-    CardBody,
-    CardFooter,
-    CardHeader,
-    CardLabel,
-    CardSubTitle,
-    CardTitle,
-} from '../components/bootstrap/Card';
+import Card, { CardActions, CardBody, CardFooter, CardHeader, CardLabel, CardSubTitle, CardTitle, } from '../components/bootstrap/Card';
 import Button from '../components/bootstrap/Button';
-import Dropdown, {
-    DropdownItem,
-    DropdownMenu,
-    DropdownToggle,
-} from '../components/bootstrap/Dropdown';
+import Dropdown, { DropdownItem, DropdownMenu, DropdownToggle, } from '../components/bootstrap/Dropdown';
 import useDarkMode from '../hooks/useDarkMode';
 import Spinner from '../components/bootstrap/Spinner';
 import FormGroup from '../components/bootstrap/forms/FormGroup';
@@ -42,13 +27,14 @@ import VerifyEmail from '../common/LMS_Common/VerifyEmail';
 import Verifynumber from '../common/LMS_Common/VerifyNumber';
 import ChatStatusBar from '../pages/_common/StatusBar';
 import Progress from '../components/bootstrap/Progress';
+import axios, { AxiosError } from 'axios';
+import { AppConst, Profile_Urls } from '../common/data/constants';
 import AuthContext from '../contexts/authContext';
-// import { Google, Facebook, Twitter, GitHub } from '@mui/icons-material';
 import { FaFacebook, FaGithub, FaGoogle, FaTwitter } from 'react-icons/fa';
-
 const LmsUserProfile = () => {
+    const { session } = useContext(AuthContext);
     const { themeStatus } = useDarkMode();
-    const { profilePicture, userData } = useContext(AuthContext);
+    const { profilePicture, userData, handleSetProfilePicture } = useContext(AuthContext);
 
     /**
      * Common
@@ -66,7 +52,97 @@ const LmsUserProfile = () => {
             "The user's account details have been successfully updated.",
         );
     };
-    // const { id } = useParams();
+    const handleChangePassword = async () => {
+        setIsLoading(true);
+        try {
+            const response = await axios.post(Profile_Urls.ChangePassword,
+                pswformik.values,
+                {
+                    headers: {
+                        Accept: 'text/plain',
+                        'Content-Type': 'application/json-patch+json',
+                        'X-XSRF-TOKEN': 'null',
+                        Authorization: `Bearer ${session?.accessToken}`
+                    },
+                    withCredentials: true,
+                })
+            var data = response.data.result;
+
+            showNotification(
+                <span className='d-flex align-items-center'>
+                    <Icon icon='Info' size='lg' className='me-1' />
+                    <span>Updated Successfully</span>
+                </span>,
+                "The user's password have been successfully updated.",
+            );
+        } catch (e: any) {
+            var m = e.response.data.error.message || "";
+            showNotification(
+                <span className='d-flex align-items-center'>
+                    <Icon icon='Error' size='lg' className='me-1' />
+                    <span>Not Updated</span>
+                </span>,
+                m,
+            );
+        }
+        setIsLoading(false);
+    };
+
+    const [image, setImage] = useState('');
+    function handleImage(e: any) {
+        console.log(e.target.files);
+        setImage(e.target.files[0])
+    }
+    const formData = new FormData()
+    async function handleApi() {
+        setIsLoading(true);
+        try {
+            const t = uuidv4();
+            formData.append('ProfilePicture', image);
+            formData.append('FileName', (image as any).name);
+            formData.append('FileToken', t);
+
+            var res = await axios.post(Profile_Urls.UploadProfilePicture, formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${session?.accessToken}`
+                    },
+                    withCredentials: true,
+                }).then((res) => {
+                    const result = res.data.result;
+                    console.log(result)
+                    if (res.data.success) {
+                        axios.put(Profile_Urls.UpdateProfilePicture,
+                            {
+                                "fileToken": t,
+                                "x": 0,
+                                "y": 0,
+                                "width": result.width,
+                                "height": result.height,
+                                "useGravatarProfilePicture": false
+
+                            },
+                            {
+                                headers: {
+                                    Accept: 'text/plain',
+                                    'Content-Type': 'application/json-patch+json',
+                                    'X-XSRF-TOKEN': 'null',
+                                    Authorization: `Bearer ${session?.accessToken}`
+                                },
+                                withCredentials: true,
+                            }).then((res) => {
+                                if (res.data.success) {
+                                    if (handleSetProfilePicture)
+                                        handleSetProfilePicture(session?.accessToken);
+                                }
+                            })
+                    }
+                })
+        } catch (e: any) {
+            console.log(e)
+        }
+        setIsLoading(false);
+    }
     const data = userData || {};
 
     const formik = useFormik({
@@ -88,6 +164,17 @@ const LmsUserProfile = () => {
         onSubmit: () => {
             setIsLoading(true);
             setTimeout(handleSave, 2000);
+        },
+    });
+    const pswformik = useFormik({
+        initialValues: {
+            currentPassword: '',
+            newPassword: '',
+            confirmPassword: '',
+        },
+        validate: pswvalidate,
+        onSubmit: () => {
+            handleChangePassword();
         },
     });
 
@@ -196,11 +283,14 @@ const LmsUserProfile = () => {
                                         <div className='col-lg'>
                                             <div className='row g-4'>
                                                 <div className='col-auto'>
-                                                    <Input type='file' autoComplete='photo' />
+                                                    <Input type='file' onChange={handleImage} autoComplete='photo' />
                                                 </div>
                                                 <div className='col-auto'>
-                                                    <Button color='dark' isLight icon='Delete'>
-                                                        Delete Avatar
+                                                    <Button color='dark' onClick={handleApi} isLight icon='Save'>
+                                                        {isLoading && (
+                                                            <Spinner isSmall inButton isGrow />
+                                                        )}
+                                                        Save Image
                                                     </Button>
                                                 </div>
                                                 <div className='col-12'>
@@ -402,8 +492,8 @@ const LmsUserProfile = () => {
                                                     type='password'
                                                     placeholder='Current password'
                                                     autoComplete='current-password'
-                                                    onChange={formik.handleChange}
-                                                    value={formik.values.currentPassword}
+                                                    onChange={pswformik.handleChange}
+                                                    value={pswformik.values.currentPassword}
                                                 />
                                             </FormGroup>
                                         </div>
@@ -416,12 +506,12 @@ const LmsUserProfile = () => {
                                                     type='password'
                                                     placeholder='New password'
                                                     autoComplete='new-password'
-                                                    onChange={formik.handleChange}
-                                                    onBlur={formik.handleBlur}
-                                                    value={formik.values.newPassword}
-                                                    isValid={formik.isValid}
-                                                    isTouched={formik.touched.newPassword}
-                                                    invalidFeedback={formik.errors.newPassword}
+                                                    onChange={pswformik.handleChange}
+                                                    onBlur={pswformik.handleBlur}
+                                                    value={pswformik.values.newPassword}
+                                                    isValid={pswformik.isValid}
+                                                    isTouched={pswformik.touched.newPassword}
+                                                    invalidFeedback={pswformik.errors.newPassword}
                                                     validFeedback='Looks good!'
                                                 />
                                             </FormGroup>
@@ -435,12 +525,12 @@ const LmsUserProfile = () => {
                                                     type='password'
                                                     placeholder='Confirm new password'
                                                     autoComplete='new-password'
-                                                    onChange={formik.handleChange}
-                                                    onBlur={formik.handleBlur}
-                                                    value={formik.values.confirmPassword}
-                                                    isValid={formik.isValid}
-                                                    isTouched={formik.touched.confirmPassword}
-                                                    invalidFeedback={formik.errors.confirmPassword}
+                                                    onChange={pswformik.handleChange}
+                                                    onBlur={pswformik.handleBlur}
+                                                    value={pswformik.values.confirmPassword}
+                                                    isValid={pswformik.isValid}
+                                                    isTouched={pswformik.touched.confirmPassword}
+                                                    invalidFeedback={pswformik.errors.confirmPassword}
                                                     validFeedback='Looks good!'
                                                 />
                                             </FormGroup>
@@ -451,7 +541,7 @@ const LmsUserProfile = () => {
                                                 color='primary'
                                                 isLight
                                                 icon='PublishedWithChanges'
-                                                onClick={formik.handleSubmit}>
+                                                onClick={handleChangePassword}>
                                                 {isLoading && (
                                                     <Spinner isSmall inButton isGrow />
                                                 )}

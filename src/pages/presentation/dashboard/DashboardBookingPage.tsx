@@ -17,7 +17,7 @@ import Card, {
 	CardLabel,
 	CardTitle,
 } from '../../../components/bootstrap/Card';
-import CommonUpcomingEvents from '../../_common/CommonUpcomingEvents';
+import FavouriteVideos from '../../_common/CommonUpcomingEvents';
 import eventList, { IEvents } from '../../../common/data/events';
 import OffCanvas, {
 	OffCanvasBody,
@@ -495,7 +495,7 @@ const DashboardBookingPage = () => {
 						<CommonDashboardBookingLists />
 					</div>
 					<div className='col-12'>
-						<CommonUpcomingEvents />
+						<FavouriteVideos />
 					</div>
 				</div>
 

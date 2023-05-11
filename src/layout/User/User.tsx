@@ -14,7 +14,7 @@ import AuthContext from '../../contexts/authContext';
 import { ISessionProps, IUserProps } from '../../common/data/userSessionService';
 
 const User = () => {
-    const { userData, handleSetSession, handleSetProfileData, profilePicture } = useContext(AuthContext);
+    const { userData, handleLogout, profilePicture } = useContext(AuthContext);
 
     const navigate = useNavigate();
     const handleItem = useNavigationItemHandle();
@@ -124,8 +124,7 @@ const User = () => {
                             role='presentation'
                             className='navigation-item cursor-pointer'
                             onClick={() => {
-                                if (handleSetSession) { handleSetSession({} as ISessionProps); }
-                                if (handleSetProfileData) { handleSetProfileData(`wrong`); }
+                                if (handleLogout) { handleLogout(); }
                                 navigate(`../${demoPagesMenu.login.path}`);
                             }}>
                             <span className='navigation-link navigation-link-pill'>

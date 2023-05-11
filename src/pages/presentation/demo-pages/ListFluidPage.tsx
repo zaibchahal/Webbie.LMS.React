@@ -6,7 +6,7 @@ import Icon from '../../../components/icon/Icon';
 import Button from '../../../components/bootstrap/Button';
 import Page from '../../../layout/Page/Page';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
-import CommonUpcomingEvents from '../../_common/CommonUpcomingEvents';
+import FavouriteVideos from '../../_common/CommonUpcomingEvents';
 import Popovers from '../../../components/bootstrap/Popovers';
 import { demoPagesMenu } from '../../../menu';
 import useDarkMode from '../../../hooks/useDarkMode';
@@ -49,7 +49,7 @@ const ListFluidPage = () => {
 				</SubHeaderRight>
 			</SubHeader>
 			<Page container='fluid'>
-				<CommonUpcomingEvents isFluid />
+				<FavouriteVideos isFluid />
 			</Page>
 		</PageWrapper>
 	);

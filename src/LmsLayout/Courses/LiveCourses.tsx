@@ -41,10 +41,10 @@ import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import { LmsFeatures, demoPagesMenu } from '../../menu';
 import ZoomMeeting from '../ZoomMeeting/ZoomMeeting';
 
-interface ICommonUpcomingEventsProps {
+interface IFavouriteVideosProps {
 	isFluid?: boolean;
 }
-const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
+const FavouriteVideos: FC<IFavouriteVideosProps> = ({ isFluid }) => {
 	const { darkModeStatus } = useDarkMode();
 
 	// BEGIN :: Upcoming Events
@@ -495,4 +495,4 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	);
 };
 
-export default CommonUpcomingEvents;
+export default FavouriteVideos;

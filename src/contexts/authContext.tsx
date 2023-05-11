@@ -10,6 +10,8 @@ export interface IAuthContextProps {
     profilePicture: string;
     handleSetSession: (data: ISessionProps) => void;
     handleSetProfileData: (token: string) => void;
+    handleSetProfilePicture: (token: string | undefined) => void;
+    handleLogout: () => void;
 
 }
 const AuthContext = createContext<Partial<IAuthContextProps>>({});
@@ -18,8 +20,17 @@ interface IAuthContextProviderProps {
     children: ReactNode;
 }
 export const AuthContextProvider: FC<IAuthContextProviderProps> = ({ children }) => {
-    const [session, setSession] = useState<ISessionProps>(JSON.parse(localStorage.getItem(AppConst.CurrentSession) || '{}') as ISessionProps);
-    const [userData, setProfileData] = useState<IUserProps>(JSON.parse(localStorage.getItem(AppConst.CurrentUser) || '{}') as IUserProps);
+
+    const getDataFromStorege = (Key: string) => {
+        try {
+            return JSON.parse(localStorage.getItem(Key) || '{}')
+        } catch {
+            return {};
+        }
+    }
+
+    const [session, setSession] = useState<ISessionProps>(getDataFromStorege(AppConst.CurrentSession) as ISessionProps);
+    const [userData, setProfileData] = useState<IUserProps>(getDataFromStorege(AppConst.CurrentUser) as IUserProps);
     const [profilePicture, setProfilePicture] = useState<string>(localStorage.getItem(AppConst.ProfilePic) || '');
 
 
@@ -27,6 +38,15 @@ export const AuthContextProvider: FC<IAuthContextProviderProps> = ({ children })
         setSession(data);
         localStorage.setItem(AppConst.CurrentSession, JSON.stringify(data));
 
+    };
+
+    const handleLogout = () => {
+        setSession({} as ISessionProps);
+        setProfileData({} as IUserProps);
+        setProfilePicture("");
+        localStorage.setItem(AppConst.CurrentSession, JSON.stringify({}));
+        localStorage.setItem(AppConst.CurrentUser, JSON.stringify({}));
+        localStorage.setItem(AppConst.ProfilePic, '');
     };
 
     const handleSetProfileData = async (token: string) => {
@@ -51,7 +71,7 @@ export const AuthContextProvider: FC<IAuthContextProviderProps> = ({ children })
         }
     };
 
-    const handleSetProfilePicture = async (token: string) => {
+    const handleSetProfilePicture = async (token: string | undefined) => {
         try {
             if (!token) {
                 token = session.accessToken;
@@ -80,7 +100,9 @@ export const AuthContextProvider: FC<IAuthContextProviderProps> = ({ children })
             userData,
             handleSetSession,
             handleSetProfileData,
-            profilePicture
+            handleSetProfilePicture,
+            profilePicture,
+            handleLogout
         }),
         [session, userData, handleSetSession, handleSetProfileData],
     );

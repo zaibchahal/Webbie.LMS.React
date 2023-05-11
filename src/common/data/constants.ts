@@ -1,5 +1,6 @@
 //export const API_BASE_URL = 'https://localhost:44302/api';
-export const API_BASE_URL = 'https://stupefied-proskuriakova.69-10-42-234.plesk.page/api';
+export const BASE_URL = 'https://stupefied-proskuriakova.69-10-42-234.plesk.page';
+export const API_BASE_URL = BASE_URL + '/api';
 
 export const Auth_Urls = {
     IsTenantAvailable: API_BASE_URL + '/services/app/Account/IsTenantAvailable',
@@ -9,8 +10,19 @@ export const Auth_Urls = {
 export const Profile_Urls = {
     GetCurrentUserProfileForEdit: API_BASE_URL + '/services/app/Profile/GetCurrentUserProfileForEdit',
     GetProfilePicture: API_BASE_URL + '/services/app/Profile/GetProfilePicture',
-    ChangePassword: API_BASE_URL + '/services/app/Profile/ChangePassword'
+    ChangePassword: API_BASE_URL + '/services/app/Profile/ChangePassword',
+    UpdateProfilePicture: API_BASE_URL + '/services/app/Profile/UpdateProfilePicture',
+
+    UploadProfilePicture: BASE_URL + '/Profile/UploadProfilePicture',
+    DownloadTempFile: BASE_URL + '/File/DownloadTempFile', //fileToken fileName=ProfilePicture &fileType=image/jpeg &v=1683616970003
+
 }
+
+export const Student_Urls = {
+    GetFovouritsList: API_BASE_URL + '/services/app/QuestionBankService/GetFovouritsList',
+}
+
+
 
 export const AppConst = {
     TenantID: 'Abp.TenantId',

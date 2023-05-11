@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import showNotification from '../../components/extras/showNotification';
 import Icon from '../../components/icon/Icon';
 import useDarkMode from '../../hooks/useDarkMode';
-import CommonUpcomingEvents from '../../pages/_common/CommonUpcomingEvents';
+import FavouriteVideos from '../../pages/_common/CommonUpcomingEvents';
 import Page from '../../layout/Page/Page';
 import ListFluidPage from '../../pages/presentation/demo-pages/ListFluidPage';
 import { useSelector, useDispatch } from 'react-redux';
@@ -74,7 +74,7 @@ const MyFiles = () => {
 						<Alert isLight className='border-0' shadow='md' icon='LocalPolice'>
 							The information is not shared with third parties.
 						</Alert>
-						<CommonUpcomingEvents isFluid />
+						<FavouriteVideos isFluid />
 						{/* <Alert
 							isLight
 							className='border-0'

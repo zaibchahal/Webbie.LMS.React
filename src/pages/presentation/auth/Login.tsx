@@ -114,6 +114,7 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
                 {
                     headers: {
                         Accept: 'text/plain',
+                        'Abp.TenantId': getCookie(AppConst.TenantID),
                         'Content-Type': 'application/json-patch+json',
                         'X-XSRF-TOKEN': 'null',
                     },

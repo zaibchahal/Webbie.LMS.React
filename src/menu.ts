@@ -1150,7 +1150,26 @@ export const LmsFeatures = {
 		text: 'MCQ Bank',
 		path: 'mcq-bank',
 		icon: 'Help',
-		subMenu: null,
+		subMenu: {
+			createtest: {
+				id: 'listBoxed',
+				text: 'Create Test',
+				path: 'mcq-bank/create-test',
+				icon: 'ViewArray',
+			},
+			paperlist: {
+				id: 'listBoxed',
+				text: 'Solve Paper',
+				path: 'mcq-bank/paper-list',
+				icon: 'ViewArray',
+			},
+			previousattempts: {
+				id: 'listFluid',
+				text: 'Previous Attempts',
+				path: 'mcq-bank/previous-attempts',
+				icon: 'ViewDay',
+			},
+		},
 	},
 	studyplanner: {
 		id: 'study-planner',

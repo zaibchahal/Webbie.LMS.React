@@ -6,7 +6,7 @@ import Page from '../../../layout/Page/Page';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Button from '../../../components/bootstrap/Button';
 import { demoPagesMenu } from '../../../menu';
-import CommonUpcomingEvents from '../../_common/CommonUpcomingEvents';
+import FavouriteVideos from '../../_common/CommonUpcomingEvents';
 import useDarkMode from '../../../hooks/useDarkMode';
 
 const AppointmentList = () => {
@@ -32,7 +32,7 @@ const AppointmentList = () => {
 			<Page container='fluid'>
 				<div className='row h-100'>
 					<div className='col-12'>
-						<CommonUpcomingEvents isFluid />
+						<FavouriteVideos isFluid />
 					</div>
 				</div>
 			</Page>
