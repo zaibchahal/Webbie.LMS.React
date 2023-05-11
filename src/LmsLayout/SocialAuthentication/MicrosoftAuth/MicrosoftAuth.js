@@ -2,6 +2,7 @@ import React from 'react';
 import { msalInstance } from './authInstance';
 import Button from '../../../components/bootstrap/Button';
 import { FaMicrosoft } from 'react-icons/fa';
+import '../Auth.css'
 
 
 const MicrosoftAuth = () => {
@@ -18,7 +19,6 @@ const MicrosoftAuth = () => {
       });
   }
   return (
-    // <button onClick={handleLogin}>Login with Microsoft</button>
     <Button
       color='primary'
       isLight
@@ -28,6 +28,13 @@ const MicrosoftAuth = () => {
       <FaMicrosoft className='me-2' fontSize={20} />
       Sign in with Microsoft
     </Button>
+
+    // <button id="microsoft-login-button" className="login-button"
+    //   onClick={handleLogin}
+    // >
+    //   <FaMicrosoft className='me-2' fontSize={20} />
+    //   <span class="button-text">Sign in with Microsoft</span>
+    // </button>
   );
 }
 

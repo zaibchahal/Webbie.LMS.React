@@ -23,16 +23,6 @@ const JoinMeeting = () => {
 		const zoomMeetingContainer = document.querySelector<HTMLElement>('#zoom-meeting-container');
 		const zmmtgRoot = document.querySelector<HTMLElement>('#zmmtg-root');
 		const videoWrap = document.querySelector<HTMLElement>('.zm-video-wrap');
-
-		if (zmmtgRoot && videoWrap) {
-			// zmmtgRoot.style.position = 'relative';
-			// videoWrap.style.width = '20%';
-			// videoWrap.style.height = '20%';
-			// videoWrap.style.position = 'absolute';
-			// videoWrap.style.top = '50%';
-			// videoWrap.style.left = '50%';
-			// videoWrap.style.transform = 'translate(-50%, -50%)';
-		}
 	}, []);
 
 	useEffect(() => {

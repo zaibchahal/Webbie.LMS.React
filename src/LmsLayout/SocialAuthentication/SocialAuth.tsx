@@ -1,33 +1,33 @@
 import React from 'react';
 import Button from '../../components/bootstrap/Button';
 import { FaFacebook, FaGoogle, FaMicrosoft, FaTwitter } from 'react-icons/fa';
-import { useGoogleAuth } from './useGoogleAuth';
-import MicrosoftLoginComponent from './MicrosoftAuth/MicrosoftAuth';
+// import { useGoogleAuth } from './useGoogleAuth';
 import MicrosoftAuth from './MicrosoftAuth/MicrosoftAuth';
+import GoogleAuth from './GoogleAuth/GoogleAuth';
 
 const SocialAuth = () => {
-	const { isSignedIn, signIn, signOut } = useGoogleAuth();
+	// const { isSignedIn, signIn, signOut } = useGoogleAuth();
 
-	const handleSignInClick = async () => {
-		await signIn();
-	};
+	// const handleSignInClick = async () => {
+	// 	await signIn();
+	// };
 
-	const handleSignOutClick = async () => {
-		await signOut();
-	};
+	// const handleSignOutClick = async () => {
+	// 	await signOut();
+	// };
 
 	return (
-		<>
+		<div>
 			<div className='container mb-3'>
 				<h2 className='text-center mb-4'>Sign in with social media</h2>
 				<div className='row justify-content-center'>
 					<div className='col-md-6'>
 						<div>
-							{isSignedIn ? (
+							{/* {isSignedIn ? (
 								<Button
 									color='primary'
 									isLight
-									// icon='Google'
+									icon='Google'
 									onClick={handleSignOutClick}
 									className='btn-lg w-100 mb-3 d-flex align-items-center'>
 									<FaGoogle className='me-2' fontSize={20} />
@@ -42,22 +42,12 @@ const SocialAuth = () => {
 									<FaGoogle className='me-2' fontSize={20} />
 									Sign In with Google
 								</Button>
-							)}
+							)} */}
+							<GoogleAuth />
 						</div>
 					</div>
 					<div className='col-md-6'>{/* <FacebookAuth /> */}</div>
-					<div className='col-md-6'>
-						{/* <Button
-							color='primary'
-							isLight
-							className='btn-lg w-100 mb-3 d-flex align-items-center'
-							onClick={() => {
-								handleTwitterLogin();
-							}}>
-							<FaTwitter className='me-2' fontSize={20} />
-							Sign in with Apple
-						</Button> */}
-					</div>
+					<div className='col-md-6'>{/* <LoginWithAppleButton /> */}</div>
 					<div className='col-md-6'>
 						<MicrosoftAuth />
 					</div>
@@ -75,7 +65,7 @@ const SocialAuth = () => {
 					Authentication
 				</Button>
 			</div>
-		</>
+		</div>
 	);
 };
 

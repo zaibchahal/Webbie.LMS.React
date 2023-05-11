@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface UseGoogleAuthReturn {
 	isSignedIn: boolean;
@@ -6,7 +6,7 @@ interface UseGoogleAuthReturn {
 	signOut: () => Promise<void>;
 }
 
-declare const gapi: any;
+// declare const gapi: any;
 
 interface Profile {
 	name: string;
@@ -19,17 +19,17 @@ export function useGoogleAuth(): UseGoogleAuthReturn {
 	const [profile, setProfile] = useState<Profile | null>(null);
 
 	useEffect(() => {
-		const script = document.createElement('script');
-		script.src = 'https://apis.google.com/js/api.js';
-		gapi.load('client:auth2', () => {
-			gapi.client
+		// const script = document.createElement('script');
+		// script.src = 'https://apis.google.com/js/api.js';
+		window.gapi.load('client:auth2', () => {
+			window.gapi.client
 				.init({
 					clientId:
 						'910444537344-mu95pf7nm7j2e5l2kp2g8ri2bi00jjj9.apps.googleusercontent.com',
 					scope: 'openid profile email',
 				})
 				.then(() => {
-					const auth2 = (gapi as any).auth2;
+					const auth2 = window.gapi.auth2;
 					const isSignedIn = auth2.getAuthInstance().isSignedIn.get();
 					const currentUser = auth2.getAuthInstance().currentUser.get();
 					const userProfile = currentUser.getBasicProfile();
@@ -46,7 +46,7 @@ export function useGoogleAuth(): UseGoogleAuthReturn {
 
 	const loadClient = (): Promise<void> => {
 		return new Promise((resolve, reject) => {
-			gapi.load('client:auth2', {
+			window.gapi.load('client:auth2', {
 				callback: resolve,
 				onerror: reject,
 			});
@@ -55,13 +55,13 @@ export function useGoogleAuth(): UseGoogleAuthReturn {
 
 	const signIn = async (): Promise<void> => {
 		await loadClient();
-		const auth2 = (gapi as any).auth2;
+		const auth2 = (window.gapi).auth2;
 		await auth2.getAuthInstance().signIn();
 		setIsSignedIn(true);
 	};
 
 	const signOut = async (): Promise<void> => {
-		const auth2 = (gapi as any).auth2;
+		const auth2 = (window.gapi).auth2;
 		await auth2.getAuthInstance().signOut();
 		setIsSignedIn(false);
 	};
