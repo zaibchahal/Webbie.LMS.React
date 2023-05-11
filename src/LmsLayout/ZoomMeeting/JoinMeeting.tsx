@@ -96,7 +96,7 @@ const JoinMeeting = () => {
 	}, [location.pathname]);
 
 	return (
-		<PageWrapper title='Zoom Meeting'>
+		// <PageWrapper title='Zoom Meeting'>
 			<div id='zoom-meeting-container' className=''>
 				{meetingStarted ? (
 					<div
@@ -128,7 +128,7 @@ const JoinMeeting = () => {
 						}}></div>
 				)}
 			</div>
-		</PageWrapper>
+		// </PageWrapper>
 	);
 };
 
