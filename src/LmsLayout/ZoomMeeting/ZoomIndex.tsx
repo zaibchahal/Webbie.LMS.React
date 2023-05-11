@@ -1,6 +1,5 @@
 import React from 'react';
 import JoinMeeting from './JoinMeeting';
-// import './Meeting.css';
 
 const ZoomIndex = () => {
 	return (
