@@ -1,6 +1,6 @@
 import React from 'react';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import USERS from '../../common/data/userDummyData';
+import USERS from '../../common/data/userSessionService';
 import Card, {
 	CardActions,
 	CardBody,
@@ -44,7 +44,7 @@ const Template = ({ className, title, text, team, onClick }) => (
 						{Object.keys(team).map((u) => (
 							<Avatar
 								// eslint-disable-next-line react/prop-types
-								key={team[u].username}
+								key={team[u].userName}
 								// eslint-disable-next-line react/prop-types
 								srcSet={team[u].srcSet}
 								// eslint-disable-next-line react/prop-types

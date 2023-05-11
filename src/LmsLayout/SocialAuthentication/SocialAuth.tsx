@@ -1,6 +1,5 @@
 import React from 'react';
 import Button from '../../components/bootstrap/Button';
-import { FaFacebook, FaGoogle, FaMicrosoft, FaTwitter } from 'react-icons/fa';
 // import { useGoogleAuth } from './useGoogleAuth';
 import MicrosoftAuth from './MicrosoftAuth/MicrosoftAuth';
 import GoogleAuth from './GoogleAuth/GoogleAuth';

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import OffCanvas, { OffCanvasBody } from '../../../components/bootstrap/OffCanvas';
 import Avatar, { AvatarGroup } from '../../../components/Avatar';
-import USERS from '../../../common/data/userDummyData';
+import USERS from '../../../common/data/userSessionService';
 import Dropdown, {
 	DropdownItem,
 	DropdownMenu,
@@ -118,7 +118,7 @@ const CommonRightPanel: FC<ICommonRightPanel> = ({ setOpen, isOpen }) => {
 							<AvatarGroup className='me-3'>
 								{Object.keys(USERS).map((u) => (
 									<Avatar
-										key={USERS[u].username}
+										key={USERS[u].userName}
 										srcSet={USERS[u].srcSet}
 										src={USERS[u].src}
 										userName={`${USERS[u].name} ${USERS[u].surname}`}

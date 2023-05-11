@@ -17,7 +17,7 @@ import Card, {
 	CardLabel,
 	CardTitle,
 } from '../../../components/bootstrap/Card';
-import CommonUpcomingEvents from '../../_common/CommonUpcomingEvents';
+import FavouriteVideos from '../../_common/CommonUpcomingEvents';
 import eventList, { IEvents } from '../../../common/data/events';
 import OffCanvas, {
 	OffCanvasBody,
@@ -28,7 +28,7 @@ import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../components/bootstrap/forms/Input';
 import Checks from '../../../components/bootstrap/forms/Checks';
 import Select from '../../../components/bootstrap/forms/Select';
-import USERS, { getUserDataWithUsername, IUserProps } from '../../../common/data/userDummyData';
+import USERS, { getUserDataWithuserName, IUserProps } from '../../../common/data/userSessionService';
 import Avatar, { AvatarGroup } from '../../../components/Avatar';
 import useMinimizeAside from '../../../hooks/useMinimizeAside';
 import Popovers from '../../../components/bootstrap/Popovers';
@@ -147,10 +147,10 @@ const DashboardBookingPage = () => {
 	// BEGIN :: Calendar
 	// Active employee
 	const [employeeList, setEmployeeList] = useState({
-		[USERS.JOHN.username]: true,
-		[USERS.ELLA.username]: true,
-		[USERS.RYAN.username]: true,
-		[USERS.GRACE.username]: true,
+		[USERS.JOHN.userName]: true,
+		[USERS.ELLA.userName]: true,
+		[USERS.RYAN.userName]: true,
+		[USERS.GRACE.userName]: true,
 	});
 	// Events
 	const [events, setEvents] = useState(eventList);
@@ -250,7 +250,7 @@ const DashboardBookingPage = () => {
 						...getServiceDataWithServiceName(values.eventName),
 						end: values.eventEnd,
 						start: values.eventStart,
-						user: { ...getUserDataWithUsername(values.eventEmployee) },
+						user: { ...getUserDataWithuserName(values.eventEmployee) },
 					},
 				]);
 			}
@@ -276,7 +276,7 @@ const DashboardBookingPage = () => {
 				eventName: eventItem.name || '',
 				eventStart: dayjs(eventItem.start).format(),
 				eventEnd: dayjs(eventItem.end).format(),
-				eventEmployee: eventItem?.user?.username || '',
+				eventEmployee: eventItem?.user?.userName || '',
 			});
 		return () => {};
 		//	eslint-disable-next-line react-hooks/exhaustive-deps
@@ -333,7 +333,7 @@ const DashboardBookingPage = () => {
 					<>
 						<div className='row mb-4 g-3'>
 							{Object.keys(USERS).map((u) => (
-								<div key={USERS[u].username} className='col-auto'>
+								<div key={USERS[u].userName} className='col-auto'>
 									<Popovers
 										trigger='hover'
 										desc={
@@ -344,8 +344,8 @@ const DashboardBookingPage = () => {
 													{
 														events.filter(
 															(i) =>
-																i.user?.username ===
-																USERS[u].username,
+																i.user?.userName ===
+																USERS[u].userName,
 														).length
 													}
 												</div>
@@ -354,8 +354,8 @@ const DashboardBookingPage = () => {
 													{
 														events.filter(
 															(i) =>
-																i.user?.username ===
-																	USERS[u].username &&
+																i.user?.userName ===
+																	USERS[u].userName &&
 																i.color === 'info',
 														).length
 													}
@@ -371,21 +371,21 @@ const DashboardBookingPage = () => {
 												border={4}
 												className='cursor-pointer'
 												borderColor={
-													employeeList[USERS[u].username]
+													employeeList[USERS[u].userName]
 														? 'info'
 														: themeStatus
 												}
 												onClick={() =>
 													setEmployeeList({
 														...employeeList,
-														[USERS[u].username]:
-															!employeeList[USERS[u].username],
+														[USERS[u].userName]:
+															!employeeList[USERS[u].userName],
 													})
 												}
 											/>
 											{!!events.filter(
 												(i) =>
-													i.user?.username === USERS[u].username &&
+													i.user?.userName === USERS[u].userName &&
 													i.start &&
 													i.start < now &&
 													i.end &&
@@ -431,7 +431,7 @@ const DashboardBookingPage = () => {
 											toolbar={false}
 											localizer={localizer}
 											events={events.filter(
-												(i) => i?.user && employeeList[i.user.username],
+												(i) => i?.user && employeeList[i.user.userName],
 											)}
 											defaultView={Views.WEEK}
 											views={views}
@@ -495,7 +495,7 @@ const DashboardBookingPage = () => {
 						<CommonDashboardBookingLists />
 					</div>
 					<div className='col-12'>
-						<CommonUpcomingEvents />
+						<FavouriteVideos />
 					</div>
 				</div>
 
@@ -621,7 +621,7 @@ const DashboardBookingPage = () => {
 												{Object.keys(USERS).map((u) => (
 													<Option
 														key={USERS[u].id}
-														value={USERS[u].username}>
+														value={USERS[u].userName}>
 														{`${USERS[u].name} ${USERS[u].surname}`}
 													</Option>
 												))}

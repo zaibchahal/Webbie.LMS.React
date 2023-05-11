@@ -10,7 +10,7 @@ import SubHeader, {
 import Page from '../../../layout/Page/Page';
 import Badge from '../../../components/bootstrap/Badge';
 import COLORS from '../../../common/data/enumColors';
-import USERS from '../../../common/data/userDummyData';
+import USERS from '../../../common/data/userSessionService';
 
 import Slide2 from '../../../assets/img/wanna/slide/scene-2.png';
 import Slide4 from '../../../assets/img/wanna/slide/scene-4.png';

@@ -28,7 +28,7 @@ import Textarea from '../../components/bootstrap/forms/Textarea';
 import Checks from '../../components/bootstrap/forms/Checks';
 import Popovers from '../../components/bootstrap/Popovers';
 import data from '../../common/data/dummyEventsData';
-import USERS from '../../common/data/userDummyData';
+import USERS from '../../common/data/userSessionService';
 import EVENT_STATUS from '../../common/data/enumEventStatus';
 import Avatar from '../../components/Avatar';
 import PaginationButtons, { dataPagination, PER_COUNT } from '../../components/PaginationButtons';
@@ -39,15 +39,13 @@ import Page from '../../layout/Page/Page';
 import { Calendar as DatePicker } from 'react-date-range';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import { LmsFeatures, demoPagesMenu } from '../../menu';
-import { useNavigate } from 'react-router-dom';
+import JoinMeeting from '../ZoomMeeting/JoinMeeting';
 
-interface ICommonUpcomingEventsProps {
+interface IFavouriteVideosProps {
 	isFluid?: boolean;
 }
-const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
+const FavouriteVideos: FC<IFavouriteVideosProps> = ({ isFluid }) => {
 	const { darkModeStatus } = useDarkMode();
-	const [startCall, setStartCall] = useState(false);
-	const navigate = useNavigate();
 
 	// BEGIN :: Upcoming Events
 	const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
@@ -127,6 +125,9 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					</SubHeaderRight>
 				</SubHeader>
 				<Page>
+					<React.StrictMode>
+						<JoinMeeting />
+					</React.StrictMode>
 					<Card stretch={isFluid}>
 						<CardHeader borderSize={1}>
 							<CardLabel icon='LiveTv' iconColor='info'>
@@ -295,7 +296,8 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 														'border-light': !darkModeStatus,
 													})}
 													icon='Add'
-													onClick={() => navigate('../zoom-meeting')}>
+													// onClick={handleUpcomingEdit}
+												>
 													Join
 												</Button>
 											</td>
@@ -493,4 +495,4 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	);
 };
 
-export default CommonUpcomingEvents;
+export default FavouriteVideos;

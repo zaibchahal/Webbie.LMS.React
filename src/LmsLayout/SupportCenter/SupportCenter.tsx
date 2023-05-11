@@ -23,7 +23,7 @@ import Card, {
 	CardFooterRight,
 } from '../../components/bootstrap/Card';
 import FormGroup from '../../components/bootstrap/forms/FormGroup';
-import CommonUpcomingEvents from '../Courses/LiveCourses';
+import FavouriteVideos from '../Courses/LiveCourses';
 import KnowledgeGridPage from '../knowledge/KnowledgeGridPage';
 import { Views } from 'react-big-calendar';
 import Dropdown, {
@@ -205,7 +205,7 @@ const SupportCenter = () => {
 						</div>
 					</CardTabItem>
 					<CardTabItem id='tickets' title='TICKETS' icon='LibraryMusic'>
-						<CommonUpcomingEvents />
+						<FavouriteVideos />
 					</CardTabItem>
 					<CardTabItem id='knowladge' title='Knowladge Base' icon='AutoStories'>
 						<KnowledgeGridPage />

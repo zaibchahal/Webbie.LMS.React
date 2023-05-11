@@ -33,7 +33,7 @@ import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../components/bootstrap/forms/Input';
 import Breadcrumb from '../../../components/bootstrap/Breadcrumb';
 import Avatar from '../../../components/Avatar';
-import USERS from '../../../common/data/userDummyData';
+import USERS from '../../../common/data/userSessionService';
 import CommonDesc from '../../../common/other/CommonDesc';
 import Label from '../../../components/bootstrap/forms/Label';
 import Checks, { ChecksGroup } from '../../../components/bootstrap/forms/Checks';
@@ -191,7 +191,7 @@ const EditModernPage = () => {
 											formText='This will be how your name will be displayed in the account section and in reviews'>
 											<Input
 												placeholder='Display Name'
-												autoComplete='username'
+												autoComplete='userName'
 												onChange={formik.handleChange}
 												onBlur={formik.handleBlur}
 												value={formik.values.displayName}

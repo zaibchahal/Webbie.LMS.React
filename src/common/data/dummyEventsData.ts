@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import USERS, { IUserProps } from './userDummyData';
+import USERS, { IUserProps } from './userSessionService';
 import EVENT_STATUS, { IEventStatus } from './enumEventStatus';
 import SERVICES, { IServiceProps } from './serviceDummyData';
 

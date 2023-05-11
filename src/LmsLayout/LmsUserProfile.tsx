@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useContext, useState } from 'react';
 import { useFormik } from 'formik';
+import { v4 as uuidv4 } from 'uuid';
 import dayjs, { Dayjs } from 'dayjs';
 import PageWrapper from '../layout/PageWrapper/PageWrapper';
 import { demoPagesMenu } from '../menu';
@@ -9,8 +10,8 @@ import SubHeader, {
 	SubheaderSeparator,
 } from '../layout/SubHeader/SubHeader';
 import Page from '../layout/Page/Page';
-// import validate from './helper/editPagesValidate';
 import validate from '../pages/presentation/demo-pages/helper/editPagesValidate';
+import pswvalidate from '../pages/presentation/demo-pages/helper/editPasswordValidate';
 import showNotification from '../components/extras/showNotification';
 import Icon from '../components/icon/Icon';
 import Card, {
@@ -34,21 +35,10 @@ import FormGroup from '../components/bootstrap/forms/FormGroup';
 import Input from '../components/bootstrap/forms/Input';
 import Breadcrumb from '../components/bootstrap/Breadcrumb';
 import Avatar from '../components/Avatar';
-import USERS, { getUserDataWithId } from '../common/data/userDummyData';
+import USERS from '../common/data/userSessionService';
 import CommonDesc from '../common/other/CommonDesc';
-import Label from '../components/bootstrap/forms/Label';
-import Checks, { ChecksGroup } from '../components/bootstrap/forms/Checks';
-import Alert from '../components/bootstrap/Alert';
-import Modal, {
-	ModalHeader,
-	ModalTitle,
-	ModalBody,
-	ModalFooter,
-} from '../components/bootstrap/Modal';
-import Logo from '../components/Logo';
-import { useLocation, useNavigate, useNavigation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTour } from '@reactour/tour';
-import Img from '../assets/img/wanna/susy/susy9.png';
 import VerifyEmail from '../common/LMS_Common/VerifyEmail';
 import Verifynumber from '../common/LMS_Common/VerifyNumber';
 import ChatStatusBar from '../pages/_common/StatusBar';
@@ -57,8 +47,14 @@ import Progress from '../components/bootstrap/Progress';
 // import { FaFacebook, FaGithub, FaGoogle, FaTwitter } from 'react-icons/fa';
 import SocialAuth from './SocialAuthentication/SocialAuth';
 
+import axios, { AxiosError } from 'axios';
+import { AppConst, Profile_Urls } from '../common/data/constants';
+import AuthContext from '../contexts/authContext';
+import { FaFacebook, FaGithub, FaGoogle, FaTwitter } from 'react-icons/fa';
 const LmsUserProfile = () => {
+	const { session } = useContext(AuthContext);
 	const { themeStatus } = useDarkMode();
+	const { profilePicture, userData, handleSetProfilePicture } = useContext(AuthContext);
 
 	/**
 	 * Common
@@ -76,17 +72,109 @@ const LmsUserProfile = () => {
 			"The user's account details have been successfully updated.",
 		);
 	};
-	// const { id } = useParams();
-	// const data = getUserDataWithId(id);
+	const handleChangePassword = async () => {
+		setIsLoading(true);
+		try {
+			const response = await axios.post(Profile_Urls.ChangePassword, pswformik.values, {
+				headers: {
+					Accept: 'text/plain',
+					'Content-Type': 'application/json-patch+json',
+					'X-XSRF-TOKEN': 'null',
+					Authorization: `Bearer ${session?.accessToken}`,
+				},
+				withCredentials: true,
+			});
+			var data = response.data.result;
+
+			showNotification(
+				<span className='d-flex align-items-center'>
+					<Icon icon='Info' size='lg' className='me-1' />
+					<span>Updated Successfully</span>
+				</span>,
+				"The user's password have been successfully updated.",
+			);
+		} catch (e: any) {
+			var m = e.response.data.error.message || '';
+			showNotification(
+				<span className='d-flex align-items-center'>
+					<Icon icon='Error' size='lg' className='me-1' />
+					<span>Not Updated</span>
+				</span>,
+				m,
+			);
+		}
+		setIsLoading(false);
+	};
+
+	const [image, setImage] = useState('');
+	function handleImage(e: any) {
+		console.log(e.target.files);
+		setImage(e.target.files[0]);
+	}
+	const formData = new FormData();
+	async function handleApi() {
+		setIsLoading(true);
+		try {
+			const t = uuidv4();
+			formData.append('ProfilePicture', image);
+			formData.append('FileName', (image as any).name);
+			formData.append('FileToken', t);
+
+			var res = await axios
+				.post(Profile_Urls.UploadProfilePicture, formData, {
+					headers: {
+						Authorization: `Bearer ${session?.accessToken}`,
+					},
+					withCredentials: true,
+				})
+				.then((res) => {
+					const result = res.data.result;
+					console.log(result);
+					if (res.data.success) {
+						axios
+							.put(
+								Profile_Urls.UpdateProfilePicture,
+								{
+									fileToken: t,
+									x: 0,
+									y: 0,
+									width: result.width,
+									height: result.height,
+									useGravatarProfilePicture: false,
+								},
+								{
+									headers: {
+										Accept: 'text/plain',
+										'Content-Type': 'application/json-patch+json',
+										'X-XSRF-TOKEN': 'null',
+										Authorization: `Bearer ${session?.accessToken}`,
+									},
+									withCredentials: true,
+								},
+							)
+							.then((res) => {
+								if (res.data.success) {
+									if (handleSetProfilePicture)
+										handleSetProfilePicture(session?.accessToken);
+								}
+							});
+					}
+				});
+		} catch (e: any) {
+			console.log(e);
+		}
+		setIsLoading(false);
+	}
+	const data = userData || {};
 
 	const formik = useFormik({
 		initialValues: {
-			firstName: 'John',
-			lastName: 'Doe',
-			displayName: 'johndoe',
-			address: 'New Yark',
-			emailAddress: 'johndoe@site.com',
-			phone: '',
+			firstName: data.name || '',
+			lastName: data.surname || '',
+			displayName: data.username || '',
+			address: '',
+			emailAddress: data.emailAddress || '',
+			phone: data.phoneNumber || '',
 			currentPassword: '',
 			newPassword: '',
 			confirmPassword: '',
@@ -100,6 +188,17 @@ const LmsUserProfile = () => {
 			setTimeout(handleSave, 2000);
 		},
 	});
+	const pswformik = useFormik({
+		initialValues: {
+			currentPassword: '',
+			newPassword: '',
+			confirmPassword: '',
+		},
+		validate: pswvalidate,
+		onSubmit: () => {
+			handleChangePassword();
+		},
+	});
 
 	const [passwordChangeCTA, setPasswordChangeCTA] = useState<boolean>(false);
 
@@ -108,8 +207,6 @@ const LmsUserProfile = () => {
 
 	const location = useLocation();
 	const [activeSection, setActiveSection] = useState('');
-
-	// const StartRef = useRef<HTMLDivElement>(null);
 	const ChangePasswordRef = useRef<HTMLDivElement>(null);
 	const verificationRef = useRef<HTMLDivElement>(null);
 	const ProfileVisibilityRef = useRef<HTMLDivElement>(null);
@@ -149,7 +246,6 @@ const LmsUserProfile = () => {
 		};
 	}, []);
 	const { setIsOpen } = useTour();
-	const data = getUserDataWithId('1');
 
 	// const navigate=useNavigation()
 	const handleDeviceManagement = () => {
@@ -167,7 +263,7 @@ const LmsUserProfile = () => {
 						]}
 					/>
 					<SubheaderSeparator />
-					<span className='text-muted'>John Doe</span>
+					<span className='text-muted'>{userData?.name + ' ' + userData?.surname}</span>
 				</SubHeaderLeft>
 				<SubHeaderRight>
 					<Button
@@ -199,8 +295,8 @@ const LmsUserProfile = () => {
 									<div className='row g-4 align-items-center'>
 										<div className='col-lg-auto'>
 											<Avatar
-												srcSet={USERS.JOHN.srcSet}
-												src={USERS.JOHN.src}
+												//srcSet={USERS.JOHN.srcSet}
+												src={profilePicture || ''}
 												color={USERS.JOHN.color}
 												rounded={3}
 											/>
@@ -208,11 +304,22 @@ const LmsUserProfile = () => {
 										<div className='col-lg'>
 											<div className='row g-4'>
 												<div className='col-auto'>
-													<Input type='file' autoComplete='photo' />
+													<Input
+														type='file'
+														onChange={handleImage}
+														autoComplete='photo'
+													/>
 												</div>
 												<div className='col-auto'>
-													<Button color='dark' isLight icon='Delete'>
-														Delete Avatar
+													<Button
+														color='dark'
+														onClick={handleApi}
+														isLight
+														icon='Save'>
+														{isLoading && (
+															<Spinner isSmall inButton isGrow />
+														)}
+														Save Image
 													</Button>
 												</div>
 												<div className='col-12'>
@@ -274,7 +381,7 @@ const LmsUserProfile = () => {
 											formText='This will be how your name will be displayed in the account section and in reviews'>
 											<Input
 												placeholder='Display Name'
-												autoComplete='username'
+												autoComplete='userName'
 												onChange={formik.handleChange}
 												onBlur={formik.handleBlur}
 												value={formik.values.displayName}
@@ -293,7 +400,7 @@ const LmsUserProfile = () => {
 											formText='This will be how your name will be displayed in the account section and in reviews'>
 											<Input
 												placeholder='Address'
-												autoComplete='username'
+												autoComplete='userName'
 												onChange={formik.handleChange}
 												onBlur={formik.handleBlur}
 												value={formik.values.address}
@@ -414,8 +521,8 @@ const LmsUserProfile = () => {
 													type='password'
 													placeholder='Current password'
 													autoComplete='current-password'
-													onChange={formik.handleChange}
-													value={formik.values.currentPassword}
+													onChange={pswformik.handleChange}
+													value={pswformik.values.currentPassword}
 												/>
 											</FormGroup>
 										</div>
@@ -428,12 +535,12 @@ const LmsUserProfile = () => {
 													type='password'
 													placeholder='New password'
 													autoComplete='new-password'
-													onChange={formik.handleChange}
-													onBlur={formik.handleBlur}
-													value={formik.values.newPassword}
-													isValid={formik.isValid}
-													isTouched={formik.touched.newPassword}
-													invalidFeedback={formik.errors.newPassword}
+													onChange={pswformik.handleChange}
+													onBlur={pswformik.handleBlur}
+													value={pswformik.values.newPassword}
+													isValid={pswformik.isValid}
+													isTouched={pswformik.touched.newPassword}
+													invalidFeedback={pswformik.errors.newPassword}
 													validFeedback='Looks good!'
 												/>
 											</FormGroup>
@@ -447,15 +554,27 @@ const LmsUserProfile = () => {
 													type='password'
 													placeholder='Confirm new password'
 													autoComplete='new-password'
-													onChange={formik.handleChange}
-													onBlur={formik.handleBlur}
-													value={formik.values.confirmPassword}
-													isValid={formik.isValid}
-													isTouched={formik.touched.confirmPassword}
-													invalidFeedback={formik.errors.confirmPassword}
+													onChange={pswformik.handleChange}
+													onBlur={pswformik.handleBlur}
+													value={pswformik.values.confirmPassword}
+													isValid={pswformik.isValid}
+													isTouched={pswformik.touched.confirmPassword}
+													invalidFeedback={
+														pswformik.errors.confirmPassword
+													}
 													validFeedback='Looks good!'
 												/>
 											</FormGroup>
+										</div>
+										<div className='col-12 text-end'>
+											<Button
+												color='primary'
+												isLight
+												icon='PublishedWithChanges'
+												onClick={handleChangePassword}>
+												{isLoading && <Spinner isSmall inButton isGrow />}
+												Chnage
+											</Button>
 										</div>
 									</div>
 								</CardBody>
@@ -575,8 +694,8 @@ const LmsUserProfile = () => {
 											style={{ paddingTop: '-30px' }}>
 											<div className='flex-shrink-0'>
 												<Avatar
-													src={data.src}
-													srcSet={data.srcSet}
+													src={profilePicture || ''}
+													//srcSet={data.srcSet}
 													color={data.color}
 													isOnline={data.isOnline}
 													className='rounded-circle'
@@ -601,7 +720,7 @@ const LmsUserProfile = () => {
 													</div>
 													<div className='flex-grow-1 ms-3'>
 														<div className='fw-bold fs-5 mb-0'>
-															{`${data.username}@site.com`}
+															{`${data.emailAddress}`}
 														</div>
 														<div className='text-muted'>
 															Email Address
@@ -616,7 +735,7 @@ const LmsUserProfile = () => {
 													</div>
 													<div className='flex-grow-1 ms-3'>
 														<div className='fw-bold fs-5 mb-0'>
-															{`@${data.username}`}
+															{`${data.name}`}
 														</div>
 														<div className='text-muted'>
 															Social name
@@ -631,7 +750,7 @@ const LmsUserProfile = () => {
 													</div>
 													<div className='flex-grow-1 ms-3'>
 														<div className='fw-bold fs-5 mb-0'>
-															{`${data.address}`}
+															{`${data.address || 'N/A'}`}
 														</div>
 														<div className='text-muted'>
 															Home Address
@@ -646,10 +765,10 @@ const LmsUserProfile = () => {
 													</div>
 													<div className='flex-grow-1 ms-3'>
 														<div className='fw-bold fs-5 mb-0'>
-															{`${data.phoneNumber}`}
+															{`${data.phoneNumber || 'N/A'}`}
 														</div>
 														<div className='text-muted'>
-															Contect Number
+															Contact Number
 														</div>
 													</div>
 												</div>

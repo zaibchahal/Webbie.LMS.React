@@ -31,7 +31,7 @@ import Input from '../../../../components/bootstrap/forms/Input';
 import Textarea from '../../../../components/bootstrap/forms/Textarea';
 import Select from '../../../../components/bootstrap/forms/Select';
 import Option from '../../../../components/bootstrap/Option';
-import USERS from '../../../../common/data/userDummyData';
+import USERS from '../../../../common/data/userSessionService';
 import TAGS from '../../../../common/data/boardTagsData';
 import { TCards, TColumnData, TColumnsData } from '../type/types';
 import ColumnCardWrapper from './ColumnCardWrapper';
@@ -201,7 +201,7 @@ const Columns: FC<IColumns> = ({ cardsData, columnsData, setCardsData }) => {
 										value={formik.values.assignee}>
 										{Object.keys(USERS).map((u) => (
 											// @ts-ignore
-											<Option key={USERS[u].id} value={USERS[u].username}>
+											<Option key={USERS[u].id} value={USERS[u].userName}>
 												{
 													// @ts-ignore
 													`${USERS[u].name} ${USERS[u].surname}`

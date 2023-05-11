@@ -12,7 +12,7 @@ import Button from '../../../components/bootstrap/Button';
 import { demoPagesMenu } from '../../../menu';
 import tableData from '../../../common/data/dummyProductData';
 import Avatar from '../../../components/Avatar';
-import USERS from '../../../common/data/userDummyData';
+import USERS from '../../../common/data/userSessionService';
 import Card, {
 	CardBody,
 	CardFooter,

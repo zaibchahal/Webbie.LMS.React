@@ -270,7 +270,7 @@ const FormControlsPage = () => {
 														(['password', 'email'].includes(type)
 															? (type === 'password' &&
 																	'current-password') ||
-															  (type === 'email' && 'username')
+															  (type === 'email' && 'userName')
 															: undefined) as string
 													}
 													placeholder={`Supports ${type} type placeholder`}
@@ -319,7 +319,7 @@ const FormControlsPage = () => {
 														(['password', 'email'].includes(type)
 															? (type === 'password' &&
 																	'current-password') ||
-															  (type === 'email' && 'username')
+															  (type === 'email' && 'userName')
 															: undefined) as string
 													}
 													placeholder={`Supports ${type} type placeholder`}
@@ -643,7 +643,7 @@ const FormControlsPage = () => {
 											<Input
 												readOnly='plaintext'
 												value='email@example.com'
-												autoComplete='username'
+												autoComplete='userName'
 											/>
 										</FormGroup>
 									</CardBody>

@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import USERS from '../../../common/data/userDummyData';
+import USERS from '../../../common/data/userSessionService';
 
 const now = new Date();
 

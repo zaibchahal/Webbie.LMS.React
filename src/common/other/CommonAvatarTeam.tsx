@@ -1,7 +1,7 @@
 import React, { FC, memo, ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import Avatar, { AvatarGroup } from '../../components/Avatar';
-import USERS from '../data/userDummyData';
+import USERS from '../data/userSessionService';
 
 interface ICommonAvatarTeamProps {
 	children: ReactNode;

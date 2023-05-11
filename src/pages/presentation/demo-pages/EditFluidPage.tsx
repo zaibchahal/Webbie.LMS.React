@@ -45,7 +45,7 @@ import {
 import Select from '../../../components/bootstrap/forms/Select';
 import CommonMyWallet from '../../_common/CommonMyWallet';
 import Popovers from '../../../components/bootstrap/Popovers';
-import USERS from '../../../common/data/userDummyData';
+import USERS from '../../../common/data/userSessionService';
 import OffCanvas, {
 	OffCanvasBody,
 	OffCanvasHeader,
@@ -518,7 +518,7 @@ const EditFluidPage = () => {
 														formText='This will be how your name will be displayed in the account section and in reviews'>
 														<Input
 															placeholder='Display Name'
-															autoComplete='username'
+															autoComplete='userName'
 															onChange={formik.handleChange}
 															onBlur={formik.handleBlur}
 															value={formik.values.displayName}

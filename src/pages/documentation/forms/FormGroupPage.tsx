@@ -701,7 +701,7 @@ const FormGroupPage = () => {
 									childWrapperClassName='col-sm-10'>
 									<Input
 										readOnly='plaintext'
-										autoComplete='username'
+										autoComplete='userName'
 										onChange={formik.handleChange}
 										value={formik.values.exampleColForLabelMail}
 									/>
@@ -769,7 +769,7 @@ const FormGroupPage = () => {
 										<Input
 											id='exampleColForLabelMail2'
 											readOnly='plaintext'
-											autoComplete='username'
+											autoComplete='userName'
 											onChange={formik2.handleChange}
 											value={formik2.values.exampleColForLabelMail2}
 										/>

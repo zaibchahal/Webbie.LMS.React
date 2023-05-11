@@ -208,6 +208,11 @@ const Lms = {
 	LmsCoursePage: lazy(() => import('../LmsLayout/Courses/Coursepage')),
 	LmsZoomMeeting: lazy(() => import('../LmsLayout/ZoomMeeting/ZoomIndex')),
 	LmsGoogleClass: lazy(() => import('../LmsLayout/GoogleClass/GoogleClass')),
+	LmsQuestionBank: {
+		prevattepmts: lazy(() => import('../LmsLayout/QuestionBank/PreviousAttempts')),
+		createTest: lazy(() => import('../LmsLayout/QuestionBank/CreateTest')),
+		paperList: lazy(() => import('../LmsLayout/QuestionBank/PaperList')),
+	},
 	// LmsGoogleMeeting: lazy(() => import('../LmsLayout/GoogleMeeting/MeetComponent')),
 };
 const location = window.location;
@@ -308,6 +313,22 @@ const presentation: RouteProps[] = [
 	{
 		path: 'courses-page',
 		element: <Lms.LmsCoursePage />,
+	},
+	{
+		path: LmsFeatures.mcqbank.subMenu.previousattempts.path,
+		element: <Lms.LmsQuestionBank.prevattepmts />,
+	},
+	{
+		path: LmsFeatures.mcqbank.subMenu.createtest.path,
+		element: <Lms.LmsQuestionBank.createTest />,
+	},
+	{
+		path: LmsFeatures.mcqbank.subMenu.paperlist.path,
+		element: <Lms.LmsQuestionBank.paperList />,
+	},
+	{
+		path: LmsFeatures.mcqbank.subMenu.createtest.path,
+		element: <Lms.LmsQuestionBank.prevattepmts />,
 	},
 
 	/**

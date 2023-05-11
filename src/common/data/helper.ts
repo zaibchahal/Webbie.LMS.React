@@ -1,6 +1,8 @@
 
 
 
+
+
 export const getCookie = (name: string) => {
     const cookies = document.cookie.split('; ');
     const cookieName = `${name}=`;

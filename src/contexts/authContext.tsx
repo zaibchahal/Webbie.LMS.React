@@ -1,12 +1,18 @@
 import React, { createContext, FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { getUserDataWithUsername, IUserProps } from '../common/data/userDummyData';
-import { AppConst } from '../common/data/constants';
+import { IUserProps, ISessionProps } from '../common/data/userSessionService';
+import { AppConst, Profile_Urls } from '../common/data/constants';
+import axios from 'axios';
 
 export interface IAuthContextProps {
-    user: string;
-    setUser?(...args: unknown[]): unknown;
     userData: Partial<IUserProps>;
+    session: Partial<ISessionProps>;
+    profilePicture: string;
+    handleSetSession: (data: ISessionProps) => void;
+    handleSetProfileData: (token: string) => void;
+    handleSetProfilePicture: (token: string | undefined) => void;
+    handleLogout: () => void;
+
 }
 const AuthContext = createContext<Partial<IAuthContextProps>>({});
 
@@ -14,29 +20,93 @@ interface IAuthContextProviderProps {
     children: ReactNode;
 }
 export const AuthContextProvider: FC<IAuthContextProviderProps> = ({ children }) => {
-    const [user, setUser] = useState<string>(localStorage.getItem(AppConst.CurrentUser) || '');
-    const [userData, setUserData] = useState<Partial<IUserProps>>({});
 
-    useEffect(() => {
-        localStorage.setItem(AppConst.CurrentUser, user);
-    }, [user]);
-
-    useEffect(() => {
-        if (user !== '') {
-            setUserData(getUserDataWithUsername(user));
-        } else {
-            setUserData({});
+    const getDataFromStorege = (Key: string) => {
+        try {
+            return JSON.parse(localStorage.getItem(Key) || '{}')
+        } catch {
+            return {};
         }
-    }, [user]);
+    }
+
+    const [session, setSession] = useState<ISessionProps>(getDataFromStorege(AppConst.CurrentSession) as ISessionProps);
+    const [userData, setProfileData] = useState<IUserProps>(getDataFromStorege(AppConst.CurrentUser) as IUserProps);
+    const [profilePicture, setProfilePicture] = useState<string>(localStorage.getItem(AppConst.ProfilePic) || '');
+
+
+    const handleSetSession = (data: ISessionProps) => {
+        setSession(data);
+        localStorage.setItem(AppConst.CurrentSession, JSON.stringify(data));
+
+    };
+
+    const handleLogout = () => {
+        setSession({} as ISessionProps);
+        setProfileData({} as IUserProps);
+        setProfilePicture("");
+        localStorage.setItem(AppConst.CurrentSession, JSON.stringify({}));
+        localStorage.setItem(AppConst.CurrentUser, JSON.stringify({}));
+        localStorage.setItem(AppConst.ProfilePic, '');
+    };
+
+    const handleSetProfileData = async (token: string) => {
+        try {
+            if (!token) {
+                token = session.accessToken;
+            }
+            handleSetProfilePicture(token);
+            const response = await axios.get(Profile_Urls.GetCurrentUserProfileForEdit, {
+                headers: {
+                    Accept: 'text/plain',
+                    'Content-Type': 'application/json-patch+json',
+                    'X-XSRF-TOKEN': 'null',
+                    Authorization: `Bearer ${token}`
+                },
+            })
+            var data = response.data.result;
+            setProfileData(data as IUserProps);
+            localStorage.setItem(AppConst.CurrentUser, JSON.stringify(data));
+        } catch {
+            localStorage.setItem(AppConst.CurrentUser, JSON.stringify({}));
+        }
+    };
+
+    const handleSetProfilePicture = async (token: string | undefined) => {
+        try {
+            if (!token) {
+                token = session.accessToken;
+            }
+            const response = await axios.get(Profile_Urls.GetProfilePicture, {
+                headers: {
+                    Accept: 'text/plain',
+                    'Content-Type': 'application/json-patch+json',
+                    'X-XSRF-TOKEN': 'null',
+                    Authorization: `Bearer ${token}`
+                },
+            })
+            var data = `data:image/png;base64,${response.data.result.profilePicture}`;
+            setProfilePicture(data);
+            localStorage.setItem(AppConst.ProfilePic, data);
+        } catch {
+            localStorage.setItem(AppConst.ProfilePic, '');
+        }
+    };
+
 
     const value = useMemo(
         () => ({
-            user,
-            setUser,
+            session,
+            setSession,
             userData,
+            handleSetSession,
+            handleSetProfileData,
+            handleSetProfilePicture,
+            profilePicture,
+            handleLogout
         }),
-        [user, userData],
+        [session, userData, handleSetSession, handleSetProfileData],
     );
+
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 AuthContextProvider.propTypes = {

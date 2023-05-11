@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import USERS, { IUserProps } from './userDummyData';
+import USERS, { IUserProps } from './userSessionService';
 import SERVICES, { IServiceProps } from './serviceDummyData';
 
 export interface IEvents extends Partial<IServiceProps> {

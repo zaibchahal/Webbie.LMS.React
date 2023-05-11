@@ -4,7 +4,7 @@ import Chat, { ChatGroup, ChatHeader } from '../../../components/Chat';
 import InputGroup from '../../../components/bootstrap/forms/InputGroup';
 import Textarea from '../../../components/bootstrap/forms/Textarea';
 import Button from '../../../components/bootstrap/Button';
-import USERS from '../../../common/data/userDummyData';
+import USERS from '../../../common/data/userSessionService';
 import Avatar from '../../../components/Avatar';
 import showNotification from '../../../components/extras/showNotification';
 import CHATS from '../../../common/data/chatDummyData';

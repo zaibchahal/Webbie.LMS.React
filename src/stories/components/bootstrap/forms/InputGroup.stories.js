@@ -56,10 +56,10 @@ WithChecks.args = {
 		<Input
 			key={2}
 			id='exampleInput'
-			placeholder='Username'
-			ariaLabel='Username'
+			placeholder='userName'
+			ariaLabel='userName'
 			ariaDescribedby='addon-wrapping'
-			autoComplete='username'
+			autoComplete='userName'
 		/>,
 		<InputGroupText key={3}>End</InputGroupText>,
 	],
