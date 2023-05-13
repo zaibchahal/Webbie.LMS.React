@@ -14,7 +14,7 @@ export const PER_COUNT = {
 };
 
 export const dataPagination = (data: any[], currentPage: number, perPage: number) =>
-	data.filter(
+	data?.filter(
 		(i, index) => index + 1 > (currentPage - 1) * perPage && index + 1 <= currentPage * perPage,
 	);
 
