@@ -44,12 +44,21 @@ import axios from 'axios';
 import { AppConst, BASE_URL } from '../../common/data/constants';
 import { getCookie } from '../../common/data/helper';
 import AuthContext from '../../contexts/authContext';
-import { ILiveClassList, getLiveClassList } from '../../services/LiveClasses';
+import { ITicket, ITicketReply, getTicketList, postTicket } from '../../services/TicketService';
+import CreateTicket from './CreateTicket';
+import Black_WebbieLogo from '../../components/Black_WebbieLogo';
+import Modal, {
+	ModalHeader,
+	ModalTitle,
+	ModalBody,
+	ModalFooter,
+} from '../../components/bootstrap/Modal';
+import Label from '../../components/bootstrap/forms/Label';
 
-interface ILiveCoursesProps {
+interface ITicketProps {
 	isFluid?: boolean;
 }
-function LiveCourses() {
+function Ticket() {
 	const { darkModeStatus } = useDarkMode();
 	// BEGIN :: Upcoming Events
 	const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
@@ -87,77 +96,67 @@ function LiveCourses() {
 	const Navigate = useNavigate();
 	const { themeStatus } = useDarkMode();
 	const { session } = useContext(AuthContext);
-	const [liveClassList, setLiveClassList] = useState<ILiveClassList[]>([]);
-	const { items, requestSort, getClassNamesFor } = useSortableData(
-		liveClassList as ILiveClassList[],
-	);
+	const [TicketList, setTicketList] = useState<ITicket[]>([]);
+	const { items, requestSort, getClassNamesFor } = useSortableData(TicketList as ITicket[], null);
+
+	const tenant = getCookie(AppConst.TenantID);
+	const tenantName = getCookie(AppConst.TenantName);
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const d = await getLiveClassList(0, session?.accessToken);
-			setLiveClassList(d.items as ILiveClassList[]);
-			// useSortableData(d.items as ILiveClassList[], null);
+			const d = await getTicketList(1, 1, session?.accessToken);
+			setTicketList(d.items as ITicket[]);
+			// useSortableData(d.items as ITicket[], null);
 			console.log(d.items);
 		};
 		fetchData();
 	}, []);
 
 	const [date, setDate] = useState<Date>(new Date());
+	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+
+	const [subject, setSubject] = useState('');
+	const [priority, setPriority] = useState('');
+	const [catogoty, setCatogoty] = useState('');
+	const [discription, setDiscription] = useState('');
+
+	const TicketData: ITicket = {
+		tenantId: parseInt(tenant),
+		categoryID: 0,
+		refNo: '',
+		tags: '',
+		subject: subject,
+		body: discription,
+		issuedTo: 0,
+		priority: 1,
+		isPopular: false,
+		status: 0,
+		category: catogoty,
+		creatorUserName: '',
+		ticketReply: [],
+		id: 0,
+	};
+
+	const HandleSubmitTicket = async () => {
+		await postTicket(TicketData, session?.accessToken);
+	};
+
 	return (
 		<>
-			<PageWrapper title={LmsFeatures.livecourses.text}>
-				<SubHeader>
-					<SubHeaderLeft>
-						<Icon icon='OndemandVideo' color='primary' className='me-2' size='2x' />
-						<span className='text-muted'>
-							Join 12 Live Classes
-							<Icon
-								icon='SmartDisplay'
-								color='success'
-								className='mx-1'
-								size='lg'
-							/>{' '}
-							39 Existing Classes
-							<Icon icon='Alarm' color='warning' className='mx-1' size='lg' />
-							And 4 Advance Live Classes Schaduals.
-						</span>
-					</SubHeaderLeft>
-					<SubHeaderRight>
-						<Popovers
-							desc={
-								<DatePicker
-									onChange={(item) => setDate(item)}
-									date={date}
-									color={process.env.REACT_APP_PRIMARY_COLOR}
-								/>
-							}
-							placement='bottom-end'
-							className='mw-100'
-							trigger='click'>
-							<Button color={themeStatus}>
-								{`${dayjs(date).startOf('weeks').format('MMM Do')} - ${dayjs(date)
-									.endOf('weeks')
-									.format('MMM Do')}`}
-							</Button>
-						</Popovers>
-					</SubHeaderRight>
-				</SubHeader>
+			<PageWrapper title={LmsFeatures.supportcenter.text}>
 				<Page>
 					<Card>
 						<CardHeader borderSize={1}>
-							<CardLabel icon='LiveTv' iconColor='info'>
-								<CardTitle>Live Classes</CardTitle>
+							<CardLabel icon='AutoAwesomeMotion' iconColor='info'>
+								<CardTitle>Tickets</CardTitle>
 							</CardLabel>
 							<CardActions>
 								<Button
 									color='info'
-									icon='CloudDownload'
+									icon='Add'
 									isLight
-									tag='a'
-									to='/somefile.txt'
-									target='_blank'
-									download>
-									Export
+									onClick={() => setIsOpenModal(true)}>
+									Create New Ticket
 								</Button>
 							</CardActions>
 						</CardHeader>
@@ -169,24 +168,18 @@ function LiveCourses() {
 										<th
 											onClick={() => requestSort('date')}
 											className='cursor-pointer text-decoration-underline'>
-											Class Info
-											<Icon
-												size='lg'
-												className={getClassNamesFor('date')}
-												icon='LiveTv'
-											/>
+											Subject
 										</th>
-										<th>Status</th>
-										<th>Duration</th>
+										<th>Catogoty</th>
+										<th>Priority</th>
 
-										<th>Start Time</th>
-										<th>Created Date</th>
-										<th>Join Class</th>
+										<th>Status</th>
+										<th>Reply</th>
 										<td />
 									</tr>
 								</thead>
 								<tbody>
-									{dataPagination(liveClassList, currentPage, perPage).map(
+									{dataPagination(TicketList, currentPage, perPage).map(
 										(item) => (
 											<tr key={item.id}>
 												<td>
@@ -209,100 +202,15 @@ function LiveCourses() {
 												</td>
 												<td>
 													<div>
-														<div>{item.topic}</div>
-														<div className='small text-muted'>
-															{item.description}
-														</div>
+														<div>{item.subject}</div>
 													</div>
 												</td>
 												<td>
-													<Dropdown>
-														<DropdownToggle hasIcon={false}>
-															<Button
-																isLink
-																color={item.status.color}
-																icon='Circle'
-																className='text-nowrap'>
-																{item.status}
-															</Button>
-														</DropdownToggle>
-														<DropdownMenu>
-															{Object.keys(EVENT_STATUS).map((k) => (
-																<DropdownItem key={k}>
-																	<div>
-																		<Icon
-																			icon='Circle'
-																			color={
-																				EVENT_STATUS[k]
-																					.color
-																			}
-																		/>
-																		{EVENT_STATUS[k].name}
-																	</div>
-																</DropdownItem>
-															))}
-														</DropdownMenu>
-													</Dropdown>
+													<td>{item.category}</td>
 												</td>
-												<td>{item.duration}</td>
+												<div>{item.priority}</div>
 												<td>
-													{/* <div className='d-flex'>
-													<div className='flex-shrink-0'>
-														<Avatar
-															src={item.assigned.src}
-															srcSet={item.assigned.srcSet}
-															color={item.assigned.color}
-															size={36}
-														/>
-													</div>
-													<div className='flex-grow-1 ms-3 d-flex align-items-center text-nowrap'>
-														{`${item.assigned.name} ${item.assigned.surname}`}
-													</div>
-												</div> */}
-													<div className='d-flex align-items-center'>
-														<span
-															className={classNames(
-																'badge',
-																'border border-2',
-																[`border-${themeStatus}`],
-																'rounded-circle',
-																'bg-success',
-																'p-2 me-2',
-																`bg-${item.status}`,
-															)}>
-															<span className='visually-hidden'>
-																{item.status}
-															</span>
-														</span>
-														<span className='text-nowrap'>
-															{dayjs(`${item.startTime}`).format(
-																'MMM Do YYYY, h:mm a',
-															)}
-														</span>
-													</div>
-												</td>
-												<td>
-													<div className='d-flex align-items-center'>
-														<span
-															className={classNames(
-																'badge',
-																'border border-2',
-																[`border-${themeStatus}`],
-																'rounded-circle',
-																'bg-success',
-																'p-2 me-2',
-																`bg-${item.status.color}`,
-															)}>
-															<span className='visually-hidden'>
-																{item.status.name}
-															</span>
-														</span>
-														<span className='text-nowrap'>
-															{dayjs(`${item.startTime}`).format(
-																'MMM Do YYYY, h:mm a',
-															)}
-														</span>
-													</div>
+													<div>{item.status}</div>
 												</td>
 												<td>
 													<Button
@@ -312,9 +220,9 @@ function LiveCourses() {
 														className={classNames('text-nowrap', {
 															'border-light': !darkModeStatus,
 														})}
-														icon='Add'
+														icon='Reply'
 														onClick={() => Navigate('../zoom-meeting')}>
-														Join
+														Reply
 													</Button>
 												</td>
 											</tr>
@@ -332,6 +240,126 @@ function LiveCourses() {
 							setPerPage={setPerPage}
 						/>
 					</Card>
+					{isOpenModal && (
+						<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal} titleId='tour-title'>
+							<ModalHeader setIsOpen={setIsOpenModal} className='mx-2'>
+								<ModalTitle id='tour-title' className='d-flex align-items-center'>
+									<Black_WebbieLogo height={28} />
+									<span className='ps-2'>Support</span>
+									<span className='ps-2'>
+										<Icon icon='Verified' color='info' />
+									</span>
+								</ModalTitle>
+							</ModalHeader>
+							<ModalBody className='mx-2'>
+								{/* <CreateTicket /> */}
+								<div className='row mt-0 pt-0'>
+									<div className='col-md-12 mt-0 pt-0 d-flex align-items-center'>
+										<div className='d-flex justify-content-center'>
+											<div className='text-center'>
+												<h2 className='mb-3'>Create Ticket</h2>
+
+												<h5 className='text-center'>
+													<span>
+														If you need more info, please check
+														<a href='' className='px-2'>
+															Support Guidelines
+														</a>
+													</span>
+												</h5>
+											</div>
+										</div>
+									</div>
+
+									<div>
+										<FormGroup className='my-4'>
+											<Label htmlFor='Subject'>Subject</Label>
+											<Input
+												id='subject'
+												placeholder='Enter Your Ticket Subject'
+												aria-label='subject'
+												value={subject}
+												onChange={(e: any) => setSubject(e.target.value)}
+											/>
+										</FormGroup>
+										<FormGroup className='my-4'>
+											<div className='d-flex justify-content-between'>
+												<div
+													className='w-100'
+													style={{ marginRight: '8px' }}>
+													<Label htmlFor='category'>Category</Label>
+													<select
+														className=' form-select form-control '
+														data-kt-select2='true'
+														data-placeholder='Select option'
+														data-allow-clear='true'
+														defaultValue='Select Category'
+														disabled={false}>
+														<option value='Category 1'>
+															Category 1
+														</option>
+														<option value='Category 2'>
+															Category 2
+														</option>
+														<option value='Category 3'>
+															Category 3
+														</option>
+													</select>
+												</div>
+												<div
+													className='w-100'
+													style={{ marginLeft: '8px' }}>
+													<Label htmlFor='Priority'>Priority</Label>
+													<select
+														className=' form-select form-control '
+														data-kt-select2='true'
+														data-placeholder='Select option'
+														data-allow-clear='true'
+														defaultValue='Select priority'
+														disabled={false}>
+														<option value='priority 1'>
+															priority 1
+														</option>
+														<option value='priority 2'>
+															priority 2
+														</option>
+														<option value='priority 3'>
+															priority 3
+														</option>
+													</select>
+												</div>
+											</div>
+										</FormGroup>
+										<FormGroup className='mt-4'>
+											<Label htmlFor='Description'>Description</Label>
+											<Textarea id='Description' ariaLabel='With textarea' />
+										</FormGroup>
+									</div>
+								</div>
+							</ModalBody>
+							<ModalFooter>
+								<Button
+									icon='Close'
+									color='danger'
+									isLink
+									onClick={() => setIsOpenModal(false)}>
+									Cancel
+								</Button>
+								<Button
+									isOutline={!themeStatus}
+									color='primary'
+									className={classNames('text-nowrap', {
+										'border-light': !themeStatus,
+									})}
+									icon='Save'
+									onClick={() => {
+										HandleSubmitTicket();
+									}}>
+									Save
+								</Button>
+							</ModalFooter>
+						</Modal>
+					)}
 
 					<OffCanvas
 						setOpen={setUpcomingEventsInfoOffcanvas}
@@ -512,4 +540,4 @@ function LiveCourses() {
 	);
 }
 
-export default LiveCourses;
+export default Ticket;

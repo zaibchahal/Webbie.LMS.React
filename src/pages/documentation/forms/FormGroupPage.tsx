@@ -53,13 +53,13 @@ const FormGroupPage = () => {
 	isColForLabel={ Boolean }
 	labelClassName={ String }
 	childWrapperClassName={ String }>
-	
+
 	<Input {...props}/>
 	{/* or */}
 	<Select {...props}/>
 	{/* or */}
 	<Textarea {...props}/>
-	
+
 </FormGroup>`;
 	const GENERAL_USAGE_2 = `
 <FormGroup
@@ -82,13 +82,13 @@ const FormGroupPage = () => {
 		>
 		...
 	</Label>
-	
+
 	<Input {...props}/>
 	{/* or */}
 	<Select {...props}/>
 	{/* or */}
 	<Textarea {...props}/>
-	
+
 	<FormText {...props}>...</FormText>
 </FormGroup>`;
 
@@ -137,10 +137,8 @@ const FormGroupPage = () => {
 				</SubHeaderLeft>
 				<SubHeaderRight>
 					<Dropdown>
-						<DropdownToggle>
-							<Button color='storybook' icon='CustomStorybook' isLight>
-								Storybook
-							</Button>
+						<DropdownToggle hasIcon={true}>
+							<Button color='storybook'>Storybook</Button>
 						</DropdownToggle>
 						<DropdownMenu isAlignmentEnd>
 							<DropdownItem>

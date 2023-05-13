@@ -9,6 +9,7 @@ const footers: RouteProps[] = [
 	{ path: demoPagesMenu.signUp.path, element: null },
 	{ path: demoPagesMenu.page404.path, element: null },
 	{ path: 'zoom-meeting', element: null },
+	{ path: 'live-class', element: null },
 	{ path: demoPagesMenu.knowledge.subMenu.grid.path, element: null },
 	{ path: '*', element: <DefaultFooter /> },
 ];
