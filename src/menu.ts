@@ -1152,19 +1152,19 @@ export const LmsFeatures = {
 		icon: 'Help',
 		subMenu: {
 			createtest: {
-				id: 'listBoxed',
+				id: 'create-test',
 				text: 'Create Test',
 				path: 'mcq-bank/create-test',
 				icon: 'ViewArray',
 			},
 			paperlist: {
-				id: 'listBoxed',
+				id: 'paper-list',
 				text: 'Solve Paper',
 				path: 'mcq-bank/paper-list',
 				icon: 'ViewArray',
 			},
 			previousattempts: {
-				id: 'listFluid',
+				id: 'previous-attempts',
 				text: 'Previous Attempts',
 				path: 'mcq-bank/previous-attempts',
 				icon: 'ViewDay',
