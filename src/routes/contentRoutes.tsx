@@ -215,6 +215,7 @@ const Lms = {
 		paperList: lazy(() => import('../LmsLayout/QuestionBank/PaperList')),
 	},
 	// LmsGoogleMeeting: lazy(() => import('../LmsLayout/GoogleMeeting/MeetComponent')),
+	LmsTicketChat: lazy(() => import('../LmsLayout/SupportCenter/TicketChat')),
 };
 const location = window.location;
 const presentation: RouteProps[] = [
@@ -334,6 +335,10 @@ const presentation: RouteProps[] = [
 	{
 		path: 'live-class',
 		element: <Lms.LmsLiveClassPage />,
+	},
+	{
+		path: 'Ticket-Chat',
+		element: <Lms.LmsTicketChat />,
 	},
 
 	/**

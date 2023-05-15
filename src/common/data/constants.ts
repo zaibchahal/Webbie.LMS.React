@@ -23,6 +23,8 @@ export const Student_Urls = {
 	GetLiveClassList: API_BASE_URL + '/services/app/LiveSessionService/MyLiveSession',
 	GetTicketList: API_BASE_URL + '/services/app/TicketService/GetTicket',
 	PostTicket: API_BASE_URL + '/services/app/TicketService/CreatUpdateTicket',
+	SupportCategotyDropdown: API_BASE_URL + '/services/app/DropDownService/GetSupportCategory',
+	SupportPriorityDropdown: API_BASE_URL + '/services/app/DropDownService/GetTicketPriority',
 };
 
 export const AppConst = {

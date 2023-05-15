@@ -43,6 +43,40 @@ export const postTicket = async (TicketData: ITicket, accessToken: string | unde
 	}
 };
 
+export const getCategotyDropdown = async (accessToken: string | undefined) => {
+	try {
+		const response = await axios.get(Student_Urls.SupportCategotyDropdown, {
+			headers: {
+				Accept: 'text/plain',
+				'Content-Type': 'application/json-patch+json',
+				'X-XSRF-TOKEN': 'null',
+				Authorization: `Bearer ${accessToken}`,
+			},
+			withCredentials: true,
+		});
+		return response.data.result || [];
+	} catch {
+		return [];
+	}
+};
+
+export const getPriorityDropdown = async (accessToken: string | undefined) => {
+	try {
+		const response = await axios.get(Student_Urls.SupportPriorityDropdown, {
+			headers: {
+				Accept: 'text/plain',
+				'Content-Type': 'application/json-patch+json',
+				'X-XSRF-TOKEN': 'null',
+				Authorization: `Bearer ${accessToken}`,
+			},
+			withCredentials: true,
+		});
+		return response.data.result || [];
+	} catch {
+		return [];
+	}
+};
+
 export interface ITicket {
 	tenantId: number;
 	categoryID: number;

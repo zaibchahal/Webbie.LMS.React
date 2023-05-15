@@ -55,7 +55,7 @@ const SupportCenter = () => {
 		<PageWrapper title={LmsFeatures.supportcenter.text}>
 			<Page>
 				<div className='row'>
-					<div className='col-12 text-center my-3'>
+					<div className='col-12 my-3'>
 						<span className='display-5 fw-bold'>SUPPORT CENTER</span>
 					</div>
 					<div
@@ -127,8 +127,9 @@ const SupportCenter = () => {
 									rounded={1}
 									onClick={formik.resetForm}
 									type='reset'
-									isDisable={!(formik.values.search || formik.values.category)}
-								/>
+									isDisable={!(formik.values.search || formik.values.category)}>
+									Search
+								</Button>
 							</div>
 						</form>
 					</div>

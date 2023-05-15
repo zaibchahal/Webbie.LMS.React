@@ -44,8 +44,14 @@ import axios from 'axios';
 import { AppConst, BASE_URL } from '../../common/data/constants';
 import { getCookie } from '../../common/data/helper';
 import AuthContext from '../../contexts/authContext';
-import { ITicket, ITicketReply, getTicketList, postTicket } from '../../services/TicketService';
-import CreateTicket from './CreateTicket';
+import {
+	ITicket,
+	ITicketReply,
+	getCategotyDropdown,
+	getPriorityDropdown,
+	getTicketList,
+	postTicket,
+} from '../../services/TicketService';
 import Black_WebbieLogo from '../../components/Black_WebbieLogo';
 import Modal, {
 	ModalHeader,
@@ -54,6 +60,7 @@ import Modal, {
 	ModalFooter,
 } from '../../components/bootstrap/Modal';
 import Label from '../../components/bootstrap/forms/Label';
+import NoData from '../no-data/NoData';
 
 interface ITicketProps {
 	isFluid?: boolean;
@@ -101,13 +108,19 @@ function Ticket() {
 
 	const tenant = getCookie(AppConst.TenantID);
 	const tenantName = getCookie(AppConst.TenantName);
+	const [dropdownCategory, setDropdownCategory] = useState<any[]>([]);
+	const [dropdownPriority, setDropdownPriority] = useState<any[]>([]);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			const d = await getTicketList(1, 1, session?.accessToken);
 			setTicketList(d.items as ITicket[]);
 			// useSortableData(d.items as ITicket[], null);
-			console.log(d.items);
+			// console.log(d.items);
+			const dropCategory = await getCategotyDropdown(session?.accessToken);
+			const dropPriority = await getPriorityDropdown(session?.accessToken);
+			setDropdownCategory(dropCategory);
+			setDropdownPriority(dropPriority);
 		};
 		fetchData();
 	}, []);
@@ -117,28 +130,41 @@ function Ticket() {
 
 	const [subject, setSubject] = useState('');
 	const [priority, setPriority] = useState('');
-	const [catogoty, setCatogoty] = useState('');
+	const [priorityID, setPriorityID] = useState(0);
+	const [categoty, setCategoty] = useState('');
+	const [categotyID, setCategotyID] = useState(0);
+
 	const [discription, setDiscription] = useState('');
 
 	const TicketData: ITicket = {
 		tenantId: parseInt(tenant),
-		categoryID: 0,
+		categoryID: categotyID,
 		refNo: '',
 		tags: '',
 		subject: subject,
 		body: discription,
 		issuedTo: 0,
-		priority: 1,
+		priority: priorityID,
 		isPopular: false,
-		status: 0,
-		category: catogoty,
-		creatorUserName: '',
+		status: 1,
+		category: categoty,
+		creatorUserName: tenantName,
 		ticketReply: [],
 		id: 0,
 	};
 
 	const HandleSubmitTicket = async () => {
 		await postTicket(TicketData, session?.accessToken);
+	};
+
+	const handleCategory = (e: any) => {
+		setCategotyID(parseInt(e.taget.value));
+		setCategoty(e.taget.value);
+		setCategoty(dropdownCategory[parseInt(e.target.value)]);
+	};
+	const handlePriority = (e: any) => {
+		setPriorityID(parseInt(e.target.value));
+		setPriority(dropdownPriority[parseInt(e.target.value)]);
 	};
 
 	return (
@@ -170,7 +196,7 @@ function Ticket() {
 											className='cursor-pointer text-decoration-underline'>
 											Subject
 										</th>
-										<th>Catogoty</th>
+										<th>Categoty</th>
 										<th>Priority</th>
 
 										<th>Status</th>
@@ -179,54 +205,60 @@ function Ticket() {
 									</tr>
 								</thead>
 								<tbody>
-									{dataPagination(TicketList, currentPage, perPage).map(
-										(item) => (
-											<tr key={item.id}>
-												<td>
-													<Button
-														isOutline={!darkModeStatus}
-														color='dark'
-														isLight={darkModeStatus}
-														className={classNames({
-															'border-light': !darkModeStatus,
-														})}
-														icon='Info'
-														onClick={handleUpcomingDetails}
-														aria-label='Detailed information'
-													/>
-													{/* <input
+									{TicketList === undefined || TicketList.length === 0 ? (
+										<NoData />
+									) : (
+										dataPagination(TicketList, currentPage, perPage).map(
+											(item) => (
+												<tr key={item.id}>
+													<td>
+														<Button
+															isOutline={!darkModeStatus}
+															color='dark'
+															isLight={darkModeStatus}
+															className={classNames({
+																'border-light': !darkModeStatus,
+															})}
+															icon='Info'
+															onClick={handleUpcomingDetails}
+															aria-label='Detailed information'
+														/>
+														{/* <input
 													className='form-check-input'
 													type='checkbox'
 													value=''
 												id='flexCheckChecked'></input> */}
-												</td>
-												<td>
-													<div>
-														<div>{item.subject}</div>
-													</div>
-												</td>
-												<td>
-													<td>{item.category}</td>
-												</td>
-												<div>{item.priority}</div>
-												<td>
-													<div>{item.status}</div>
-												</td>
-												<td>
-													<Button
-														isOutline={!darkModeStatus}
-														color='brand'
-														isLight={darkModeStatus}
-														className={classNames('text-nowrap', {
-															'border-light': !darkModeStatus,
-														})}
-														icon='Reply'
-														onClick={() => Navigate('../zoom-meeting')}>
-														Reply
-													</Button>
-												</td>
-											</tr>
-										),
+													</td>
+													<td>
+														<div>
+															<div>{item.subject}</div>
+														</div>
+													</td>
+													<td>
+														<td>{item.category}</td>
+													</td>
+													<div>{item.priority}</div>
+													<td>
+														<div>{item.status}</div>
+													</td>
+													<td>
+														<Button
+															isOutline={!darkModeStatus}
+															color='brand'
+															isLight={darkModeStatus}
+															className={classNames('text-nowrap', {
+																'border-light': !darkModeStatus,
+															})}
+															icon='Reply'
+															onClick={() =>
+																Navigate('../zoom-meeting')
+															}>
+															Reply
+														</Button>
+													</td>
+												</tr>
+											),
+										)
 									)}
 								</tbody>
 							</table>
@@ -293,17 +325,19 @@ function Ticket() {
 														data-kt-select2='true'
 														data-placeholder='Select option'
 														data-allow-clear='true'
-														defaultValue='Select Category'
-														disabled={false}>
-														<option value='Category 1'>
-															Category 1
-														</option>
-														<option value='Category 2'>
-															Category 2
-														</option>
-														<option value='Category 3'>
-															Category 3
-														</option>
+														// defaultValue='Select Category'
+														placeholder='Select Category'
+														disabled={false}
+														onChange={(e) => handleCategory(e)}>
+														{dropdownCategory.map(
+															(dropItem: any, key: number) => (
+																<option
+																	key={key}
+																	value={dropItem.value}>
+																	{dropItem.text}
+																</option>
+															),
+														)}
 													</select>
 												</div>
 												<div
@@ -315,24 +349,31 @@ function Ticket() {
 														data-kt-select2='true'
 														data-placeholder='Select option'
 														data-allow-clear='true'
-														defaultValue='Select priority'
-														disabled={false}>
-														<option value='priority 1'>
-															priority 1
-														</option>
-														<option value='priority 2'>
-															priority 2
-														</option>
-														<option value='priority 3'>
-															priority 3
-														</option>
+														// defaultValue={dropdownPriority[0]}
+														disabled={false}
+														onChange={(e) => handlePriority(e)}>
+														{dropdownPriority.map(
+															(dropItem: any, key: number) => (
+																<option
+																	key={key}
+																	value={dropItem.value}>
+																	{dropItem.text}
+																</option>
+															),
+														)}
 													</select>
 												</div>
 											</div>
 										</FormGroup>
 										<FormGroup className='mt-4'>
 											<Label htmlFor='Description'>Description</Label>
-											<Textarea id='Description' ariaLabel='With textarea' />
+											<Textarea
+												id='Description'
+												ariaLabel='With textarea'
+												onChange={(e: any) => {
+													setDiscription(e.target.value);
+												}}
+											/>
 										</FormGroup>
 									</div>
 								</div>
