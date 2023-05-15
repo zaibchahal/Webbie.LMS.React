@@ -208,12 +208,14 @@ const Lms = {
 	LmsCoursePage: lazy(() => import('../LmsLayout/Courses/Coursepage')),
 	LmsZoomMeeting: lazy(() => import('../LmsLayout/ZoomMeeting/ZoomIndex')),
 	LmsGoogleClass: lazy(() => import('../LmsLayout/GoogleClass/GoogleClass')),
+	LmsLiveClassPage: lazy(() => import('../LmsLayout/LiveClass/LiveClassPage')),
 	LmsQuestionBank: {
 		prevattepmts: lazy(() => import('../LmsLayout/QuestionBank/PreviousAttempts')),
 		createTest: lazy(() => import('../LmsLayout/QuestionBank/CreateTest')),
 		paperList: lazy(() => import('../LmsLayout/QuestionBank/PaperList')),
 	},
 	// LmsGoogleMeeting: lazy(() => import('../LmsLayout/GoogleMeeting/MeetComponent')),
+	LmsTicketChat: lazy(() => import('../LmsLayout/SupportCenter/TicketChat')),
 };
 const location = window.location;
 const presentation: RouteProps[] = [
@@ -329,6 +331,14 @@ const presentation: RouteProps[] = [
 	{
 		path: LmsFeatures.mcqbank.subMenu.createtest.path,
 		element: <Lms.LmsQuestionBank.prevattepmts />,
+	},
+	{
+		path: 'live-class',
+		element: <Lms.LmsLiveClassPage />,
+	},
+	{
+		path: 'Ticket-Chat',
+		element: <Lms.LmsTicketChat />,
 	},
 
 	/**

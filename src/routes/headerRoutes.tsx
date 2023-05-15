@@ -2,13 +2,13 @@ import React from 'react';
 import { RouteProps } from 'react-router-dom';
 import {
 	componentPagesMenu,
-	dashboardPagesMenu, 
+	dashboardPagesMenu,
 	demoPagesMenu,
 	gettingStartedPagesMenu,
 	pageLayoutTypesPagesMenu,
 	LmsDashboard,
 	LmsFeatures,
-	LmsUserManu
+	LmsUserManu,
 } from '../menu';
 import DashboardHeader from '../pages/_layout/_headers/DashboardHeader';
 import DashboardBookingHeader from '../pages/_layout/_headers/DashboardBookingHeader';

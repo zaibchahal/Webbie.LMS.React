@@ -34,6 +34,7 @@ import Dropdown, {
 import { UpdateName } from '../../@features/User/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
+import Ticket from './Tickets';
 
 const SupportCenter = () => {
 	const { darkModeStatus } = useDarkMode();
@@ -54,7 +55,7 @@ const SupportCenter = () => {
 		<PageWrapper title={LmsFeatures.supportcenter.text}>
 			<Page>
 				<div className='row'>
-					<div className='col-12 text-center my-3'>
+					<div className='col-12 my-3'>
 						<span className='display-5 fw-bold'>SUPPORT CENTER</span>
 					</div>
 					<div
@@ -126,8 +127,9 @@ const SupportCenter = () => {
 									rounded={1}
 									onClick={formik.resetForm}
 									type='reset'
-									isDisable={!(formik.values.search || formik.values.category)}
-								/>
+									isDisable={!(formik.values.search || formik.values.category)}>
+									Search
+								</Button>
 							</div>
 						</form>
 					</div>
@@ -205,7 +207,7 @@ const SupportCenter = () => {
 						</div>
 					</CardTabItem>
 					<CardTabItem id='tickets' title='TICKETS' icon='LibraryMusic'>
-						<FavouriteVideos />
+						<Ticket />
 					</CardTabItem>
 					<CardTabItem id='knowladge' title='Knowladge Base' icon='AutoStories'>
 						<KnowledgeGridPage />
