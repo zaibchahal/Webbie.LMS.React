@@ -216,6 +216,8 @@ const Lms = {
 	},
 	// LmsGoogleMeeting: lazy(() => import('../LmsLayout/GoogleMeeting/MeetComponent')),
 	LmsTicketChat: lazy(() => import('../LmsLayout/SupportCenter/TicketChat')),
+	LmsStudentTest: lazy(() => import('../LmsLayout/QuestionBank/Test')),
+
 };
 const location = window.location;
 const presentation: RouteProps[] = [
@@ -275,6 +277,10 @@ const presentation: RouteProps[] = [
 	{
 		path: 'google-class',
 		element: <Lms.LmsGoogleClass />,
+	},
+	{
+		path: 'mcq-bank/test',
+		element: <Lms.LmsStudentTest />,
 	},
 	{
 		path: LmsFeatures.mycourses.path,

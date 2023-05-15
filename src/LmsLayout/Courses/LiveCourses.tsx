@@ -45,6 +45,7 @@ import { AppConst, BASE_URL } from '../../common/data/constants';
 import { getCookie } from '../../common/data/helper';
 import AuthContext from '../../contexts/authContext';
 import { ILiveClassList, getLiveClassList } from '../../services/LiveClasses';
+import NoData from '../no-data/NoData';
 
 interface ILiveCoursesProps {
 	isFluid?: boolean;
@@ -90,14 +91,15 @@ function LiveCourses() {
 	const [liveClassList, setLiveClassList] = useState<ILiveClassList[]>([]);
 	const { items, requestSort, getClassNamesFor } = useSortableData(
 		liveClassList as ILiveClassList[],
+		null,
 	);
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const d = await getLiveClassList(0, session?.accessToken);
-			setLiveClassList(d.items as ILiveClassList[]);
+			await getLiveClassList(3, session?.accessToken).then((res: any) => {
+				setLiveClassList(res as ILiveClassList[]);
+			});
 			// useSortableData(d.items as ILiveClassList[], null);
-			console.log(d.items);
 		};
 		fetchData();
 	}, []);
@@ -186,67 +188,76 @@ function LiveCourses() {
 									</tr>
 								</thead>
 								<tbody>
-									{dataPagination(liveClassList, currentPage, perPage).map(
-										(item) => (
-											<tr key={item.id}>
-												<td>
-													<Button
-														isOutline={!darkModeStatus}
-														color='dark'
-														isLight={darkModeStatus}
-														className={classNames({
-															'border-light': !darkModeStatus,
-														})}
-														icon='Info'
-														onClick={handleUpcomingDetails}
-														aria-label='Detailed information'
-													/>
-													{/* <input
+									{liveClassList === undefined || liveClassList.length === 0 ? (
+										<NoData />
+									) : (
+										dataPagination(liveClassList, currentPage, perPage).map(
+											(item) => (
+												<tr key={item.id}>
+													<td>
+														<Button
+															isOutline={!darkModeStatus}
+															color='dark'
+															isLight={darkModeStatus}
+															className={classNames({
+																'border-light': !darkModeStatus,
+															})}
+															icon='Info'
+															onClick={handleUpcomingDetails}
+															aria-label='Detailed information'
+														/>
+														{/* <input
 													className='form-check-input'
 													type='checkbox'
 													value=''
 												id='flexCheckChecked'></input> */}
-												</td>
-												<td>
-													<div>
-														<div>{item.topic}</div>
-														<div className='small text-muted'>
-															{item.description}
+													</td>
+													<td>
+														<div>
+															<div>{item.topic}</div>
+															<div className='small text-muted'>
+																{item.description}
+															</div>
 														</div>
-													</div>
-												</td>
-												<td>
-													<Dropdown>
-														<DropdownToggle hasIcon={false}>
-															<Button
-																isLink
-																color={item.status.color}
-																icon='Circle'
-																className='text-nowrap'>
-																{item.status}
-															</Button>
-														</DropdownToggle>
-														<DropdownMenu>
-															{Object.keys(EVENT_STATUS).map((k) => (
-																<DropdownItem key={k}>
-																	<div>
-																		<Icon
-																			icon='Circle'
-																			color={
-																				EVENT_STATUS[k]
-																					.color
-																			}
-																		/>
-																		{EVENT_STATUS[k].name}
-																	</div>
-																</DropdownItem>
-															))}
-														</DropdownMenu>
-													</Dropdown>
-												</td>
-												<td>{item.duration}</td>
-												<td>
-													{/* <div className='d-flex'>
+													</td>
+													<td>
+														<Dropdown>
+															<DropdownToggle hasIcon={false}>
+																<Button
+																	isLink
+																	color={item.status.color}
+																	icon='Circle'
+																	className='text-nowrap'>
+																	{item.status}
+																</Button>
+															</DropdownToggle>
+															<DropdownMenu>
+																{Object.keys(EVENT_STATUS).map(
+																	(k) => (
+																		<DropdownItem key={k}>
+																			<div>
+																				<Icon
+																					icon='Circle'
+																					color={
+																						EVENT_STATUS[
+																							k
+																						].color
+																					}
+																				/>
+																				{
+																					EVENT_STATUS[k]
+																						.name
+																				}
+																			</div>
+																		</DropdownItem>
+																	),
+																)}
+															</DropdownMenu>
+														</Dropdown>
+													</td>
+													<td>{item.duration}</td>
+													<td>
+														{/* <div className='d-flex'>
 													<div className='flex-shrink-0'>
 														<Avatar
 															src={item.assigned.src}
@@ -259,78 +270,85 @@ function LiveCourses() {
 														{`${item.assigned.name} ${item.assigned.surname}`}
 													</div>
 												</div> */}
-													<div className='d-flex align-items-center'>
-														<span
-															className={classNames(
-																'badge',
-																'border border-2',
-																[`border-${themeStatus}`],
-																'rounded-circle',
-																'bg-success',
-																'p-2 me-2',
-																`bg-${item.status}`,
-															)}>
-															<span className='visually-hidden'>
-																{item.status}
+														<div className='d-flex align-items-center'>
+															<span
+																className={classNames(
+																	'badge',
+																	'border border-2',
+																	[`border-${themeStatus}`],
+																	'rounded-circle',
+																	'bg-success',
+																	'p-2 me-2',
+																	`bg-${item.status}`,
+																)}>
+																<span className='visually-hidden'>
+																	{item.status}
+																</span>
 															</span>
-														</span>
-														<span className='text-nowrap'>
-															{dayjs(`${item.startTime}`).format(
-																'MMM Do YYYY, h:mm a',
-															)}
-														</span>
-													</div>
-												</td>
-												<td>
-													<div className='d-flex align-items-center'>
-														<span
-															className={classNames(
-																'badge',
-																'border border-2',
-																[`border-${themeStatus}`],
-																'rounded-circle',
-																'bg-success',
-																'p-2 me-2',
-																`bg-${item.status.color}`,
-															)}>
-															<span className='visually-hidden'>
-																{item.status.name}
+															<span className='text-nowrap'>
+																{dayjs(`${item.startTime}`).format(
+																	'MMM Do YYYY, h:mm a',
+																)}
 															</span>
-														</span>
-														<span className='text-nowrap'>
-															{dayjs(`${item.startTime}`).format(
-																'MMM Do YYYY, h:mm a',
-															)}
-														</span>
-													</div>
-												</td>
-												<td>
-													<Button
-														isOutline={!darkModeStatus}
-														color='brand'
-														isLight={darkModeStatus}
-														className={classNames('text-nowrap', {
-															'border-light': !darkModeStatus,
-														})}
-														icon='Add'
-														onClick={() => Navigate('../zoom-meeting')}>
-														Join
-													</Button>
-												</td>
-											</tr>
-										),
+														</div>
+													</td>
+													<td>
+														<div className='d-flex align-items-center'>
+															<span
+																className={classNames(
+																	'badge',
+																	'border border-2',
+																	[`border-${themeStatus}`],
+																	'rounded-circle',
+																	'bg-success',
+																	'p-2 me-2',
+																	`bg-${item.status.color}`,
+																)}>
+																<span className='visually-hidden'>
+																	{item.status.name}
+																</span>
+															</span>
+															<span className='text-nowrap'>
+																{dayjs(`${item.startTime}`).format(
+																	'MMM Do YYYY, h:mm a',
+																)}
+															</span>
+														</div>
+													</td>
+													<td>
+														<Button
+															isOutline={!darkModeStatus}
+															color='brand'
+															isLight={darkModeStatus}
+															className={classNames('text-nowrap', {
+																'border-light': !darkModeStatus,
+															})}
+															icon='Add'
+															onClick={() =>
+																Navigate('../zoom-meeting')
+															}>
+															Join
+														</Button>
+													</td>
+												</tr>
+											),
+										)
 									)}
 								</tbody>
 							</table>
 						</CardBody>
-						<PaginationButtons
-							data={items}
-							label='items'
-							setCurrentPage={setCurrentPage}
-							currentPage={currentPage}
-							perPage={perPage}
-							setPerPage={setPerPage}
-						/>
+						{liveClassList === undefined || liveClassList.length === 0 ? (
+							<NoData />
+						) : (
+							<PaginationButtons
+								data={items}
+								label='items'
+								setCurrentPage={setCurrentPage}
+								currentPage={currentPage}
+								perPage={perPage}
+								setPerPage={setPerPage}
+							/>
+						)}
 					</Card>
 
 					<OffCanvas

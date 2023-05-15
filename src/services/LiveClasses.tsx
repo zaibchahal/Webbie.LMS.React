@@ -2,19 +2,26 @@ import React, { useEffect, useRef, useContext, useState } from 'react';
 import axios from 'axios';
 import { AppConst, Student_Urls } from '../common/data/constants';
 
-export const getLiveClassList = async (type: number, accessToken: string | undefined) => {
+export const getLiveClassList = async (studentID: number, accessToken: string | undefined) => {
 	try {
-		const response = await axios.post(Student_Urls.GetLiveClassList, {
-			headers: {
-				Accept: 'text/plain',
-				'Content-Type': 'application/json-patch+json',
-				'X-XSRF-TOKEN': 'null',
-				Authorization: `Bearer ${accessToken}`,
+		const response = await axios.post(
+			Student_Urls.GetLiveClassList,
+			{
+				studentID: studentID,
 			},
-			withCredentials: true,
-		});
+			{
+				headers: {
+					Accept: 'text/plain',
+					'Content-Type': 'application/json-patch+json',
+					'X-XSRF-TOKEN': 'null',
+					Authorization: `Bearer ${accessToken}`,
+				},
+				withCredentials: true,
+			},
+		);
 		return response.data.result || [];
 	} catch {
+		(e: any) => console.log(e + 'errore error');
 		return [];
 	}
 };
