@@ -25,7 +25,7 @@ import SubHeader, {
 } from '../../layout/SubHeader/SubHeader';
 import Icon from '../../components/icon/Icon';
 import { useState } from 'react';
-import Question from './Question';
+import { Question } from './Question';
 const Test = () => {
 	const navigate = useNavigate();
 
@@ -120,7 +120,16 @@ const Test = () => {
 											</div>
 										</SubHeaderRight>
 									</SubHeader>
-									<Question />
+									<Question
+										question='What is the capital of France?'
+										options={['Paris', 'London', 'Berlin', 'Rome']}
+										answer='Paris'
+									/>
+									<Question
+										question='Which planet is known as the Red Planet?'
+										options={['Venus', 'Mars', 'Jupiter', 'Saturn']}
+										answer='Mars'
+									/>
 								</div>
 							</div>
 						</CardBody>

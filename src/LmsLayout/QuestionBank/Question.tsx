@@ -1,60 +1,45 @@
 import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { AnswerOption } from './AnswerOption';
 
-const Question = () => {
-	const [selectedOption, setSelectedOption] = useState<number | null>(null);
+type QuestionProps = {
+	question: string;
+	options: string[];
+	answer: string;
+};
+
+export const Question: React.FC<QuestionProps> = ({ question, options, answer }) => {
+	const [selectedOption, setSelectedOption] = useState<string | null>(null);
 	const [showAnswer, setShowAnswer] = useState(false);
 
-	interface Option {
-		id: number;
-		text: string;
-		isCorrect: boolean;
-	}
-
-	const options: Option[] = [
-		{ id: 1, text: 'Option 1', isCorrect: true },
-		{ id: 2, text: 'Option 2', isCorrect: false },
-		{ id: 3, text: 'Option 3', isCorrect: false },
-		{ id: 4, text: 'Option 4', isCorrect: false },
-	];
-
-	const handleOptionSelect = (optionId: number) => {
-		if (!selectedOption && !showAnswer) {
-			setSelectedOption(optionId);
+	const handleOptionClick = (option: string) => {
+		if (!showAnswer) {
+			setSelectedOption(option);
 			setShowAnswer(true);
 		}
 	};
 
 	return (
-		<div className='container mt-5'>
-			<h2 className='mb-4'>Question:</h2>
-			<p className='lead'>What is the correct answer?</p>
-
-			<div className='list-group'>
-				{options.map((option) => {
-					const isOptionSelected = selectedOption === option.id;
-					const isCorrectAnswer = option.isCorrect;
-					const isWrongAnswer = showAnswer && isOptionSelected && !isCorrectAnswer;
-
-					let optionClass = 'list-group-item list-group-item-action';
-					if (isOptionSelected && showAnswer) {
-						optionClass += isCorrectAnswer
-							? ' bg-primary text-white'
-							: ' bg-danger text-white';
-					}
-
-					return (
-						<div
-							key={option.id}
-							onClick={() => handleOptionSelect(option.id)}
-							className={optionClass}>
-							{option.text}
-						</div>
-					);
-				})}
+		<div className='card my-3'>
+			<div className='card-body'>
+				<h5 className='card-title'>{question}</h5>
+				{options.map((option, index) => (
+					<AnswerOption
+						key={index}
+						option={option}
+						isCorrect={option === answer}
+						isSelected={option === selectedOption}
+						showAnswer={showAnswer}
+						handleClick={() => handleOptionClick(option)}
+					/>
+				))}
 			</div>
+			{showAnswer && (
+				<div className='card-footer'>
+					<p className='mb-0'>
+						<strong>Correct answer:</strong> {answer}
+					</p>
+				</div>
+			)}
 		</div>
 	);
 };
-
-export default Question;
