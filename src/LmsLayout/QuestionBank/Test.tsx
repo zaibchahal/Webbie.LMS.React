@@ -125,11 +125,11 @@ const Test = () => {
 										options={['Paris', 'London', 'Berlin', 'Rome']}
 										answer='Paris'
 									/>
-									<Question
+									{/* <Question
 										question='Which planet is known as the Red Planet?'
 										options={['Venus', 'Mars', 'Jupiter', 'Saturn']}
 										answer='Mars'
-									/>
+									/> */}
 								</div>
 							</div>
 						</CardBody>
