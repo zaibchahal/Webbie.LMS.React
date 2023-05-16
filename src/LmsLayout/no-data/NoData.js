@@ -27,7 +27,7 @@ const NoData = (props) => {
     <div
       style={{
         ...props.style,
-        height: height || `calc(${checkHeight()}px - 180px)`,
+        height: height || `calc(${checkHeight()}px - 480px)`,
       }}
 
       className="NoDataWrapper"
@@ -35,7 +35,7 @@ const NoData = (props) => {
       <div>
         <div
           style={{
-            transform: "translate(-50%, -50%)",
+            transform: "translate(-30%, -30%)",
             top: "50%",
             left: "50%",
             position: "absolute",

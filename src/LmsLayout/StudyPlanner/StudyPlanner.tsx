@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 import { Calendar, dayjsLocalizer, View as TView, Views } from 'react-big-calendar';
@@ -43,6 +43,10 @@ import Input from '../../components/bootstrap/forms/Input';
 import Tooltips from '../../components/bootstrap/Tooltips';
 import useDarkMode from '../../hooks/useDarkMode';
 import { TColor } from '../../type/color-type';
+import { IStudyPlanner, getStudyPlannerList, postStudyPlanner } from '../../services/StudyPlanner';
+import AuthContext from '../../contexts/authContext';
+import { getCookie } from '../../common/data/helper';
+import { AppConst } from '../../common/data/constants';
 
 const localizer = dayjsLocalizer(dayjs);
 const now = new Date();
@@ -169,8 +173,6 @@ const MyEventDay = (data: { event: IEvent }) => {
 const CalendarPage = () => {
 	const { darkModeStatus, themeStatus } = useDarkMode();
 
-	// BEGIN :: Calendar
-	// Active employee
 	const [employeeList, setEmployeeList] = useState({
 		[USERS.JOHN.userName]: true,
 		[USERS.ELLA.userName]: true,
@@ -180,10 +182,28 @@ const CalendarPage = () => {
 	// Events
 	const [events, setEvents] = useState(eventList);
 
+	const { session } = useContext(AuthContext);
+	const { profilePicture, userData, handleSetProfilePicture } = useContext(AuthContext);
+
 	// FOR DEV
 	useEffect(() => {
-		setEvents(eventList);
-		return () => {};
+		getStudyPlannerList(session?.userId, session?.accessToken).then((res) => {
+			// console.log(res);
+			setEvents(res.items);
+
+			const convertedData = res.items.map((data: any) => ({
+				id: data.id,
+				start: dayjs(data.start).startOf('day').add(9, 'hour').toDate(),
+				end: dayjs(data.end).startOf('day').toDate(),
+				color: 'danger',
+				name: data.title,
+				user: userData,
+			}));
+			// console.log(session);
+			// console.log(convertedData);
+			setEvents(convertedData);
+			// console.log(eventList);
+		});
 	}, []);
 
 	const initialEventItem: IEvent = {
@@ -299,6 +319,35 @@ const CalendarPage = () => {
 		return () => {};
 		//	eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [eventItem]);
+	const [newEventName, setNewEventName] = useState('');
+	const { eventName, eventStart, eventEnd, eventEmployee, eventAllDay } = formik.values;
+
+	const InsertData: IStudyPlanner = {
+		tenantId: parseInt(getCookie(AppConst.TenantID)),
+		title: newEventName,
+		description: '',
+		dateFrom: eventStart,
+		dateTo: eventEnd,
+		isFullDay: eventAllDay,
+		isDeleted: false,
+		deleterUserId: 0,
+		deletionTime: '',
+		lastModificationTime: '',
+		lastModifierUserId: 0,
+		creationTime: dayjs().format(),
+		creatorUserId: session?.userId!,
+		id: 0,
+	};
+
+	const handleSubmitEvent = () => {
+		postStudyPlanner(InsertData, session?.accessToken)
+			.then((res) => {
+				console.log(res);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 	// END:: Calendar
 	return (
 		<PageWrapper title={demoPagesMenu.appointment.subMenu.dashboard.text}>
@@ -306,9 +355,9 @@ const CalendarPage = () => {
 				<SubHeaderLeft>
 					<Icon icon='Info' className='me-2' size='2x' />
 					<span className='text-muted'>
-						You have{' '}
+						You have
 						<Icon icon='Check Circle ' color='success' className='mx-1' size='lg' /> 12
-						approved appointments and{' '}
+						approved appointments and
 						<Icon icon='pending_actions ' color='danger' className='mx-1' size='lg' /> 3
 						pending appointments for today.
 					</span>
@@ -511,23 +560,18 @@ const CalendarPage = () => {
 							{eventAdding ? 'Add Event' : 'Edit Event'}
 						</OffCanvasTitle>
 					</OffCanvasHeader>
-					<OffCanvasBody tag='form' onSubmit={formik.handleSubmit} className='p-4'>
+					<OffCanvasBody className='p-4'>
 						<div className='row g-4'>
 							{/* Name */}
 							<div className='col-12'>
 								<FormGroup id='eventName' label='Name'>
-									<Select
-										ariaLabel='Service select'
-										placeholder='Please select...'
-										size='lg'
-										value={formik.values.eventName}
-										onChange={formik.handleChange}>
-										{Object.keys(SERVICES).map((s) => (
-											<Option key={SERVICES[s].name} value={SERVICES[s].name}>
-												{SERVICES[s].name}
-											</Option>
-										))}
-									</Select>
+									<Input
+										name='Name of Event'
+										className='border-0 shadow-none bg-transparent'
+										placeholder='Enter Event Name'
+										onChange={(e: any) => setNewEventName(e.target.value)}
+										value={newEventName}
+									/>
 								</FormGroup>
 							</div>
 							{/* Date */}
@@ -626,7 +670,12 @@ const CalendarPage = () => {
 								</Card>
 							</div>
 							<div className='col'>
-								<Button color='info' type='submit'>
+								<Button
+									color='info'
+									type='submit'
+									onClick={() => {
+										handleSubmitEvent();
+									}}>
 									Save
 								</Button>
 							</div>
