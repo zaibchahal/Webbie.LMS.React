@@ -121,6 +121,7 @@ function Ticket() {
 			const dropPriority = await getPriorityDropdown(session?.accessToken);
 			setDropdownCategory(dropCategory);
 			setDropdownPriority(dropPriority);
+			console.log(dropCategory);
 		};
 		fetchData();
 	}, []);
@@ -130,9 +131,9 @@ function Ticket() {
 
 	const [subject, setSubject] = useState('');
 	const [priority, setPriority] = useState('');
-	const [priorityID, setPriorityID] = useState(0);
+	const [priorityID, setPriorityID] = useState(1);
 	const [categoty, setCategoty] = useState('');
-	const [categotyID, setCategotyID] = useState(0);
+	const [categotyID, setCategotyID] = useState(1);
 
 	const [discription, setDiscription] = useState('');
 
@@ -158,9 +159,8 @@ function Ticket() {
 	};
 
 	const handleCategory = (e: any) => {
-		setCategotyID(parseInt(e.taget.value));
-		setCategoty(e.taget.value);
-		setCategoty(dropdownCategory[parseInt(e.target.value)]);
+		setCategotyID(parseInt(e.target.value));
+		setCategoty(e.target.text);
 	};
 	const handlePriority = (e: any) => {
 		setPriorityID(parseInt(e.target.value));
@@ -326,9 +326,9 @@ function Ticket() {
 														data-placeholder='Select option'
 														data-allow-clear='true'
 														// defaultValue='Select Category'
-														placeholder='Select Category'
+														// placeholder='Select Category'
 														disabled={false}
-														onChange={(e) => handleCategory(e)}>
+														onChange={(e: any) => handleCategory(e)}>
 														{dropdownCategory.map(
 															(dropItem: any, key: number) => (
 																<option

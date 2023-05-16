@@ -54,6 +54,7 @@ export const getCategotyDropdown = async (accessToken: string | undefined) => {
 			},
 			withCredentials: true,
 		});
+		console.log(response.data);
 		return response.data.result || [];
 	} catch {
 		return [];

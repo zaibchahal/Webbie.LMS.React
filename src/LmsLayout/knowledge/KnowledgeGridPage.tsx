@@ -186,11 +186,16 @@ const KnowledgeGridPage = () => {
 						className='col-xxl-6 mx-auto text-center my-5'
 						data-tour='knowledge-filter'>
 						<form
-							className={classNames('row', 'pb-4 px-3 mx-0 g-4', 'rounded-3', [
-								`bg-l${
-									darkModeStatus ? 'o25' : '10'
-								}-${getRandomBootstrapColor()}-primary`,
-							])}
+							className={classNames(
+								'row',
+								'pb-4 px-3 mx-0 g-4',
+								'rounded-3  d-flex justify-content-end',
+								[
+									`bg-l${
+										darkModeStatus ? 'o25' : '10'
+									}-${getRandomBootstrapColor()}-primary`,
+								],
+							)}
 							onSubmit={formik.handleSubmit}>
 							{/* <div className='col-md-5'>
 								<Select

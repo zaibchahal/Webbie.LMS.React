@@ -37,6 +37,7 @@ import Ticket from './Tickets';
 import { getFaqList } from '../../services/FAQ.service';
 import AuthContext from '../../contexts/authContext';
 import { getRandomBootstrapColor } from '../knowledge/helper/dummyKnowledgeData';
+import ReactDOM from 'react-dom';
 
 interface HTMLStringProps {
 	htmlString: string;
@@ -89,11 +90,16 @@ const SupportCenter = () => {
 						className='col-xxl-6 mx-auto text-center my-5'
 						data-tour='knowledge-filter'>
 						<form
-							className={classNames('row', 'pb-4 px-3 mx-0 g-4', 'rounded-3', [
-								`bg-l${
-									darkModeStatus ? 'o25' : '10'
-								}-${getRandomBootstrapColor()}-primary`,
-							])}
+							className={classNames(
+								'row',
+								'pb-4 px-3 mx-0 g-4',
+								'rounded-3 d-flex justify-content-end',
+								[
+									`bg-l${
+										darkModeStatus ? 'o25' : '10'
+									}-${getRandomBootstrapColor()}-primary`,
+								],
+							)}
 							onSubmit={formik.handleSubmit}>
 							{/* <div className='col-md-5'>
 								<Select
@@ -121,7 +127,7 @@ const SupportCenter = () => {
 									value={formik.values.category}
 								/>
 							</div> */}
-							<div className='col-md-5'>
+							<div className='col-md-5 '>
 								<Input
 									id='search'
 									size='lg'
@@ -177,6 +183,15 @@ const SupportCenter = () => {
 											<CardTitle>Popular Tickets</CardTitle>
 										</CardLabel>
 									</CardHeader>
+									<CardBody
+										style={{
+											maxHeight: '80px',
+											minHeight: '80px',
+											paddingTop: '0px',
+											overflowY: 'scroll',
+										}}>
+										<Ticket />
+									</CardBody>
 									<CardFooter>
 										<CardFooterRight>
 											<Button
@@ -199,6 +214,36 @@ const SupportCenter = () => {
 											<CardTitle>Faq</CardTitle>
 										</CardLabel>
 									</CardHeader>
+									<CardBody
+										style={{
+											maxHeight: '80px',
+											minHeight: '80px',
+											paddingTop: '0px',
+											overflowY: 'scroll',
+										}}
+										id='faq2'>
+										{faqList.map((f: any, k) => (
+											<Dropdown key={k} className='mb-3 mx-1'>
+												<DropdownToggle>
+													<Button
+														color='primary'
+														isLight
+														icon='view_agenda'>
+														<HTMLStringComponent
+															htmlString={f.question}
+														/>
+													</Button>
+												</DropdownToggle>
+												<DropdownMenu isCloseAfterLeave>
+													<DropdownItem>
+														<HTMLStringComponent
+															htmlString={f.answer}
+														/>
+													</DropdownItem>
+												</DropdownMenu>
+											</Dropdown>
+										))}
+									</CardBody>
 									<CardFooter>
 										<CardFooterRight>
 											<Button
@@ -221,6 +266,15 @@ const SupportCenter = () => {
 											<CardTitle>Tutorials</CardTitle>
 										</CardLabel>
 									</CardHeader>
+									<CardBody
+										style={{
+											maxHeight: '80px',
+											minHeight: '80px',
+											paddingTop: '0px',
+											overflowY: 'scroll',
+										}}>
+										{/* <Ticket /> */}
+									</CardBody>
 									<CardFooter>
 										<CardFooterRight>
 											<Button

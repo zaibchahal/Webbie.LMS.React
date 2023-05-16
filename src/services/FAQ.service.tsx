@@ -13,7 +13,7 @@ export const getFaqList = async (accessToken: string | undefined) => {
 			},
 			withCredentials: true,
 		});
-		console.log('success');
+		console.log('success faq');
 		return response.data.result || [];
 	} catch {
 		return [];
