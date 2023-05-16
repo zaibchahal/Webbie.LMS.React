@@ -3,7 +3,6 @@ import Page from '../../layout/Page/Page';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import { LmsFeatures } from '../../menu';
 import classNames from 'classnames';
-import { id } from 'date-fns/locale';
 import { useFormik } from 'formik';
 import Button from '../../components/bootstrap/Button';
 import Select from '../../components/bootstrap/forms/Select';
@@ -11,7 +10,6 @@ import Input from '../../components/bootstrap/forms/Input';
 
 import { debounce } from '../../helpers/helpers';
 import useDarkMode from '../../hooks/useDarkMode';
-import Alert from '../../components/bootstrap/Alert';
 import Card, {
 	CardTabItem,
 	CardHeader,
@@ -21,23 +19,20 @@ import Card, {
 	CardFooter,
 	CardFooterRight,
 } from '../../components/bootstrap/Card';
-import FormGroup from '../../components/bootstrap/forms/FormGroup';
-import FavouriteVideos from '../Courses/LiveCourses';
 import KnowledgeGridPage from '../knowledge/KnowledgeGridPage';
-import { Views } from 'react-big-calendar';
 import Dropdown, {
 	DropdownToggle,
 	DropdownMenu,
 	DropdownItem,
 } from '../../components/bootstrap/Dropdown';
-import { UpdateName } from '../../@features/User/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import Ticket from './Tickets';
 import { getFaqList } from '../../services/FAQ.service';
 import AuthContext from '../../contexts/authContext';
 import { getRandomBootstrapColor } from '../knowledge/helper/dummyKnowledgeData';
-import ReactDOM from 'react-dom';
+import Label from '../../components/bootstrap/forms/Label';
+import FormGroup from '../../components/bootstrap/forms/FormGroup';
 
 interface HTMLStringProps {
 	htmlString: string;
@@ -58,6 +53,8 @@ const SupportCenter = () => {
 	const { session } = useContext(AuthContext);
 	const { darkModeStatus } = useDarkMode();
 	const [filterableData, setFilterableData] = useState([]);
+	let commonState = useSelector((store: RootState) => store.common);
+
 	const onFormSubmit = (values: { category: any; search: any }) => {
 		const searchValue = values.search.toString().toLowerCase();
 	};
@@ -75,7 +72,6 @@ const SupportCenter = () => {
 	useEffect(() => {
 		getFaqList(session?.accessToken).then((res) => {
 			setFaqlist(res.items);
-			console.log(res);
 		});
 	}, []);
 
@@ -101,8 +97,8 @@ const SupportCenter = () => {
 								],
 							)}
 							onSubmit={formik.handleSubmit}>
-							{/* <div className='col-md-5'>
-								<Select
+							<div className='col-md-5'>
+								{/* <Select
 									id='category'
 									size='lg'
 									ariaLabel='Category'
@@ -125,8 +121,45 @@ const SupportCenter = () => {
 											)();
 									}}
 									value={formik.values.category}
-								/>
-							</div> */}
+								/> */}
+								<div className='w-100' style={{ marginLeft: '8px' }}>
+									<select
+										className={classNames(
+											'rounded-1 form-select form-control form-control-lg pt-2 pb-3',
+											{
+												'bg-white': !darkModeStatus,
+											},
+										)}
+										data-kt-select2='true'
+										data-placeholder='Select option'
+										data-allow-clear='true'
+										placeholder='Select Category...'
+										// defaultValue={dropdownPriority[0]}
+										disabled={false}
+										onChange={(e: { target: { value: any } }) => {
+											formik.handleChange(e);
+
+											if (e.target.value)
+												debounce(
+													() =>
+														onFormSubmit({
+															...formik.values,
+															category: e.target.value,
+														}),
+													1000,
+												)();
+										}}
+										value={formik.values.category}>
+										{commonState.CategoryList.map(
+											(dropItem: any, key: number) => (
+												<option key={key} value={dropItem.value}>
+													{dropItem.text}
+												</option>
+											),
+										)}
+									</select>
+								</div>
+							</div>
 							<div className='col-md-5 '>
 								<Input
 									id='search'

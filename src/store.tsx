@@ -6,6 +6,7 @@ import { persistReducer, persistStore } from 'redux-persist';
 import { combineReducers } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 import kbSlice from './@features/KnowladgeBase/KbSlice';
+import commonSlicer from './@features/Common/Common.slice';
 let middlewares: any[] = [];
 
 if (process.env.NODE_ENV === 'development') {
@@ -26,6 +27,7 @@ const persistConfig = {
 const reducer = combineReducers({
 	user: userReducer,
 	knowladgeBaseStore: kbSlice,
+	common: commonSlicer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

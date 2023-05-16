@@ -10,12 +10,6 @@ import Card, {
 	CardTitle,
 } from '../../components/bootstrap/Card';
 import Button from '../../components/bootstrap/Button';
-import { priceFormat } from '../../helpers/helpers';
-import Dropdown, {
-	DropdownItem,
-	DropdownMenu,
-	DropdownToggle,
-} from '../../components/bootstrap/Dropdown';
 import Icon from '../../components/icon/Icon';
 import OffCanvas, {
 	OffCanvasBody,
@@ -29,24 +23,18 @@ import Checks from '../../components/bootstrap/forms/Checks';
 import Popovers from '../../components/bootstrap/Popovers';
 import data from '../../common/data/dummyEventsData';
 import USERS from '../../common/data/userSessionService';
-import EVENT_STATUS from '../../common/data/enumEventStatus';
-import Avatar from '../../components/Avatar';
 import PaginationButtons, { dataPagination, PER_COUNT } from '../../components/PaginationButtons';
 import useSortableData from '../../hooks/useSortableData';
 import useDarkMode from '../../hooks/useDarkMode';
-import SubHeader, { SubHeaderLeft, SubHeaderRight } from '../../layout/SubHeader/SubHeader';
 import Page from '../../layout/Page/Page';
-import { Calendar as DatePicker } from 'react-date-range';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import { LmsFeatures, demoPagesMenu } from '../../menu';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { AppConst, BASE_URL } from '../../common/data/constants';
+import { AppConst } from '../../common/data/constants';
 import { getCookie } from '../../common/data/helper';
 import AuthContext from '../../contexts/authContext';
 import {
 	ITicket,
-	ITicketReply,
 	getCategotyDropdown,
 	getPriorityDropdown,
 	getTicketList,
@@ -61,6 +49,9 @@ import Modal, {
 } from '../../components/bootstrap/Modal';
 import Label from '../../components/bootstrap/forms/Label';
 import NoData from '../no-data/NoData';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store';
+import { UpdateCategoryList } from '../../@features/Common/Common.slice';
 
 interface ITicketProps {
 	isFluid?: boolean;
@@ -110,18 +101,17 @@ function Ticket() {
 	const tenantName = getCookie(AppConst.TenantName);
 	const [dropdownCategory, setDropdownCategory] = useState<any[]>([]);
 	const [dropdownPriority, setDropdownPriority] = useState<any[]>([]);
+	const dispatch = useDispatch<AppDispatch>();
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const d = await getTicketList(1, 1, session?.accessToken);
+			const d = await getTicketList(session?.userId!, 1, session?.accessToken);
 			setTicketList(d.items as ITicket[]);
-			// useSortableData(d.items as ITicket[], null);
-			// console.log(d.items);
 			const dropCategory = await getCategotyDropdown(session?.accessToken);
+			dispatch(UpdateCategoryList(dropCategory));
 			const dropPriority = await getPriorityDropdown(session?.accessToken);
 			setDropdownCategory(dropCategory);
 			setDropdownPriority(dropPriority);
-			console.log(dropCategory);
 		};
 		fetchData();
 	}, []);
@@ -167,6 +157,10 @@ function Ticket() {
 		setPriority(dropdownPriority[parseInt(e.target.value)]);
 	};
 
+	const handleChat = () => {
+		Navigate('../ticket-chat');
+	};
+
 	return (
 		<>
 			<PageWrapper title={LmsFeatures.supportcenter.text}>
@@ -190,10 +184,10 @@ function Ticket() {
 							<table className='table table-modern'>
 								<thead>
 									<tr>
-										<td style={{ width: 60 }} />
+										<td style={{ width: '60px' }} />
 										<th
-											onClick={() => requestSort('date')}
-											className='cursor-pointer text-decoration-underline'>
+											// onClick={() => requestSort('date')}
+											style={{ width: '200px' }}>
 											Subject
 										</th>
 										<th>Categoty</th>
@@ -211,7 +205,7 @@ function Ticket() {
 										dataPagination(TicketList, currentPage, perPage).map(
 											(item) => (
 												<tr key={item.id}>
-													<td>
+													<td className='text-left'>
 														<Button
 															isOutline={!darkModeStatus}
 															color='dark'
@@ -229,31 +223,31 @@ function Ticket() {
 													value=''
 												id='flexCheckChecked'></input> */}
 													</td>
-													<td>
+													<td className='text-left'>
 														<div>
 															<div>{item.subject}</div>
 														</div>
 													</td>
-													<td>
-														<td>{item.category}</td>
+													<td className='text-left'>
+														<td className='text-left'>
+															{item.category}
+														</td>
 													</td>
 													<div>{item.priority}</div>
-													<td>
+													<td className='text-left'>
 														<div>{item.status}</div>
 													</td>
-													<td>
+													<td className='text-left'>
 														<Button
 															isOutline={!darkModeStatus}
-															color='brand'
+															color='primary'
 															isLight={darkModeStatus}
 															className={classNames('text-nowrap', {
 																'border-light': !darkModeStatus,
 															})}
-															icon='Reply'
-															onClick={() =>
-																Navigate('../zoom-meeting')
-															}>
-															Reply
+															icon='Chat'
+															onClick={() => handleChat()}>
+															Support
 														</Button>
 													</td>
 												</tr>

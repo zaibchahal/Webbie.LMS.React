@@ -343,7 +343,7 @@ const presentation: RouteProps[] = [
 		element: <Lms.LmsLiveClassPage />,
 	},
 	{
-		path: 'Ticket-Chat',
+		path: 'ticket-chat',
 		element: <Lms.LmsTicketChat />,
 	},
 

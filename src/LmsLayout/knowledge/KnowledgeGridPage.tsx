@@ -109,6 +109,7 @@ const KnowledgeGridPage = () => {
 	const { session } = useContext(AuthContext);
 	const [filterableData, setFilterableData] = useState(kbState.kBList);
 	const [knowladgeBaseList, setKnowladgeBaseList] = useState(kbState.kBList);
+	let commonState = useSelector((store: RootState) => store.common);
 	const dispatch = useDispatch<AppDispatch>();
 
 	useEffect(() => {
@@ -197,8 +198,45 @@ const KnowledgeGridPage = () => {
 								],
 							)}
 							onSubmit={formik.handleSubmit}>
-							{/* <div className='col-md-5'>
-								<Select
+							<div className='col-md-5'>
+								<div className='w-100' style={{ marginLeft: '8px' }}>
+									<select
+										className={classNames(
+											'rounded-1 form-select form-control form-control-lg pt-2 pb-3',
+											{
+												'bg-white': !darkModeStatus,
+											},
+										)}
+										data-kt-select2='true'
+										data-placeholder='Select option'
+										data-allow-clear='true'
+										placeholder='Select Category...'
+										// defaultValue={dropdownPriority[0]}
+										disabled={false}
+										onChange={(e: { target: { value: any } }) => {
+											formik.handleChange(e);
+
+											if (e.target.value)
+												debounce(
+													() =>
+														onFormSubmit({
+															...formik.values,
+															category: e.target.value,
+														}),
+													1000,
+												)();
+										}}
+										value={formik.values.category}>
+										{commonState.CategoryList.map(
+											(dropItem: any, key: number) => (
+												<option key={key} value={dropItem.value}>
+													{dropItem.text}
+												</option>
+											),
+										)}
+									</select>
+								</div>
+								{/* <Select
 									id='category'
 									size='lg'
 									ariaLabel='Category'
@@ -221,8 +259,8 @@ const KnowledgeGridPage = () => {
 											)();
 									}}
 									value={formik.values.category}
-								/>
-							</div> */}
+								/> */}
+							</div>
 							<div className='col-md-5'>
 								<Input
 									id='search'

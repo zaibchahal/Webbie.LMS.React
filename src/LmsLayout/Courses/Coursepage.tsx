@@ -15,6 +15,7 @@ import Card, {
 	CardHeader,
 	CardLabel,
 	CardSubTitle,
+	CardTabItem,
 	CardTitle,
 } from '../../components/bootstrap/Card';
 import { useVideo } from 'react-use';
@@ -22,6 +23,11 @@ import Icon from '../../components/icon/Icon';
 import './Video.css';
 import Badge from '../../components/bootstrap/Badge';
 import Lectures from './Lectures';
+import Button from '../../components/bootstrap/Button';
+import { sendMessage } from '@microsoft/signalr/dist/esm/Utils';
+import InputGroup from '../../components/bootstrap/forms/InputGroup';
+import Textarea from '../../components/bootstrap/forms/Textarea';
+import ReviewScreen from '../LmsPages/RattingPage';
 
 const CoursePage = () => {
 	// const [video, state, controls, ref] = useVideo(
@@ -96,6 +102,7 @@ const CoursePage = () => {
 		}
 	};
 	const { darkModeStatus } = useDarkMode();
+	const [discussion, setDiscussion] = useState('');
 	return (
 		<PageWrapper title={LmsFeatures.mycourses.text}>
 			<SubHeader>
@@ -295,6 +302,139 @@ const CoursePage = () => {
 									{/* <Lectures /> */}
 								</>
 							</CardBody>
+						</Card>
+					</div>
+				</div>
+				<div className='row h-100 align-items-start'>
+					<div className='col col-8'>
+						<Card hasTab>
+							<CardTabItem id='overview' title='Overflow' icon='Shop'>
+								<div className='row d-flex justify-content-start mb-1'>
+									<Button
+										style={{ width: '140px', marginRight: '10px' }}
+										color='primary'
+										isLight
+										icon='PublishedWithChanges'
+										// onClick={() => setNumberVerification(true)}
+									>
+										LIKE
+									</Button>
+									<Button
+										style={{ width: '140px' }}
+										color='primary'
+										isLight
+										icon='PublishedWithChanges'
+										// onClick={() => setNumberVerification(true)}
+									>
+										SHARE
+									</Button>
+									<div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2  mb-3 border-bottom'></div>
+								</div>
+								<div className='row'>
+									<CardTitle>Course Description</CardTitle>
+									<CardSubTitle className='mt-2'>
+										BRS PHYSIOLOGY VIDEO LECTURES
+									</CardSubTitle>
+								</div>
+
+								<div className='row mt-4'>
+									<CardTitle>Course Outcomes</CardTitle>
+									<CardSubTitle className='mt-2'>
+										<ul>
+											<li>BRS PHYSIOLOGY</li>
+										</ul>
+									</CardSubTitle>
+								</div>
+							</CardTabItem>
+							<CardTabItem id='faq' title='FAQ' icon='PictureAsPdf'>
+								<>
+									<div className='row d-flex justify-content-start mb-1'>
+										<Button
+											style={{ width: '140px', marginRight: '10px' }}
+											color='primary'
+											isLight
+											icon='PublishedWithChanges'
+											// onClick={() => setNumberVerification(true)}
+										>
+											LIKE
+										</Button>
+										<Button
+											style={{ width: '140px' }}
+											color='primary'
+											isLight
+											icon='PublishedWithChanges'
+											// onClick={() => setNumberVerification(true)}
+										>
+											SHARE
+										</Button>
+										<div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2  mb-3 border-bottom'></div>
+									</div>
+								</>
+							</CardTabItem>
+							<CardTabItem id='discussion' title='Discussion' icon='LibraryMusic'>
+								<>
+									<div className='row d-flex justify-content-start mb-1'>
+										<Button
+											style={{ width: '140px', marginRight: '10px' }}
+											color='primary'
+											isLight
+											icon='PublishedWithChanges'
+											// onClick={() => setNumberVerification(true)}
+										>
+											LIKE
+										</Button>
+										<Button
+											style={{ width: '140px' }}
+											color='primary'
+											isLight
+											icon='PublishedWithChanges'
+											// onClick={() => setNumberVerification(true)}
+										>
+											SHARE
+										</Button>
+										<div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2  mb-3 border-bottom'></div>
+									</div>
+									<InputGroup>
+										<Textarea
+											title='Message'
+											placeholder='Write Your Message'
+											value={discussion}
+											onChange={(e: any) => {
+												setDiscussion(e.target.value);
+											}}
+										/>
+										<Button color='info' icon='Send'>
+											SEND
+										</Button>
+									</InputGroup>
+								</>
+							</CardTabItem>
+							<CardTabItem id='reviews' title='Reviews' icon='AutoStories'>
+								<>
+									<div className='row d-flex justify-content-start mb-1'>
+										<Button
+											style={{ width: '140px', marginRight: '10px' }}
+											color='primary'
+											isLight
+											icon='PublishedWithChanges'
+											// onClick={() => setNumberVerification(true)}
+										>
+											LIKE
+										</Button>
+										<Button
+											style={{ width: '140px' }}
+											color='primary'
+											isLight
+											icon='PublishedWithChanges'
+											// onClick={() => setNumberVerification(true)}
+										>
+											SHARE
+										</Button>
+										<div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2  mb-3 border-bottom'></div>
+									</div>
+									<ReviewScreen />
+								</>
+							</CardTabItem>
 						</Card>
 					</div>
 				</div>
