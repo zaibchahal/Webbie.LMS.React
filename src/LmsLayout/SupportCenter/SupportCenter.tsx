@@ -11,7 +11,6 @@ import Input from '../../components/bootstrap/forms/Input';
 
 import { debounce } from '../../helpers/helpers';
 import useDarkMode from '../../hooks/useDarkMode';
-import data, { CATEGORIES } from '../knowledge/helper/dummyKnowledgeData';
 import Alert from '../../components/bootstrap/Alert';
 import Card, {
 	CardTabItem,
@@ -37,6 +36,7 @@ import { AppDispatch, RootState } from '../../store';
 import Ticket from './Tickets';
 import { getFaqList } from '../../services/FAQ.service';
 import AuthContext from '../../contexts/authContext';
+import { getRandomBootstrapColor } from '../knowledge/helper/dummyKnowledgeData';
 
 interface HTMLStringProps {
 	htmlString: string;
@@ -56,7 +56,7 @@ const HTMLStringComponent: React.FC<HTMLStringProps> = ({ htmlString }) => {
 const SupportCenter = () => {
 	const { session } = useContext(AuthContext);
 	const { darkModeStatus } = useDarkMode();
-	const [filterableData, setFilterableData] = useState(data);
+	const [filterableData, setFilterableData] = useState([]);
 	const onFormSubmit = (values: { category: any; search: any }) => {
 		const searchValue = values.search.toString().toLowerCase();
 	};
@@ -67,7 +67,7 @@ const SupportCenter = () => {
 			category: '',
 		},
 		onSubmit: onFormSubmit,
-		onReset: () => setFilterableData(data),
+		onReset: () => setFilterableData([]),
 	});
 	const [faqList, setFaqlist] = useState([]);
 
@@ -90,10 +90,12 @@ const SupportCenter = () => {
 						data-tour='knowledge-filter'>
 						<form
 							className={classNames('row', 'pb-4 px-3 mx-0 g-4', 'rounded-3', [
-								`bg-l${darkModeStatus ? 'o25' : '10'}-primary`,
+								`bg-l${
+									darkModeStatus ? 'o25' : '10'
+								}-${getRandomBootstrapColor()}-primary`,
 							])}
 							onSubmit={formik.handleSubmit}>
-							<div className='col-md-5'>
+							{/* <div className='col-md-5'>
 								<Select
 									id='category'
 									size='lg'
@@ -118,7 +120,7 @@ const SupportCenter = () => {
 									}}
 									value={formik.values.category}
 								/>
-							</div>
+							</div> */}
 							<div className='col-md-5'>
 								<Input
 									id='search'

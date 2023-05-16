@@ -9,12 +9,9 @@ import Button from '../../components/bootstrap/Button';
 import Select from '../../components/bootstrap/forms/Select';
 import Card, { CardBody, CardTitle } from '../../components/bootstrap/Card';
 import Badge from '../../components/bootstrap/Badge';
-
-import data, { CATEGORIES, TTags } from './helper/dummyKnowledgeData';
 import { demoPagesMenu } from '../../menu';
 import useDarkMode from '../../hooks/useDarkMode';
 import useTourStep from '../../hooks/useTourStep';
-import { TColor } from '../../type/color-type';
 import { getKnoladgeBaseList } from '../../services/KnowladgeBase.service';
 import AuthContext from '../../contexts/authContext';
 import { useDispatch } from 'react-redux';
@@ -22,19 +19,12 @@ import { useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { UpdatekBList } from '../../@features/KnowladgeBase/KbSlice';
 import { BASE_URL } from '../../common/data/constants';
+import { IKnowledgeBase, getRandomBootstrapColor } from './helper/dummyKnowledgeData';
 
-interface IItemProps {
-	id: string | number;
-	image: string;
-	title: string;
-	description: string;
-	tags: TTags[];
-	color: TColor;
-}
 interface HTMLStringProps {
 	htmlString: string;
 }
-const HTMLStringComponent: React.FC<HTMLStringProps> = ({ htmlString }) => {
+export const HTMLStringComponent: React.FC<HTMLStringProps> = ({ htmlString }) => {
 	const removeHTMLTags = (html: string): string => {
 		const tempElement = document.createElement('div');
 		tempElement.innerHTML = html;
@@ -46,7 +36,16 @@ const HTMLStringComponent: React.FC<HTMLStringProps> = ({ htmlString }) => {
 	return <code className='text-decoration-none'>{codeContent}</code>;
 };
 
-const Item: FC<IItemProps> = ({ id, image, title, description, tags, color }) => {
+const Item: FC<IKnowledgeBase> = ({
+	id,
+	title,
+	description,
+	tags,
+	thumbnail,
+	isPopular,
+	category,
+	categoryID,
+}) => {
 	useTourStep(15);
 	const { darkModeStatus } = useDarkMode();
 
@@ -56,10 +55,13 @@ const Item: FC<IItemProps> = ({ id, image, title, description, tags, color }) =>
 		[navigate, id],
 	);
 	let kbState = useSelector((store: RootState) => store.knowladgeBaseStore);
-
-	// const thumbnailPath = kbState.kBList.thumbnail;
-	// const normalizedPath = thumbnailPath.replace(/\\/g, '/').replace(/^\//, '');
-	// const absoluteURL = `${BASE_URL}/${normalizedPath}`;
+	const [btColor, setBtColor] = useState('success');
+	useEffect(() => {
+		setBtColor(getRandomBootstrapColor);
+	}, []);
+	const thumbnailPath = thumbnail;
+	const normalizedPath = thumbnailPath.replace(/\\/g, '/').replace(/^\//, '');
+	const absoluteURL = `${BASE_URL}/${normalizedPath}`;
 	return (
 		<Card
 			className='cursor-pointer shadow-3d-primary shadow-3d-hover'
@@ -70,11 +72,11 @@ const Item: FC<IItemProps> = ({ id, image, title, description, tags, color }) =>
 					className={classNames(
 						'ratio ratio-1x1',
 						'rounded-2',
-						`bg-l${darkModeStatus ? 'o25' : '10'}-${color}`,
+						`bg-l${darkModeStatus ? 'o25' : '10'}-${btColor}`,
 						'mb-3',
 					)}>
 					<img
-						src={image}
+						src={absoluteURL}
 						alt=''
 						width='100%'
 						height='auto'
@@ -85,7 +87,7 @@ const Item: FC<IItemProps> = ({ id, image, title, description, tags, color }) =>
 				<p className='text-muted truncate-line-2'>
 					<HTMLStringComponent htmlString={description} />
 				</p>
-				<div className='row g-2'>
+				{/* <div className='row g-2'>
 					{!!tags &&
 						// eslint-disable-next-line react/prop-types
 						tags.map((tag) => (
@@ -95,7 +97,7 @@ const Item: FC<IItemProps> = ({ id, image, title, description, tags, color }) =>
 								</Badge>
 							</div>
 						))}
-				</div>
+				</div> */}
 			</CardBody>
 		</Card>
 	);
@@ -103,11 +105,11 @@ const Item: FC<IItemProps> = ({ id, image, title, description, tags, color }) =>
 
 const KnowledgeGridPage = () => {
 	const { darkModeStatus } = useDarkMode();
-	const { session } = useContext(AuthContext);
-	const [filterableData, setFilterableData] = useState(data);
-	const [knowladgeBaseList, setKnowladgeBaseList] = useState([]);
-	const dispatch = useDispatch<AppDispatch>();
 	let kbState = useSelector((store: RootState) => store.knowladgeBaseStore);
+	const { session } = useContext(AuthContext);
+	const [filterableData, setFilterableData] = useState(kbState.kBList);
+	const [knowladgeBaseList, setKnowladgeBaseList] = useState(kbState.kBList);
+	const dispatch = useDispatch<AppDispatch>();
 
 	useEffect(() => {
 		setKnowladgeBaseList(kbState.kBList);
@@ -121,20 +123,20 @@ const KnowledgeGridPage = () => {
 	}, []);
 
 	const searchAndFilterData = (searchValue: string, category: string) => {
-		let tempData = data;
+		let tempData = kbState.kBList;
 
-		if (category)
-			tempData = data.filter((item) =>
-				item.categories.find((categ) => categ.value === category),
-			);
+		// if (category)
+		// 	tempData = kbState.kBList.filter((item) =>
+		// 		item.categories.find((categ) => categ.value === category),
+		// 	);
 
 		return tempData.filter((item) => {
 			return (
 				item.title.toLowerCase().includes(searchValue) ||
-				item.description.toLowerCase().includes(searchValue) ||
-				item.content.toLowerCase().includes(searchValue) ||
-				item.categories.find((categ) => categ.text.toLowerCase().includes(searchValue)) ||
-				item.tags.find((tag) => tag.text.toLowerCase().includes(searchValue))
+				item.description.toLowerCase().includes(searchValue)
+				// item.content.toLowerCase().includes(searchValue) ||
+				// item.categories.find((categ) => categ.text.toLowerCase().includes(searchValue)) ||
+				// item.tags.find((tag) => tag.text.toLowerCase().includes(searchValue))
 			);
 		});
 	};
@@ -158,7 +160,7 @@ const KnowledgeGridPage = () => {
 		const newData = searchAndFilterData(searchValue, values.category);
 
 		if (!values.search && !values.category) {
-			setFilterableData(data);
+			setFilterableData(kbState.kBList);
 		} else {
 			setFilterableData(newData);
 		}
@@ -170,7 +172,7 @@ const KnowledgeGridPage = () => {
 			category: '',
 		},
 		onSubmit: onFormSubmit,
-		onReset: () => setFilterableData(data),
+		onReset: () => setFilterableData(kbState.kBList),
 	});
 
 	return (
@@ -185,10 +187,12 @@ const KnowledgeGridPage = () => {
 						data-tour='knowledge-filter'>
 						<form
 							className={classNames('row', 'pb-4 px-3 mx-0 g-4', 'rounded-3', [
-								`bg-l${darkModeStatus ? 'o25' : '10'}-primary`,
+								`bg-l${
+									darkModeStatus ? 'o25' : '10'
+								}-${getRandomBootstrapColor()}-primary`,
 							])}
 							onSubmit={formik.handleSubmit}>
-							<div className='col-md-5'>
+							{/* <div className='col-md-5'>
 								<Select
 									id='category'
 									size='lg'
@@ -213,12 +217,12 @@ const KnowledgeGridPage = () => {
 									}}
 									value={formik.values.category}
 								/>
-							</div>
+							</div> */}
 							<div className='col-md-5'>
 								<Input
 									id='search'
 									size='lg'
-									placeholder='Type your question...'
+									placeholder='Type your knowladge base query...'
 									className={classNames('rounded-1', {
 										'bg-white': !darkModeStatus,
 									})}
@@ -243,14 +247,15 @@ const KnowledgeGridPage = () => {
 							<div className='col-md-2'>
 								<Button
 									size='lg'
-									icon='Search'
+									icon='Clear'
 									color='primary'
 									className='w-100'
 									rounded={1}
 									onClick={formik.resetForm}
 									type='reset'
-									isDisable={!(formik.values.search || formik.values.category)}
-								/>
+									isDisable={!(formik.values.search || formik.values.category)}>
+									Clear
+								</Button>
 							</div>
 						</form>
 					</div>

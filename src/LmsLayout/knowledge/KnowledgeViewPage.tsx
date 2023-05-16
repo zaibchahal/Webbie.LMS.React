@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import classNames from 'classnames';
-import data from './helper/dummyKnowledgeData';
 import SubHeader, {
 	SubHeaderLeft,
 	SubHeaderRight,
@@ -15,15 +14,25 @@ import Badge from '../../components/bootstrap/Badge';
 import USERS from '../../common/data/userSessionService';
 import useDarkMode from '../../hooks/useDarkMode';
 import useTourStep from '../../hooks/useTourStep';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { BASE_URL } from '../../common/data/constants';
+import { HTMLStringComponent } from './KnowledgeGridPage';
+import { getRandomBootstrapColor } from './helper/dummyKnowledgeData';
 
 const KnowledgeViewPage = () => {
 	useTourStep(16);
 	const { darkModeStatus } = useDarkMode();
+	let kbState = useSelector((store: RootState) => store.knowladgeBaseStore);
 
 	const { id } = useParams();
 	const navigate = useNavigate();
-	const itemData = data.filter((item) => item.id.toString() === id?.toString());
+	const itemData = kbState.kBList.filter((item) => item.id.toString() === id?.toString());
 	const item = itemData[0];
+
+	const thumbnailPath = item.thumbnail;
+	const normalizedPath = thumbnailPath.replace(/\\/g, '/').replace(/^\//, '');
+	const absoluteURL = `${BASE_URL}/${normalizedPath}`;
 
 	return (
 		<PageWrapper title={item.title}>
@@ -33,7 +42,7 @@ const KnowledgeViewPage = () => {
 						Back to List
 					</Button>
 					<SubheaderSeparator />
-					{!!item.tags &&
+					{/* {!!item.tags &&
 						// eslint-disable-next-line react/prop-types
 						item.tags.map((tag) => (
 							<div key={tag.text} className='col-auto'>
@@ -41,7 +50,7 @@ const KnowledgeViewPage = () => {
 									{tag.text}
 								</Badge>
 							</div>
-						))}
+						))} */}
 				</SubHeaderLeft>
 				<SubHeaderRight>
 					<span className='text-muted fst-italic'>Written by</span>
@@ -60,11 +69,11 @@ const KnowledgeViewPage = () => {
 							className={classNames(
 								'ratio ratio-21x9',
 								'rounded-2',
-								`bg-l${darkModeStatus ? 'o25' : '10'}-${item.color}`,
+								`bg-l${darkModeStatus ? 'o25' : '10'}-${getRandomBootstrapColor()}`,
 								'mb-3',
 							)}>
 							<img
-								src={item.image}
+								src={absoluteURL}
 								alt={item.title}
 								width='100%'
 								height='auto'
@@ -73,9 +82,10 @@ const KnowledgeViewPage = () => {
 						</div>
 					</div>
 					<div className='col-12'>
-						<h3 className='text-muted'>{item.description}</h3>
+						<h3 className='text-muted px-4'>
+							<HTMLStringComponent htmlString={item.description} />
+						</h3>
 					</div>
-					<div className='col-12'>{item.content || null}</div>
 				</div>
 			</Page>
 		</PageWrapper>
