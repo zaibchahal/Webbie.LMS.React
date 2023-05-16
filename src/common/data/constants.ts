@@ -27,6 +27,8 @@ export const Student_Urls = {
 	SupportPriorityDropdown: API_BASE_URL + '/services/app/DropDownService/GetTicketPriority',
 	GetStudyPlannerList: API_BASE_URL + '/services/app/TaskReminderService/GetTaskReminder',
 	PostStudyPlanner: API_BASE_URL + '/services/app/TaskReminderService/CreateTaskReminder',
+	GetFaq: API_BASE_URL + '/services/app/FaqsService/GetFaqs',
+	GetKnowladgeBase: API_BASE_URL + '/services/app/KnowledgeBaseService/GetKnowledgeBase',
 };
 
 export const AppConst = {

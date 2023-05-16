@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import Page from '../../layout/Page/Page';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import { LmsFeatures } from '../../menu';
@@ -35,8 +35,26 @@ import { UpdateName } from '../../@features/User/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import Ticket from './Tickets';
+import { getFaqList } from '../../services/FAQ.service';
+import AuthContext from '../../contexts/authContext';
+
+interface HTMLStringProps {
+	htmlString: string;
+}
+const HTMLStringComponent: React.FC<HTMLStringProps> = ({ htmlString }) => {
+	const removeHTMLTags = (html: string): string => {
+		const tempElement = document.createElement('div');
+		tempElement.innerHTML = html;
+		return tempElement.textContent || tempElement.innerText || '';
+	};
+
+	const codeContent = removeHTMLTags(htmlString);
+
+	return <code>{codeContent}</code>;
+};
 
 const SupportCenter = () => {
+	const { session } = useContext(AuthContext);
 	const { darkModeStatus } = useDarkMode();
 	const [filterableData, setFilterableData] = useState(data);
 	const onFormSubmit = (values: { category: any; search: any }) => {
@@ -51,6 +69,15 @@ const SupportCenter = () => {
 		onSubmit: onFormSubmit,
 		onReset: () => setFilterableData(data),
 	});
+	const [faqList, setFaqlist] = useState([]);
+
+	useEffect(() => {
+		getFaqList(session?.accessToken).then((res) => {
+			setFaqlist(res.items);
+			console.log(res);
+		});
+	}, []);
+
 	return (
 		<PageWrapper title={LmsFeatures.supportcenter.text}>
 			<Page>
@@ -213,33 +240,20 @@ const SupportCenter = () => {
 						<KnowledgeGridPage />
 					</CardTabItem>
 					<CardTabItem id='faq' title='FAQ' icon='PictureAsPdf'>
-						<Dropdown>
-							<DropdownToggle>
-								<Button color='primary' isLight icon='view_agenda'>
-									What is your name?
-								</Button>
-							</DropdownToggle>
-							<DropdownMenu isCloseAfterLeave>
-								<DropdownItem>
-									<p>My Name is john Doa.</p>
-								</DropdownItem>
-							</DropdownMenu>
-						</Dropdown>
-						<Dropdown className='mt-3'>
-							<DropdownToggle>
-								<Button color='primary' isLight icon='view_agenda'>
-									How COVID-19 can change the world?
-								</Button>
-							</DropdownToggle>
-							<DropdownMenu isCloseAfterLeave>
-								<DropdownItem>
-									<p>
-										missing out on life-saving vaccinations, increased risk of
-										violence, or interrupted education.
-									</p>
-								</DropdownItem>
-							</DropdownMenu>
-						</Dropdown>
+						{faqList.map((f: any, k) => (
+							<Dropdown key={k} className='mb-3 mx-1'>
+								<DropdownToggle>
+									<Button color='primary' isLight icon='view_agenda'>
+										<HTMLStringComponent htmlString={f.question} />
+									</Button>
+								</DropdownToggle>
+								<DropdownMenu isCloseAfterLeave>
+									<DropdownItem>
+										<HTMLStringComponent htmlString={f.answer} />
+									</DropdownItem>
+								</DropdownMenu>
+							</Dropdown>
+						))}
 					</CardTabItem>
 					{/* <CardTabItem
 						id='contentUs'

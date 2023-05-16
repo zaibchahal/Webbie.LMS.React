@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +15,13 @@ import { demoPagesMenu } from '../../menu';
 import useDarkMode from '../../hooks/useDarkMode';
 import useTourStep from '../../hooks/useTourStep';
 import { TColor } from '../../type/color-type';
+import { getKnoladgeBaseList } from '../../services/KnowladgeBase.service';
+import AuthContext from '../../contexts/authContext';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store';
+import { UpdatekBList } from '../../@features/KnowladgeBase/KbSlice';
+import { BASE_URL } from '../../common/data/constants';
 
 interface IItemProps {
 	id: string | number;
@@ -24,6 +31,21 @@ interface IItemProps {
 	tags: TTags[];
 	color: TColor;
 }
+interface HTMLStringProps {
+	htmlString: string;
+}
+const HTMLStringComponent: React.FC<HTMLStringProps> = ({ htmlString }) => {
+	const removeHTMLTags = (html: string): string => {
+		const tempElement = document.createElement('div');
+		tempElement.innerHTML = html;
+		return tempElement.textContent || tempElement.innerText || '';
+	};
+
+	const codeContent = removeHTMLTags(htmlString);
+
+	return <code className='text-decoration-none'>{codeContent}</code>;
+};
+
 const Item: FC<IItemProps> = ({ id, image, title, description, tags, color }) => {
 	useTourStep(15);
 	const { darkModeStatus } = useDarkMode();
@@ -33,6 +55,11 @@ const Item: FC<IItemProps> = ({ id, image, title, description, tags, color }) =>
 		() => navigate(`../${demoPagesMenu.knowledge.subMenu.itemID.path}/${id}`),
 		[navigate, id],
 	);
+	let kbState = useSelector((store: RootState) => store.knowladgeBaseStore);
+
+	// const thumbnailPath = kbState.kBList.thumbnail;
+	// const normalizedPath = thumbnailPath.replace(/\\/g, '/').replace(/^\//, '');
+	// const absoluteURL = `${BASE_URL}/${normalizedPath}`;
 	return (
 		<Card
 			className='cursor-pointer shadow-3d-primary shadow-3d-hover'
@@ -55,7 +82,9 @@ const Item: FC<IItemProps> = ({ id, image, title, description, tags, color }) =>
 					/>
 				</div>
 				<CardTitle>{title}</CardTitle>
-				<p className='text-muted truncate-line-2'>{description}</p>
+				<p className='text-muted truncate-line-2'>
+					<HTMLStringComponent htmlString={description} />
+				</p>
 				<div className='row g-2'>
 					{!!tags &&
 						// eslint-disable-next-line react/prop-types
@@ -74,8 +103,22 @@ const Item: FC<IItemProps> = ({ id, image, title, description, tags, color }) =>
 
 const KnowledgeGridPage = () => {
 	const { darkModeStatus } = useDarkMode();
-
+	const { session } = useContext(AuthContext);
 	const [filterableData, setFilterableData] = useState(data);
+	const [knowladgeBaseList, setKnowladgeBaseList] = useState([]);
+	const dispatch = useDispatch<AppDispatch>();
+	let kbState = useSelector((store: RootState) => store.knowladgeBaseStore);
+
+	useEffect(() => {
+		setKnowladgeBaseList(kbState.kBList);
+	}, [kbState]);
+
+	useEffect(() => {
+		getKnoladgeBaseList(session?.accessToken).then((res) => {
+			dispatch(UpdatekBList(res.items));
+			console.log(res.items);
+		});
+	}, []);
 
 	const searchAndFilterData = (searchValue: string, category: string) => {
 		let tempData = data;
