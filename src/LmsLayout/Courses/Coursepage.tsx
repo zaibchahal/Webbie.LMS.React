@@ -28,12 +28,16 @@ import { sendMessage } from '@microsoft/signalr/dist/esm/Utils';
 import InputGroup from '../../components/bootstrap/forms/InputGroup';
 import Textarea from '../../components/bootstrap/forms/Textarea';
 import ReviewScreen from '../LmsPages/RattingPage';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const CoursePage = () => {
 	// const [video, state, controls, ref] = useVideo(
 	// 	<video src='http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4' autoPlay />,
 	// );
 	var src = 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4';
+
+	let myCourseStore = useSelector((store: RootState) => store.myCourses);
 
 	// const [video, state, controls] = useVideo({ src });
 
@@ -103,6 +107,17 @@ const CoursePage = () => {
 	};
 	const { darkModeStatus } = useDarkMode();
 	const [discussion, setDiscussion] = useState('');
+	const [durationFormat, setDurationFormate] = useState('');
+
+	// const MyFormate = (totalTime: number) => {
+	// 	const formattedTime = `${Math.floor(totalTime / 60)} Hrs, ${totalTime % 60} Mins`;
+	// 	return setDurationFormate(formattedTime);
+	// };
+	const [videoSrc, setVideoSrc] = useState(myCourseStore.videoImageScr);
+	useEffect(() => {
+		setVideoSrc(myCourseStore.videoImageScr);
+	}, [myCourseStore.videoImageScr]);
+
 	return (
 		<PageWrapper title={LmsFeatures.mycourses.text}>
 			<SubHeader>
@@ -135,14 +150,27 @@ const CoursePage = () => {
 							</CardHeader>
 							<CardBody>
 								<CardBody>
-									<video
+									{/* <video
 										ref={videoRef}
-										src={src}
+										src={myCourseStore.videoImageScr}
 										onTimeUpdate={handleTimeUpdate}
 										onLoadedMetadata={handleDurationChange}
 										className='video-container'
-									/>
-									<div className='d-flex justify-content-center align-items-center'>
+									/> */}
+									{/* <iframe
+										// ref={videoRef}
+										src={videoSrc}
+										onTimeUpdate={handleTimeUpdate}
+										onLoadedMetadata={handleDurationChange}
+										className='video-container'></iframe> */}
+									<iframe
+										// ref={videoRef}
+										src={videoSrc}
+										width='560'
+										height='315'
+										frameBorder='0'
+										allowFullScreen></iframe>
+									{/* <div className='d-flex justify-content-center align-items-center'>
 										{isPlaying ? (
 											<Icon
 												onClick={togglePlay}
@@ -203,7 +231,7 @@ const CoursePage = () => {
 											size='2x'
 											color='info'
 										/>
-									</div>
+									</div> */}
 									<div className='mt-3 mx-4'>
 										<CardTitle className='text-bold h3'>
 											SPECIAL CIRCULATIONS AND INTEGRATIVE SYSTEM
@@ -239,7 +267,7 @@ const CoursePage = () => {
 														}}
 														icon='SlowMotionVideo'
 													/>
-													Lecture(65)
+													Lecture({myCourseStore.myCourses.lessons})
 												</Badge>
 											</div>
 											<div className='col-auto mt-0 pt-0'>
@@ -253,7 +281,8 @@ const CoursePage = () => {
 														className='fw-bold'
 														icon='AlarmOn'
 													/>
-													56 Hrs, 34 Mins
+													{Math.floor(myCourseStore.myCourses.time / 60)}
+													Hrs, {myCourseStore.myCourses.time % 60} Mins
 												</Badge>
 											</div>
 										</div>
@@ -271,35 +300,21 @@ const CoursePage = () => {
 														className='fw-bold'
 														icon='AlarmOn'
 													/>
-													Expires On (21/02/2024)
+													Expires On (
+													{myCourseStore.myCourses.deletionTime})
 												</Badge>
 											</div>
 										</div>
 									</div>
 									<div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-1 border-bottom'></div>
-
-									<Lectures
-										mainHead='Cardiovascular System'
-										totallectures={38}
-										totaltime='56 Hrs, 34 Mins'
-									/>
-									<Lectures
-										mainHead=' VASCULAR FUNCTION CURVE'
-										totallectures={57}
-										totaltime='32 Hrs, 4 Mins'
-									/>
-									<Lectures
-										mainHead='RAAS'
-										totallectures={7}
-										totaltime='6 Hrs, 23 Mins'
-									/>
-									<Lectures
-										mainHead='CARDIAC EQUATIONS AND ACTION POTENTIAL'
-										totallectures={23}
-										totaltime='12 Hrs, 45 Mins'
-									/>
-
-									{/* <Lectures /> */}
+									{myCourseStore.myCourses.section.map((s, k) => (
+										<Lectures
+											mainHead={s.sectionTitle}
+											totallectures={s.lessons}
+											totaltime={s.duration}
+											lectures={s.lecture}
+										/>
+									))}
 								</>
 							</CardBody>
 						</Card>

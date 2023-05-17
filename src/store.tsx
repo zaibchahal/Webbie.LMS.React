@@ -7,6 +7,7 @@ import { combineReducers } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 import kbSlice from './@features/KnowladgeBase/KbSlice';
 import commonSlicer from './@features/Common/Common.slice';
+import CoursesSlice from './@features/MyCourses/Courses.slice';
 let middlewares: any[] = [];
 
 if (process.env.NODE_ENV === 'development') {
@@ -28,6 +29,7 @@ const reducer = combineReducers({
 	user: userReducer,
 	knowladgeBaseStore: kbSlice,
 	common: commonSlicer,
+	myCourses: CoursesSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

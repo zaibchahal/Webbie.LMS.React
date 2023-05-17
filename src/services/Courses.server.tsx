@@ -2,20 +2,27 @@ import React, { useEffect, useRef, useContext, useState } from 'react';
 import axios from 'axios';
 import { AppConst, Student_Urls } from '../common/data/constants';
 
-export const getStudyPlannerList = async (
+export const getMyCoursesList = async (
 	userId: number | undefined,
 	accessToken: string | undefined,
 ) => {
 	try {
-		const response = await axios.get(Student_Urls.GetMyCoursesList, {
-			headers: {
-				Accept: 'text/plain',
-				'Content-Type': 'application/json-patch+json',
-				'X-XSRF-TOKEN': 'null',
-				Authorization: `Bearer ${accessToken}`,
+		const response = await axios.post(
+			Student_Urls.GetMyCoursesList,
+			{
+				filter: 'all',
+				studentID: userId,
 			},
-			withCredentials: true,
-		});
+			{
+				headers: {
+					Accept: 'text/plain',
+					'Content-Type': 'application/json-patch+json',
+					'X-XSRF-TOKEN': 'null',
+					Authorization: `Bearer ${accessToken}`,
+				},
+				withCredentials: true,
+			},
+		);
 		console.log('success');
 		return response.data.result || [];
 	} catch {
@@ -191,3 +198,17 @@ export const initialCourseList: ICourse[] = [
 		id: 0,
 	},
 ];
+
+export const initialLecture: ILecture = {
+	id: 0,
+	tenantId: 0,
+	sectionID: 0,
+	courseID: 0,
+	title: '',
+	description: '',
+	difficulty: '',
+	path: '',
+	length: 0,
+	sortID: 0,
+	isWatched: false,
+};

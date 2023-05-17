@@ -29,7 +29,8 @@ export const Student_Urls = {
 	PostStudyPlanner: API_BASE_URL + '/services/app/TaskReminderService/CreateTaskReminder',
 	GetFaq: API_BASE_URL + '/services/app/FaqsService/GetFaqs',
 	GetKnowladgeBase: API_BASE_URL + '/services/app/KnowledgeBaseService/GetKnowledgeBase',
-	GetMyCoursesList: API_BASE_URL + '/services/app/CourseService/GetAllCourseForStudent',
+	GetAllCoursesList: API_BASE_URL + '/services/app/CourseService/GetAllCourseForStudent',
+	GetMyCoursesList: API_BASE_URL + '/services/app/EnrollmentService/MyCourses',
 };
 
 export const AppConst = {

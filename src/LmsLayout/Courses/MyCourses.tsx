@@ -1,4 +1,4 @@
-import React, { FC, HTMLAttributes, useCallback } from 'react';
+import React, { FC, HTMLAttributes, useCallback, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import USERS from '../../common/data/userSessionService';
 import CommonAvatarTeam from '../../common/other/CommonAvatarTeam';
@@ -25,6 +25,13 @@ import SubHeader, {
 	SubHeaderRight,
 } from '../../layout/SubHeader/SubHeader';
 import { demoPagesMenu } from '../../menu';
+import { getStudyPlannerList } from '../../services/StudyPlanner';
+import { getMyCoursesList } from '../../services/Courses.server';
+import AuthContext from '../../contexts/authContext';
+import { useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '../../store';
+import { useSelector } from 'react-redux';
+import { UpdateCoursesList, UpdateMyCourse, UpdateVideoSrc } from '../../@features/MyCourses/Courses.slice';
 
 interface IItemProps extends HTMLAttributes<HTMLDivElement> {
 	name: string;
@@ -47,14 +54,11 @@ const Item: FC<IItemProps> = ({
 }) => {
 	const { darkModeStatus } = useDarkMode();
 	const navigate = useNavigate();
-	const handleOnClickToProjectPage = useCallback(
-		() => navigate(`../courses-page`),
-		[navigate],
-	);
+	// const handleOnClickToProjectPage = useCallback(() => navigate(`../courses-page`), [navigate]);
 	return (
 		// eslint-disable-next-line react/jsx-props-no-spreading
 		<div className='col-md-4' {...props}>
-			<Card stretch onClick={handleOnClickToProjectPage} className='cursor-pointer'>
+			<Card stretch className='cursor-pointer'>
 				<CardHeader>
 					<CardLabel icon='Ballot'>
 						<CardTitle>{name}</CardTitle>
@@ -150,10 +154,29 @@ const ProjectManagementsList = () => {
 
 	const { darkModeStatus } = useDarkMode();
 	const navigate = useNavigate();
-	const handleOnClickToEmployeeListPage = useCallback(
-		() => navigate(`../${demoPagesMenu.appointment.subMenu.employeeList.path}`),
-		[navigate],
-	);
+	// const handleOnClickToEmployeeListPage = useCallback(
+	// 	() => navigate(`../${demoPagesMenu.appointment.subMenu.employeeList.path}`),
+	// 	[navigate],
+	// );
+
+	const { session } = useContext(AuthContext);
+	const dispatch = useDispatch<AppDispatch>();
+	let myCoursesStore = useSelector((store: RootState) => store.myCourses);
+	const handleOnClickToProjectPage = (item: any) => {
+		dispatch(UpdateMyCourse(item));
+		// dispatch(UpdateVideoSrc(item.));
+
+		navigate('../courses-page');
+		// useCallback(() => navigate(`../courses-page`), [navigate]);
+	};
+
+	useEffect(() => {
+		getMyCoursesList(session?.userId, session?.accessToken).then((res) => {
+			console.log(res);
+			dispatch(UpdateCoursesList(res));
+
+		});
+	}, []);
 
 	return (
 		<PageWrapper title={demoPagesMenu.projectManagement.subMenu.list.text}>
@@ -162,11 +185,11 @@ const ProjectManagementsList = () => {
 					<strong className='fs-5'>Hi John</strong>
 					<SubheaderSeparator />
 					<span>
-						There are{' '}
+						There are
 						<Badge color='info' isLight>
 							2 teams
-						</Badge>{' '}
-						you are in and{' '}
+						</Badge>
+						you are in and
 						<Badge color='success' isLight>
 							5 projects
 						</Badge>
@@ -331,43 +354,20 @@ const ProjectManagementsList = () => {
 					<div className='col-12'>
 						<div className='display-4 fw-bold py-3'>My Courses</div>
 					</div>
-					<Item
-						name='BRS Physiology'
-						teamName='Biology'
-						dueDate='3 days left'
-						NumberOfLectures={6}
-						CourseHour={47}
-						percent={65}
-						data-tour='project-item'
-						CourseMinute={456}
-					/>
-					<Item
-						name='Obstetrics & Gynecology'
-						teamName='Chamistory'
-						dueDate='14 days left'
-						NumberOfLectures={1}
-						CourseHour={25}
-						percent={70}
-						CourseMinute={40}
-					/>
-					<Item
-						name='GENERAL PATHOLOGY'
-						teamName='PATHOLOGY'
-						dueDate='14 days left'
-						NumberOfLectures={12}
-						CourseHour={34}
-						percent={78}
-						CourseMinute={40}
-					/>
-					<Item
-						name='COVID - 19 VIDEO LECTURES'
-						teamName='COVID'
-						dueDate='21 days left'
-						NumberOfLectures={4}
-						CourseHour={18}
-						percent={43}
-						CourseMinute={40}
-					/>
+					{myCoursesStore.CoursesList.map((item, k) => (
+						<Item
+							key={k}
+							name={item.courseTitle}
+							teamName='Biology'
+							dueDate='3 days left'
+							NumberOfLectures={item.lessons}
+							CourseHour={Math.floor(item.time / 60)}
+							percent={65}
+							data-tour='project-item'
+							CourseMinute={item.time % 60}
+							onClick={() => handleOnClickToProjectPage(item)}
+						/>
+					))}
 
 					{/* <div className='col-md-4'>
 						<Card stretch>

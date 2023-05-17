@@ -62,6 +62,7 @@ const Item: FC<IKnowledgeBase> = ({
 	const thumbnailPath = thumbnail;
 	const normalizedPath = thumbnailPath.replace(/\\/g, '/').replace(/^\//, '');
 	const absoluteURL = `${BASE_URL}/${normalizedPath}`;
+
 	return (
 		<Card
 			className='cursor-pointer shadow-3d-primary shadow-3d-hover'
