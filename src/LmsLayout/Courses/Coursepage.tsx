@@ -112,14 +112,8 @@ const CoursePage = () => {
 	const [videoData, setVideoData] = useState(initialVideoDetails);
 
 	useEffect(() => {
-		// setVideoSrc(myCourseStore.videoScr);
-		// console.log(videoData.video.title);
 		setVideoData(myCourseStore.videoDetails);
 	}, [myCourseStore.videoDetails]);
-
-	// useEffect(() => {
-
-	// }, []);
 
 	return (
 		<PageWrapper title={LmsFeatures.mycourses.text}>
@@ -238,14 +232,10 @@ const CoursePage = () => {
 											<span>Dr Hafiz Atif </span>
 											<span className='mx-1'> | </span>
 											<span className='text-info'>
-												{/* {Math.floor(
-													videoData.video.length / 60,
-												) !== 0 &&
-													Math.floor(
-														videoData.video.length /
-															60,
-													) + 'Hrs ,'}
-												{videoData.video.length % 60} Mins */}
+												{Math.floor(videoData.video.length / 60) !== 0 &&
+													Math.floor(videoData.video.length / 60) +
+														'Hrs ,'}
+												{videoData.video.length % 60} Mins
 											</span>
 										</CardSubTitle>
 									</div>
@@ -279,16 +269,16 @@ const CoursePage = () => {
 									<div className='row'>
 										<CardTitle>Course Description</CardTitle>
 										<CardSubTitle className='mt-2'>
-											{/* {videoData.video.description} */}
+											{videoData.video.description}
 										</CardSubTitle>
 									</div>
 
 									<div className='row mt-4'>
 										<CardTitle>Course Outcomes</CardTitle>
 										<CardSubTitle className='mt-2'>
-											{/* <ul>
+											<ul>
 												<li>BRS PHYSIOLOGY</li>
-											</ul> */}
+											</ul>
 										</CardSubTitle>
 									</div>
 								</CardTabItem>
