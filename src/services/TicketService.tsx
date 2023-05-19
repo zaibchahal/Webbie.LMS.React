@@ -8,18 +8,16 @@ export const getTicketList = async (
 	accessToken: string | undefined,
 ) => {
 	try {
-		const response = await axios.get(
-			Student_Urls.GetTicketList + '?UserID=' + userId + '&IssuedTo=' + issueTo,
-			{
-				headers: {
-					Accept: 'text/plain',
-					'Content-Type': 'application/json-patch+json',
-					'X-XSRF-TOKEN': 'null',
-					Authorization: `Bearer ${accessToken}`,
-				},
-				withCredentials: true,
+		const response = await axios.get(Student_Urls.GetTicketList, {
+			headers: {
+				Accept: 'text/plain',
+				'Content-Type': 'application/json-patch+json',
+				'X-XSRF-TOKEN': 'null',
+				Authorization: `Bearer ${accessToken}`,
 			},
-		);
+			withCredentials: true,
+		});
+		console.log(response.data.result);
 		return response.data.result || [];
 	} catch {
 		return [];

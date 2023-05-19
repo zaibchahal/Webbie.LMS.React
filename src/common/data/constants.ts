@@ -28,14 +28,22 @@ export const Profile_Urls = {
 };
 
 export const Student_Urls = {
-    GetFovouritsList: API_BASE_URL + '/services/app/QuestionBankService/GetFovouritsList',
-    GetLiveClassList: API_BASE_URL + '/services/app/LiveSessionService/MyLiveSession',
-    GetTicketList: API_BASE_URL + '/services/app/TicketService/GetTicket',
-    PostTicket: API_BASE_URL + '/services/app/TicketService/CreatUpdateTicket',
-    SupportCategotyDropdown: API_BASE_URL + '/services/app/DropDownService/GetSupportCategory',
-    SupportPriorityDropdown: API_BASE_URL + '/services/app/DropDownService/GetTicketPriority',
-    GetStudyPlannerList: API_BASE_URL + '/services/app/TaskReminderService/GetTaskReminder',
-    PostStudyPlanner: API_BASE_URL + '/services/app/TaskReminderService/CreateTaskReminder',
+	GetFovouritsList: API_BASE_URL + '/services/app/QuestionBankService/GetFovouritsList',
+	GetLiveClassList: API_BASE_URL + '/services/app/LiveSessionService/MyLiveSession',
+	GetTicketList: API_BASE_URL + '/services/app/TicketService/GetTicket',
+	PostTicket: API_BASE_URL + '/services/app/TicketService/CreatUpdateTicket',
+	SupportCategotyDropdown: API_BASE_URL + '/services/app/DropDownService/GetSupportCategory',
+	SupportPriorityDropdown: API_BASE_URL + '/services/app/DropDownService/GetTicketPriority',
+	GetStudyPlannerList: API_BASE_URL + '/services/app/TaskReminderService/GetTaskReminder',
+	PostStudyPlanner: API_BASE_URL + '/services/app/TaskReminderService/CreateTaskReminder',
+	GetFaq: API_BASE_URL + '/services/app/FaqsService/GetFaqs',
+	GetKnowladgeBase: API_BASE_URL + '/services/app/KnowledgeBaseService/GetKnowledgeBase',
+	GetAllCoursesList: API_BASE_URL + '/services/app/CourseService/GetAllCourseForStudent',
+	GetMyCoursesList: API_BASE_URL + '/services/app/EnrollmentService/MyCourses',
+	GetSearchContent: API_BASE_URL + '/services/app/SearchService/SearchContent',
+	GetCourse: API_BASE_URL + '/services/app/CourseService/GetCourseDetail',
+	GetVideoDetails: API_BASE_URL + '/services/app/WatchService/GetVideoPath',
+	postIsWatched: API_BASE_URL + '/services/app/WatchService/IsWatched',
 };
 
 export const AppConst = {

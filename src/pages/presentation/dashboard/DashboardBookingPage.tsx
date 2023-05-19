@@ -28,7 +28,10 @@ import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../components/bootstrap/forms/Input';
 import Checks from '../../../components/bootstrap/forms/Checks';
 import Select from '../../../components/bootstrap/forms/Select';
-import USERS, { getUserDataWithuserName, IUserProps } from '../../../common/data/userSessionService';
+import USERS, {
+	getUserDataWithuserName,
+	IUserProps,
+} from '../../../common/data/userSessionService';
 import Avatar, { AvatarGroup } from '../../../components/Avatar';
 import useMinimizeAside from '../../../hooks/useMinimizeAside';
 import Popovers from '../../../components/bootstrap/Popovers';
@@ -48,6 +51,7 @@ import CommonDashboardBookingLists from '../../_common/BookingComponents/CommonD
 import CommonRightPanel from '../../_common/BookingComponents/CommonRightPanel';
 import useDarkMode from '../../../hooks/useDarkMode';
 import { TColor } from '../../../type/color-type';
+import { getRandomBootstrapColor } from '../../../LmsLayout/knowledge/helper/dummyKnowledgeData';
 
 const localizer = dayjsLocalizer(dayjs);
 const now = new Date();
@@ -226,7 +230,9 @@ const DashboardBookingPage = () => {
 
 		return {
 			className: classNames({
-				[`bg-l${darkModeStatus ? 'o25' : '10'}-${color} text-${color}`]: color,
+				[`bg-l${
+					darkModeStatus ? 'o25' : '10'
+				}-${getRandomBootstrapColor()}-${color} text-${color}`]: color,
 				'border border-success': isActiveEvent,
 				'opacity-50': isPastEvent,
 			}),

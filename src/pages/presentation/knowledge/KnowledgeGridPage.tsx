@@ -9,22 +9,20 @@ import Button from '../../../components/bootstrap/Button';
 import Select from '../../../components/bootstrap/forms/Select';
 import Card, { CardBody, CardTitle } from '../../../components/bootstrap/Card';
 import Badge from '../../../components/bootstrap/Badge';
-
-import data, { CATEGORIES, TTags } from './helper/dummyKnowledgeData';
 import { demoPagesMenu } from '../../../menu';
 import useDarkMode from '../../../hooks/useDarkMode';
 import useTourStep from '../../../hooks/useTourStep';
 import { TColor } from '../../../type/color-type';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
+import {
+	IKnowledgeBase,
+	getRandomBootstrapColor,
+} from '../../../LmsLayout/knowledge/helper/dummyKnowledgeData';
+import { BASE_URL } from '../../../common/data/constants';
+import { HTMLStringComponent } from '../../../LmsLayout/knowledge/KnowledgeGridPage';
 
-interface IItemProps {
-	id: string | number;
-	image: string;
-	title: string;
-	description: string;
-	tags: TTags[];
-	color: TColor;
-}
-const Item: FC<IItemProps> = ({ id, image, title, description, tags, color }) => {
+const Item: FC<IKnowledgeBase> = ({ id, thumbnail, title, description, tags }) => {
 	useTourStep(15);
 	const { darkModeStatus } = useDarkMode();
 
@@ -33,6 +31,9 @@ const Item: FC<IItemProps> = ({ id, image, title, description, tags, color }) =>
 		() => navigate(`../${demoPagesMenu.knowledge.subMenu.itemID.path}/${id}`),
 		[navigate, id],
 	);
+	const thumbnailPath = thumbnail;
+	const normalizedPath = thumbnailPath.replace(/\\/g, '/').replace(/^\//, '');
+	const absoluteURL = `${BASE_URL}/${normalizedPath}`;
 	return (
 		<Card
 			className='cursor-pointer shadow-3d-primary shadow-3d-hover'
@@ -43,11 +44,12 @@ const Item: FC<IItemProps> = ({ id, image, title, description, tags, color }) =>
 					className={classNames(
 						'ratio ratio-1x1',
 						'rounded-2',
-						`bg-l${darkModeStatus ? 'o25' : '10'}-${color}`,
+						`bg-l${darkModeStatus ? 'o25' : '10'}-${getRandomBootstrapColor()}`,
+						// `bg-l${darkModeStatus ? 'o25' : '10'}-${getRandomBootstrapColor()}-${color}`,
 						'mb-3',
 					)}>
 					<img
-						src={image}
+						src={absoluteURL}
 						alt=''
 						width='100%'
 						height='auto'
@@ -55,8 +57,10 @@ const Item: FC<IItemProps> = ({ id, image, title, description, tags, color }) =>
 					/>
 				</div>
 				<CardTitle>{title}</CardTitle>
-				<p className='text-muted truncate-line-2'>{description}</p>
-				<div className='row g-2'>
+				<p className='text-muted truncate-line-2'>
+					<HTMLStringComponent htmlString={description} />
+				</p>
+				{/* <div className='row g-2'>
 					{!!tags &&
 						// eslint-disable-next-line react/prop-types
 						tags.map((tag) => (
@@ -66,7 +70,7 @@ const Item: FC<IItemProps> = ({ id, image, title, description, tags, color }) =>
 								</Badge>
 							</div>
 						))}
-				</div>
+				</div> */}
 			</CardBody>
 		</Card>
 	);
@@ -74,24 +78,24 @@ const Item: FC<IItemProps> = ({ id, image, title, description, tags, color }) =>
 
 const KnowledgeGridPage = () => {
 	const { darkModeStatus } = useDarkMode();
+	let kbState = useSelector((store: RootState) => store.knowladgeBaseStore);
+	const [filterableData, setFilterableData] = useState(kbState.kBList);
 
-	const [filterableData, setFilterableData] = useState(data);
+	const searchAndFilterData = (searchValue: string) => {
+		let tempData = kbState.kBList;
 
-	const searchAndFilterData = (searchValue: string, category: string) => {
-		let tempData = data;
-
-		if (category)
-			tempData = data.filter((item) =>
-				item.categories.find((categ) => categ.value === category),
-			);
-
+		// if (category)
+		// 	tempData = kbState.kBList.filter((item) =>
+		// 		item.categories.find((categ) => categ.value === category),
+		// 	);
 		return tempData.filter((item) => {
+			const val = (<HTMLStringComponent htmlString={item.description} />).type;
 			return (
 				item.title.toLowerCase().includes(searchValue) ||
-				item.description.toLowerCase().includes(searchValue) ||
-				item.content.toLowerCase().includes(searchValue) ||
-				item.categories.find((categ) => categ.text.toLowerCase().includes(searchValue)) ||
-				item.tags.find((tag) => tag.text.toLowerCase().includes(searchValue))
+				val.toLowerCase().includes(searchValue)
+				// item.content.toLowerCase().includes(searchValue) ||
+				// item.categories.find((categ) => categ.text.toLowerCase().includes(searchValue)) ||
+				// item.tags.find((tag) => tag.text.toLowerCase().includes(searchValue))
 			);
 		});
 	};
@@ -110,12 +114,12 @@ const KnowledgeGridPage = () => {
 		};
 	};
 
-	const onFormSubmit = (values: { category: any; search: any }) => {
+	const onFormSubmit = (values: { search: any }) => {
 		const searchValue = values.search.toString().toLowerCase();
-		const newData = searchAndFilterData(searchValue, values.category);
+		const newData = searchAndFilterData(searchValue);
 
-		if (!values.search && !values.category) {
-			setFilterableData(data);
+		if (!values.search) {
+			setFilterableData(kbState.kBList);
 		} else {
 			setFilterableData(newData);
 		}
@@ -127,7 +131,7 @@ const KnowledgeGridPage = () => {
 			category: '',
 		},
 		onSubmit: onFormSubmit,
-		onReset: () => setFilterableData(data),
+		onReset: () => setFilterableData(kbState.kBList),
 	});
 
 	return (
@@ -142,10 +146,12 @@ const KnowledgeGridPage = () => {
 						data-tour='knowledge-filter'>
 						<form
 							className={classNames('row', 'pb-4 px-3 mx-0 g-4', 'rounded-3', [
-								`bg-l${darkModeStatus ? 'o25' : '10'}-primary`,
+								`bg-l${
+									darkModeStatus ? 'o25' : '10'
+								}-${getRandomBootstrapColor()}-primary`,
 							])}
 							onSubmit={formik.handleSubmit}>
-							<div className='col-md-5'>
+							{/* <div className='col-md-5'>
 								<Select
 									id='category'
 									size='lg'
@@ -170,14 +176,15 @@ const KnowledgeGridPage = () => {
 									}}
 									value={formik.values.category}
 								/>
-							</div>
+							</div> */}
 							<div className='col-md-5'>
 								<Input
 									id='search'
 									size='lg'
-									placeholder='Type your question...'
+									placeholder='Type your knowladge base query...'
 									className={classNames('rounded-1', {
 										'bg-white': !darkModeStatus,
+										'text-white': darkModeStatus,
 									})}
 									onChange={(e: { target: { value: string | any[] } }) => {
 										formik.handleChange(e);

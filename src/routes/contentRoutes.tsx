@@ -592,6 +592,377 @@ const presentation: RouteProps[] = [
         path: pageLayoutTypesPagesMenu.asideTypes.subMenu.minimizeAside.path,
         element: <PAGE_LAYOUTS.MINIMIZE_ASIDE />,
     },
+	/**
+	 * Lms Project
+	 */
+	{
+		path: 'devices',
+		element: <DeviceManagement />,
+	},
+	// {
+	// 	path: 'Google-Meet',
+	// 	element: <Lms.LmsGoogleMeeting />,
+	// },
+	/**
+	 * Lms Project
+	 */
+	{
+		path: LmsUserManu.userprofile.path,
+		element: <Lms.LmsUserProfile />,
+	},
+	{
+		path: LmsUserManu.changepassword.path,
+		element: <Lms.LmsUserProfile />,
+	},
+	{
+		path: LmsUserManu.emailverification.path,
+		element: <Lms.LmsUserProfile />,
+	},
+	{
+		path: LmsUserManu.profilevisibilty.path,
+		element: <Lms.LmsUserProfile />,
+	},
+	{
+		path: LmsUserManu.smsverification.path,
+		element: <Lms.LmsUserProfile />,
+	},
+	{
+		path: LmsUserManu.devicemanagement.path,
+		element: <Lms.LmsUserProfile />,
+	},
+	{
+		path: LmsUserManu.socialauthentication.path,
+		element: <Lms.LmsUserProfile />,
+	},
+	{
+		path: LmsUserManu.subscriptionmanagement.path,
+		element: <Lms.LmsUserProfile />,
+	},
+	/**
+	 * Lms Project
+	 */
+	{
+		path: 'zoom-meeting',
+		element: <Lms.LmsZoomMeeting />,
+	},
+	{
+		path: 'google-class',
+		element: <Lms.LmsGoogleClass />,
+	},
+	{
+		path: 'mcq-bank/test',
+		element: <Lms.LmsStudentTest />,
+	},
+	{
+		path: LmsFeatures.mycourses.path,
+		element: <Lms.LmsMyCourses />,
+	},
+	{
+		path: LmsFeatures.livecourses.path,
+		element: <Lms.LmsLiveCourses />,
+	},
+	{
+		path: LmsFeatures.studyplanner.path,
+		element: <Lms.LmsStudyPlanner />,
+	},
+	{
+		path: LmsFeatures.studyassistant.path,
+		element: <Lms.LmsStudyAssistant />,
+	},
+	{
+		path: LmsFeatures.messaging.path,
+		element: <Lms.LmsMessaging />,
+	},
+	{
+		path: LmsFeatures.knowledgebase.path,
+		element: <Lms.LmsknowledgeBase />,
+	},
+	{
+		path: LmsFeatures.myfavourites.path,
+		element: <Lms.LmsMyFavourites />,
+	},
+	{
+		path: LmsFeatures.myfiles.path,
+		element: <Lms.LmsMyFiles />,
+	},
+	{
+		path: LmsFeatures.supportcenter.path,
+		element: <Lms.LmsSupportCenter />,
+	},
+	{
+		path: 'courses-page',
+		element: <Lms.LmsCoursePage />,
+	},
+	{
+		path: LmsFeatures.mcqbank.subMenu.previousattempts.path,
+		element: <Lms.LmsQuestionBank.prevattepmts />,
+	},
+	{
+		path: LmsFeatures.mcqbank.subMenu.createtest.path,
+		element: <Lms.LmsQuestionBank.createTest />,
+	},
+	{
+		path: LmsFeatures.mcqbank.subMenu.paperlist.path,
+		element: <Lms.LmsQuestionBank.paperList />,
+	},
+	{
+		path: LmsFeatures.mcqbank.subMenu.createtest.path,
+		element: <Lms.LmsQuestionBank.prevattepmts />,
+	},
+	{
+		path: 'live-class',
+		element: <Lms.LmsLiveClassPage />,
+	},
+	{
+		path: 'ticket-chat',
+		element: <Lms.LmsTicketChat />,
+	},
+
+	/**
+	 * Landing
+	 */
+	{
+		path: dashboardPagesMenu.dashboard.path,
+		element: <LANDING.DASHBOARD />,
+	},
+	{
+		path: dashboardPagesMenu.dashboardBooking.path,
+		element: <LANDING.DASHBOARD_BOOKING />,
+	},
+	{
+		path: dashboardPagesMenu.summary.path,
+		element: <LANDING.SUMMARY />,
+	},
+
+	/** ************************************************** */
+
+	/**
+	 * Pages
+	 */
+
+	/**
+	 * Single Pages
+	 */
+	{
+		path: demoPagesMenu.singlePages.subMenu.boxedSingle.path,
+		element: <SINGLE.BOXED />,
+	},
+	{
+		path: demoPagesMenu.singlePages.subMenu.fluidSingle.path,
+		element: <SINGLE.FLUID />,
+	},
+
+	/**
+	 * List
+	 */
+	{
+		path: demoPagesMenu.listPages.subMenu.listBoxed.path,
+		element: <LIST.BOXED />,
+	},
+	{
+		path: demoPagesMenu.listPages.subMenu.listFluid.path,
+		element: <LIST.FLUID />,
+	},
+
+	/**
+	 * Grid
+	 */
+	{
+		path: demoPagesMenu.gridPages.subMenu.gridBoxed.path,
+		element: <GRID.BOXED />,
+	},
+	{
+		path: demoPagesMenu.gridPages.subMenu.gridFluid.path,
+		element: <GRID.FLUID />,
+	},
+
+	/**
+	 * Edit
+	 */
+
+	{
+		path: demoPagesMenu.editPages.subMenu.editModern.path,
+		element: <EDIT.MODERN />,
+	},
+	{
+		path: demoPagesMenu.editPages.subMenu.editBoxed.path,
+		element: <EDIT.BOXED />,
+	},
+	{
+		path: demoPagesMenu.editPages.subMenu.editFluid.path,
+		element: <EDIT.FLUID />,
+	},
+	{
+		path: demoPagesMenu.editPages.subMenu.editWizard.path,
+		element: <EDIT.WIZARD />,
+	},
+	{
+		path: demoPagesMenu.editPages.subMenu.editInCanvas.path,
+		element: <EDIT.IN_CANVAS />,
+	},
+	{
+		path: demoPagesMenu.editPages.subMenu.editInModal.path,
+		element: <EDIT.IN_MODAL />,
+	},
+
+	{
+		path: demoPagesMenu.pricingTable.path,
+		element: <PRICING.PRICING_TABLE />,
+	},
+
+	/**
+	 * END - Pages
+	 */
+
+	/**
+	 * Auth Page
+	 */
+	{
+		path: demoPagesMenu.page404.path,
+		element: <AUTH.PAGE_404 />,
+	},
+	{
+		path: demoPagesMenu.login.path,
+		element: <Login />,
+	},
+	{
+		path: demoPagesMenu.signUp.path,
+		element: <Login isSignUp />,
+	},
+
+	/**
+	 * App
+	 */
+
+	/**
+	 * App > Project Management
+	 */
+	{
+		path: demoPagesMenu.projectManagement.subMenu.list.path,
+		element: <APP.PROJECT_MANAGEMENT.PROJECTS_LIST />,
+	},
+	{
+		path: `${demoPagesMenu.projectManagement.subMenu.itemID.path}/:id`,
+		element: <APP.PROJECT_MANAGEMENT.PROJECT />,
+	},
+
+	/**
+	 * App > Knowledge
+	 */
+	{
+		path: demoPagesMenu.knowledge.subMenu.grid.path,
+		element: <APP.KNOWLEDGE.GRID />,
+	},
+	{
+		path: `${demoPagesMenu.knowledge.subMenu.itemID.path}/:id`,
+		element: <APP.KNOWLEDGE.VIEW />,
+	},
+
+	/**
+	 * App > Sales
+	 */
+	{
+		path: demoPagesMenu.sales.subMenu.transactions.path,
+		element: <APP.SALES.TRANSACTIONS />,
+	},
+	{
+		path: demoPagesMenu.sales.subMenu.salesList.path,
+		element: <APP.SALES.PRODUCTS />,
+	},
+	{
+		path: demoPagesMenu.sales.subMenu.productsGrid.path,
+		element: <APP.SALES.PRODUCTS_GRID />,
+	},
+	{
+		path: `${demoPagesMenu.sales.subMenu.productID.path}/:id`,
+		element: <APP.SALES.PRODUCTS_VIEW />,
+	},
+
+	/**
+	 * App > Appointment
+	 */
+	{
+		path: demoPagesMenu.appointment.subMenu.calendar.path,
+		element: <APP.APPOINTMENT.CALENDAR />,
+	},
+	{
+		path: demoPagesMenu.appointment.subMenu.employeeList.path,
+		element: <APP.APPOINTMENT.EMPLOYEE_LIST />,
+	},
+	{
+		path: `${demoPagesMenu.appointment.subMenu.employeeID.path}/:id`,
+		element: <APP.APPOINTMENT.EMPLOYEE_VIEW />,
+	},
+	{
+		path: demoPagesMenu.appointment.subMenu.appointmentList.path,
+		element: <APP.APPOINTMENT.APPOINTMENT_LIST />,
+	},
+
+	/**
+	 * App > CRM
+	 */
+	{
+		path: demoPagesMenu.crm.subMenu.dashboard.path,
+		element: <APP.CRM.CRM_DASHBOARD />,
+	},
+	{
+		path: demoPagesMenu.crm.subMenu.customersList.path,
+		element: <APP.CRM.CUSTOMERS />,
+	},
+	{
+		path: `${demoPagesMenu.crm.subMenu.customerID.path}/:id`,
+		element: <APP.CRM.CUSTOMER />,
+	},
+
+	/**
+	 * App > Chat
+	 */
+	{
+		path: demoPagesMenu.chat.subMenu.withListChat.path,
+		element: <APP.CHAT.WITH_LIST />,
+	},
+	{
+		path: demoPagesMenu.chat.subMenu.onlyListChat.path,
+		element: <APP.CHAT.ONLY_LIST />,
+	},
+
+	/**
+	 * END - App
+	 */
+
+	/** ************************************************** */
+
+	/**
+	 * Page Layout Types
+	 */
+	{
+		path: pageLayoutTypesPagesMenu.blank.path,
+		element: <PAGE_LAYOUTS.BLANK />,
+	},
+	{
+		path: pageLayoutTypesPagesMenu.pageLayout.subMenu.headerAndSubheader.path,
+		element: <PAGE_LAYOUTS.HEADER_SUBHEADER />,
+	},
+	{
+		path: pageLayoutTypesPagesMenu.pageLayout.subMenu.onlyHeader.path,
+		element: <PAGE_LAYOUTS.HEADER />,
+	},
+	{
+		path: pageLayoutTypesPagesMenu.pageLayout.subMenu.onlySubheader.path,
+		element: <PAGE_LAYOUTS.SUBHEADER />,
+	},
+	{
+		path: pageLayoutTypesPagesMenu.pageLayout.subMenu.onlyContent.path,
+		element: <PAGE_LAYOUTS.CONTENT />,
+	},
+	{
+		path: pageLayoutTypesPagesMenu.asideTypes.subMenu.defaultAside.path,
+		element: <PAGE_LAYOUTS.ASIDE />,
+	},
+	{
+		path: pageLayoutTypesPagesMenu.asideTypes.subMenu.minimizeAside.path,
+		element: <PAGE_LAYOUTS.MINIMIZE_ASIDE />,
+	},
 ];
 const documentation: RouteProps[] = [
     /**
