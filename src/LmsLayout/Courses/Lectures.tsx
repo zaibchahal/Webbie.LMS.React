@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Card, {
 	CardHeader,
 	CardLabel,
@@ -10,15 +10,53 @@ import Icon from '../../components/icon/Icon';
 import Badge from '../../components/bootstrap/Badge';
 import useDarkMode from '../../hooks/useDarkMode';
 import FormGroup from '../../components/bootstrap/forms/FormGroup';
+import { GetVideoDetails, ILecture, postIsWatched } from '../../services/Courses.server';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store';
+import { UpdateVideoDetails, UpdateVideoSrc } from '../../@features/MyCourses/Courses.slice';
+import AuthContext from '../../contexts/authContext';
 
-const Lectures = (props: { mainHead: string; totallectures: number; totaltime: string }) => {
+const Lectures = (props: {
+	mainHead: string;
+	totallectures: number;
+	totaltime: number;
+	lectures: ILecture[];
+}) => {
 	const mainHead = props.mainHead;
 	const totallectures = props.totallectures;
 	const totaltime = props.totaltime;
+	const lectures = props.lectures;
 
 	const { darkModeStatus } = useDarkMode();
 	const [show, setShow] = useState(false);
 	const [check, setCheck] = useState(false);
+	const dispatch = useDispatch<AppDispatch>();
+	useEffect(() => {
+		// dispatch(UpdateVideoSrc(lectures[0].path));
+		console.log(lectures[1].title);
+		// dispatch(UpdateVideoDetails(lectures[0]));
+	}, []);
+
+	const { session } = useContext(AuthContext);
+	let myCourseStore = useSelector((store: RootState) => store.myCourses);
+
+	const handleVideoPlay = (l: ILecture) => {
+		// dispatch(UpdateVideoSrc(l.path));
+		GetVideoDetails(l.id, l.sectionID, l.courseID, session?.accessToken).then((res) => {
+			console.log(res);
+			dispatch(UpdateVideoDetails(res));
+			postIsWatched(l.id, session?.accessToken).then((res) => {
+				console.log(res);
+			});
+		});
+	};
+
+	// const handleIsWatched=()=>{
+	// 	postIsWatched(session?.accessToken).then((res) => {
+	// 		console.log(res);
+	// 		dispatch(UpdateVideoDetails(res));
+	// 	});
+	// }
 
 	return (
 		<div>
@@ -48,7 +86,7 @@ const Lectures = (props: { mainHead: string; totallectures: number; totaltime: s
 											className='fw-bold'
 											icon='AlarmOn'
 										/>
-										{totaltime}
+										{Math.floor(totaltime / 60)} Hrs , {totaltime % 60} Mins
 									</Badge>
 								</div>
 							</div>
@@ -67,72 +105,45 @@ const Lectures = (props: { mainHead: string; totallectures: number; totaltime: s
 					{show && (
 						<>
 							<div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-1 border-bottom'></div>
-							<div className='d-flex justify-content-start align-items-center'>
-								<FormGroup id='eventAllDay'>
-									<input
-										type='checkbox'
-										name=''
-										checked={check}
-										onChange={() => setCheck(!check)}
-										id=''
-									/>
-								</FormGroup>
-								<a href='#' className='mt-4 text-decoration-none mx-2'>
-									<div className='col-auto text-decoration-none text-bolder'>
-										<Icon
-											style={{
-												fontSize: 'calc(1vh + 1vw)',
-											}}
-											icon='SlowMotionVideo'
+
+							{lectures.map((l, k) => (
+								<div className='d-flex justify-content-start align-items-center'>
+									<FormGroup id='eventAllDay'>
+										<input
+											type='checkbox'
+											name=''
+											checked={l.isWatched}
+											id=''
 										/>
-										REGULATION OF ARTERIAL PRESSURE
+									</FormGroup>
+									<div
+										onClick={() => handleVideoPlay(l)}
+										className='mt-4 text-decoration-none mx-2'>
+										<div className='col-auto text-decoration-none text-bolder'>
+											<Icon
+												style={{
+													fontSize: 'calc(1vh + 1vw)',
+												}}
+												icon='SlowMotionVideo'
+											/>
+											{l.title}
+										</div>
+										<div className='col-auto text-muted mt-1'>
+											<Icon
+												style={{
+													fontSize: 'calc(1vh + 1vw)',
+												}}
+												className='fw-bold'
+												icon='AlarmOn'
+											/>
+											{Math.floor(l.length / 60) !== 0 &&
+												Math.floor(l.length / 60) + 'Hrs ,'}
+											{l.length % 60} Mins
+										</div>
 									</div>
-									<div className='col-auto text-muted mt-1'>
-										<Icon
-											style={{
-												fontSize: 'calc(1vh + 1vw)',
-											}}
-											className='fw-bold'
-											icon='AlarmOn'
-										/>
-										34 Mins
-									</div>
-								</a>
-								<div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-1 border-bottom'></div>
-							</div>
-							<div className='d-flex justify-content-start align-items-center'>
-								<FormGroup id='eventAllDay'>
-									<input
-										type='checkbox'
-										name=''
-										checked={check}
-										onChange={() => setCheck(!check)}
-										id=''
-									/>
-								</FormGroup>
-								<a href='#' className='mt-4 text-decoration-none mx-2'>
-									<div className='col-auto text-decoration-none text-bolder'>
-										<Icon
-											style={{
-												fontSize: 'calc(1vh + 1vw)',
-											}}
-											icon='SlowMotionVideo'
-										/>
-										VASCULAR FUNCTION CURVE
-									</div>
-									<div className='col-auto text-muted mt-1'>
-										<Icon
-											style={{
-												fontSize: 'calc(1vh + 1vw)',
-											}}
-											className='fw-bold'
-											icon='AlarmOn'
-										/>
-										56 Mins
-									</div>
-								</a>
-							</div>
-							<div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-1 border-bottom'></div>
+									<div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-1 border-bottom'></div>
+								</div>
+							))}
 						</>
 					)}
 				</div>

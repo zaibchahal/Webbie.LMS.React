@@ -47,6 +47,7 @@ import { IStudyPlanner, getStudyPlannerList, postStudyPlanner } from '../../serv
 import AuthContext from '../../contexts/authContext';
 import { getCookie } from '../../common/data/helper';
 import { AppConst } from '../../common/data/constants';
+import { getRandomBootstrapColor } from '../knowledge/helper/dummyKnowledgeData';
 
 const localizer = dayjsLocalizer(dayjs);
 const now = new Date();
@@ -264,7 +265,9 @@ const CalendarPage = () => {
 
 		return {
 			className: classNames({
-				[`bg-l${darkModeStatus ? 'o25' : '10'}-${color} text-${color}`]: color,
+				[`bg-l${
+					darkModeStatus ? 'o25' : '10'
+				}-${getRandomBootstrapColor()}-${color} text-${color}`]: color,
 				'border border-success': isActiveEvent,
 				'opacity-50': isPastEvent,
 			}),
@@ -644,7 +647,7 @@ const CalendarPage = () => {
 							</div>
 							{/* Employee */}
 							<div className='col-12'>
-								<Card className='mb-0 bg-l10-dark' shadow='sm'>
+								{/* <Card className='mb-0 bg-l10-dark' shadow='sm'>
 									<CardHeader className='bg-l25-dark'>
 										<CardLabel icon='Person Add' iconColor='dark'>
 											<CardTitle>Employee Options</CardTitle>
@@ -667,7 +670,7 @@ const CalendarPage = () => {
 											</Select>
 										</FormGroup>
 									</CardBody>
-								</Card>
+								</Card> */}
 							</div>
 							<div className='col'>
 								<Button

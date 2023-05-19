@@ -15,6 +15,7 @@ import Card, {
 	CardHeader,
 	CardLabel,
 	CardSubTitle,
+	CardTabItem,
 	CardTitle,
 } from '../../components/bootstrap/Card';
 import { useVideo } from 'react-use';
@@ -22,14 +23,21 @@ import Icon from '../../components/icon/Icon';
 import './Video.css';
 import Badge from '../../components/bootstrap/Badge';
 import Lectures from './Lectures';
+import Button from '../../components/bootstrap/Button';
+import { sendMessage } from '@microsoft/signalr/dist/esm/Utils';
+import InputGroup from '../../components/bootstrap/forms/InputGroup';
+import Textarea from '../../components/bootstrap/forms/Textarea';
+import ReviewScreen from '../LmsPages/RattingPage';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { UpdateVideoDetails } from '../../@features/MyCourses/Courses.slice';
+import { initialVideoDetails } from '../../services/Courses.server';
 
 const CoursePage = () => {
 	// const [video, state, controls, ref] = useVideo(
 	// 	<video src='http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4' autoPlay />,
 	// );
 	var src = 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4';
-
-	// const [video, state, controls] = useVideo({ src });
 
 	const videoRef = useRef<HTMLVideoElement>(null);
 	const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -96,6 +104,23 @@ const CoursePage = () => {
 		}
 	};
 	const { darkModeStatus } = useDarkMode();
+	const [discussion, setDiscussion] = useState('');
+	const [durationFormat, setDurationFormate] = useState('');
+	// const [videoSrc, setVideoSrc] = useState(videoData.video.path);
+	let myCourseStore = useSelector((store: RootState) => store.myCourses);
+
+	const [videoData, setVideoData] = useState(initialVideoDetails);
+
+	useEffect(() => {
+		// setVideoSrc(myCourseStore.videoScr);
+		// console.log(videoData.video.title);
+		setVideoData(myCourseStore.videoDetails);
+	}, [myCourseStore.videoDetails]);
+
+	// useEffect(() => {
+
+	// }, []);
+
 	return (
 		<PageWrapper title={LmsFeatures.mycourses.text}>
 			<SubHeader>
@@ -109,7 +134,7 @@ const CoursePage = () => {
 				</SubHeaderLeft>
 			</SubHeader>
 			<Page>
-				<div className='row h-100 align-content-start'>
+				<div className='row align-content-start'>
 					<div className='col-md-8'>
 						{/* Profile Picture */}
 						<Card>
@@ -128,14 +153,22 @@ const CoursePage = () => {
 							</CardHeader>
 							<CardBody>
 								<CardBody>
-									<video
+									{/* <video
 										ref={videoRef}
-										src={src}
+										src={myCourseStore.videoScr}
 										onTimeUpdate={handleTimeUpdate}
 										onLoadedMetadata={handleDurationChange}
 										className='video-container'
+									/> */}
+									<iframe
+										// ref={videoRef}
+										src={videoData.video.path}
+										width='560'
+										height='315'
+										frameBorder='0'
+										allowFullScreen
 									/>
-									<div className='d-flex justify-content-center align-items-center'>
+									{/* <div className='d-flex justify-content-center align-items-center'>
 										{isPlaying ? (
 											<Icon
 												onClick={togglePlay}
@@ -196,20 +229,160 @@ const CoursePage = () => {
 											size='2x'
 											color='info'
 										/>
-									</div>
+									</div> */}
 									<div className='mt-3 mx-4'>
 										<CardTitle className='text-bold h3'>
-											SPECIAL CIRCULATIONS AND INTEGRATIVE SYSTEM
+											{videoData.video.title}
 										</CardTitle>
 										<CardSubTitle className='mt-4 h5 text-muted'>
 											<span>Dr Hafiz Atif </span>
-											<span>|</span>
-											<span className='text-info'> 37 min</span>
+											<span className='mx-1'> | </span>
+											<span className='text-info'>
+												{/* {Math.floor(
+													videoData.video.length / 60,
+												) !== 0 &&
+													Math.floor(
+														videoData.video.length /
+															60,
+													) + 'Hrs ,'}
+												{videoData.video.length % 60} Mins */}
+											</span>
 										</CardSubTitle>
 									</div>
 								</CardBody>
 							</CardBody>
 						</Card>
+						<div className='row align-items-start'>
+							<Card hasTab>
+								<CardTabItem id='overview' title='Overflow' icon='Shop'>
+									<div className='row d-flex justify-content-start mb-1'>
+										<Button
+											style={{ width: '140px', marginRight: '10px' }}
+											color='primary'
+											isLight
+											icon='PublishedWithChanges'
+											// onClick={() => setNumberVerification(true)}
+										>
+											LIKE
+										</Button>
+										<Button
+											style={{ width: '140px' }}
+											color='primary'
+											isLight
+											icon='PublishedWithChanges'
+											// onClick={() => setNumberVerification(true)}
+										>
+											SHARE
+										</Button>
+										<div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2  mb-3 border-bottom'></div>
+									</div>
+									<div className='row'>
+										<CardTitle>Course Description</CardTitle>
+										<CardSubTitle className='mt-2'>
+											{/* {videoData.video.description} */}
+										</CardSubTitle>
+									</div>
+
+									<div className='row mt-4'>
+										<CardTitle>Course Outcomes</CardTitle>
+										<CardSubTitle className='mt-2'>
+											{/* <ul>
+												<li>BRS PHYSIOLOGY</li>
+											</ul> */}
+										</CardSubTitle>
+									</div>
+								</CardTabItem>
+								<CardTabItem id='faq' title='FAQ' icon='PictureAsPdf'>
+									<>
+										<div className='row d-flex justify-content-start mb-1'>
+											<Button
+												style={{ width: '140px', marginRight: '10px' }}
+												color='primary'
+												isLight
+												icon='PublishedWithChanges'
+												// onClick={() => setNumberVerification(true)}
+											>
+												LIKE
+											</Button>
+											<Button
+												style={{ width: '140px' }}
+												color='primary'
+												isLight
+												icon='PublishedWithChanges'
+												// onClick={() => setNumberVerification(true)}
+											>
+												SHARE
+											</Button>
+											<div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2  mb-3 border-bottom'></div>
+										</div>
+									</>
+								</CardTabItem>
+								<CardTabItem id='discussion' title='Discussion' icon='LibraryMusic'>
+									<>
+										<div className='row d-flex justify-content-start mb-1'>
+											<Button
+												style={{ width: '140px', marginRight: '10px' }}
+												color='primary'
+												isLight
+												icon='PublishedWithChanges'
+												// onClick={() => setNumberVerification(true)}
+											>
+												LIKE
+											</Button>
+											<Button
+												style={{ width: '140px' }}
+												color='primary'
+												isLight
+												icon='PublishedWithChanges'
+												// onClick={() => setNumberVerification(true)}
+											>
+												SHARE
+											</Button>
+											<div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2  mb-3 border-bottom'></div>
+										</div>
+										<InputGroup>
+											<Textarea
+												title='Message'
+												placeholder='Write Your Message'
+												value={discussion}
+												onChange={(e: any) => {
+													setDiscussion(e.target.value);
+												}}
+											/>
+											<Button color='info' icon='Send'>
+												SEND
+											</Button>
+										</InputGroup>
+									</>
+								</CardTabItem>
+								<CardTabItem id='reviews' title='Reviews' icon='AutoStories'>
+									<>
+										<div className='row d-flex justify-content-start mb-1'>
+											<Button
+												style={{ width: '140px', marginRight: '10px' }}
+												color='primary'
+												isLight
+												icon='PublishedWithChanges'
+												// onClick={() => setNumberVerification(true)}
+											>
+												LIKE
+											</Button>
+											<Button
+												style={{ width: '140px' }}
+												color='primary'
+												isLight
+												icon='PublishedWithChanges'
+												// onClick={() => setNumberVerification(true)}
+											>
+												SHARE
+											</Button>
+											<div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2  mb-3 border-bottom'></div>
+										</div>
+										<ReviewScreen />
+									</>
+								</CardTabItem>
+							</Card>
+						</div>
 					</div>
 					<div className='col-md-4'>
 						<Card>
@@ -232,7 +405,7 @@ const CoursePage = () => {
 														}}
 														icon='SlowMotionVideo'
 													/>
-													Lecture(65)
+													Lecture({myCourseStore.myCourses.lessons})
 												</Badge>
 											</div>
 											<div className='col-auto mt-0 pt-0'>
@@ -246,7 +419,8 @@ const CoursePage = () => {
 														className='fw-bold'
 														icon='AlarmOn'
 													/>
-													56 Hrs, 34 Mins
+													{Math.floor(myCourseStore.myCourses.time / 60)}
+													Hrs, {myCourseStore.myCourses.time % 60} Mins
 												</Badge>
 											</div>
 										</div>
@@ -264,35 +438,24 @@ const CoursePage = () => {
 														className='fw-bold'
 														icon='AlarmOn'
 													/>
-													Expires On (21/02/2024)
+													Expires On (
+													{myCourseStore.myCourses.endDate === null
+														? 'Life Time'
+														: myCourseStore.myCourses.endDate}
+													)
 												</Badge>
 											</div>
 										</div>
 									</div>
 									<div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-1 border-bottom'></div>
-
-									<Lectures
-										mainHead='Cardiovascular System'
-										totallectures={38}
-										totaltime='56 Hrs, 34 Mins'
-									/>
-									<Lectures
-										mainHead=' VASCULAR FUNCTION CURVE'
-										totallectures={57}
-										totaltime='32 Hrs, 4 Mins'
-									/>
-									<Lectures
-										mainHead='RAAS'
-										totallectures={7}
-										totaltime='6 Hrs, 23 Mins'
-									/>
-									<Lectures
-										mainHead='CARDIAC EQUATIONS AND ACTION POTENTIAL'
-										totallectures={23}
-										totaltime='12 Hrs, 45 Mins'
-									/>
-
-									{/* <Lectures /> */}
+									{myCourseStore.Course.section.map((s, k) => (
+										<Lectures
+											mainHead={s.sectionTitle}
+											totallectures={s.lessons}
+											totaltime={s.duration}
+											lectures={s.lecture}
+										/>
+									))}
 								</>
 							</CardBody>
 						</Card>

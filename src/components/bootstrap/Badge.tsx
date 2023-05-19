@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import useDarkMode from '../../hooks/useDarkMode';
 import { TColor } from '../../type/color-type';
+import { getRandomBootstrapColor } from '../../LmsLayout/knowledge/helper/dummyKnowledgeData';
 
 interface IBadgeProps extends Record<string, any> {
 	children: ReactNode;
@@ -40,7 +41,8 @@ const Badge: FC<IBadgeProps> = ({
 				'badge',
 				{
 					[`bg-${color}`]: !isLight,
-					[`bg-l${darkModeStatus ? 'o25' : '10'}-${color}`]: isLight,
+					[`bg-l${darkModeStatus ? 'o25' : '10'}-${getRandomBootstrapColor()}-${color}`]:
+						isLight,
 					[`text-${color}`]: isLight,
 					[`shadow${shadow !== 'default' ? `-${shadow}` : ''}`]: !!shadow,
 					[`rounded${rounded !== 'default' ? `-${rounded}` : ''}`]: rounded,
