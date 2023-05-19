@@ -3,23 +3,24 @@ import Card, { CardActions, CardBody, CardFooter, CardHeader, CardLabel, CardSub
 import Page from '../../layout/Page/Page';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import './style.css';
+import Breadcrumb from '../../components/bootstrap/Breadcrumb';
 import SubHeader, { SubHeaderLeft, SubheaderSeparator, SubHeaderRight } from '../../layout/SubHeader/SubHeader';
 import Icon from '../../components/icon/Icon';
 import { useContext, useEffect, useState } from 'react';
 import { saveResultDetail, getQuestionToSolve, IQuestionProp, IResultProp, addRemoveFavourites, completed } from '../../services/QBankService';
 import AuthContext from '../../contexts/authContext';
 import { PaperMode } from '../../common/data/constants';
+import Button from '../../components/bootstrap/Button';
+import { LmsFeatures } from '../../menu';
 
 
-const Test = () => {
+const QbankAnswers = () => {
     const navigate = useNavigate();
     const { session } = useContext(AuthContext);
     const { resultID } = useParams();
     const [paperData, setpaperData] = useState<IResultProp>({} as IResultProp);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [currentQuestion, setCurrentQuestion] = useState<IQuestionProp>({} as IQuestionProp);
-    const [timer, settimer] = useState("");
-    const [allowEnd, setallowEnd] = useState(false);
 
 
     useEffect(() => {
@@ -32,81 +33,10 @@ const Test = () => {
             })
             setpaperData(data);
             setCurrentQuestion(data.details[0]);
-            startTimer(data);
-
-            //const handleUnload = (event: BeforeUnloadEvent) => {
-            //    if (!allowEnd) {
-            //        event.preventDefault();
-            //        event.returnValue = false;
-            //    }
-            //};
-
-            //window.addEventListener('beforeunload', handleUnload);
-
-            //return () => {
-            //    window.removeEventListener('beforeunload', handleUnload);
-            //};
-
         };
         fetchData();
     }, []);
 
-    //#region  Handle Add to Favourite
-
-
-    const handleFlagClick = () => {
-        const newStatus = !currentQuestion.isPopular;
-        addFavourites();
-        setpaperData((prevValue) => {
-            const updatedDetails = [...prevValue.details];
-            const currentQuestion = updatedDetails[currentQuestionIndex];
-            currentQuestion.isPopular = newStatus;
-            setCurrentQuestion(currentQuestion);
-            return { ...prevValue, details: updatedDetails };
-        });
-    };
-
-    const addFavourites = async () => {
-        const data = await addRemoveFavourites({
-            id: currentQuestion.questionId,
-            remove: currentQuestion.isPopular,
-            type: 'Mcq',
-        }, session?.accessToken);
-    };
-
-    //#endregion
-
-    //#region Handle OPtion check and save result
-
-
-    const handleOptionClick = (answer: string, isTrue: boolean) => {
-        setpaperData((prevValue) => {
-            if ((!prevValue.details[currentQuestionIndex].isSolved || paperData.mode === PaperMode.Exam)) {
-                const updatedDetails = [...prevValue.details];
-                const currentQuestion = updatedDetails[currentQuestionIndex];
-                currentQuestion.isSolved = true;
-                currentQuestion.questOptions.forEach((option) => {
-                    option.IsChecked = answer.trim() === option.optionText?.trim();
-                });
-
-                setCurrentQuestion(currentQuestion);
-                saveResult(answer.trim(), isTrue);
-                return { ...prevValue, details: updatedDetails };
-            }
-            return prevValue;
-        });
-    };
-
-    const saveResult = async (answer: string, isTrue: boolean) => {
-        const data = await saveResultDetail({ answer: answer, isTrue: isTrue, questionID: currentQuestion.questionId, resultID: parseInt(resultID || "") }, session?.accessToken);
-    };
-
-    const CompleteResult = async (type: string) => {
-        const data = await completed(parseInt(resultID || ""), session?.accessToken);
-        navigate("/mcq-bank/analysis/" + resultID);
-    };
-
-    //#endregion
 
     //#region Move next Prev or GotoQuestion
 
@@ -136,42 +66,6 @@ const Test = () => {
 
     //#endregion
 
-    //#region Timer
-    function startTimer(pData: IResultProp) {
-        const dt = new Date().getTime();
-        const minutes = pData.timeGiven ?? 40;
-        const countDownDate = new Date(dt + minutes * 60000).getTime();
-
-        const interval = setInterval(function () {
-            var dtt = new Date().getTime();
-            const now = new Date(dtt - pData.timeElapsed * 60000).getTime();
-            var distance;
-
-            if (pData.mode === PaperMode.Tutor) {
-                distance = now - dt;
-            } else {
-                distance = countDownDate - now;
-            }
-
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var remainingMinutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            settimer(display(hours) + ":" + display(remainingMinutes) + ":" + display(seconds));
-            if (distance < 0) {
-                clearInterval(interval);
-                setallowEnd(true);
-                settimer("00:00:00");
-                CompleteResult("TimeUp");
-            }
-        }, 1000);
-    }
-
-    function display(time: number) {
-        return time < 10 ? "0" + time : time.toString();
-    }
-
-    //#endregion
 
     return (
         <>
@@ -185,16 +79,32 @@ const Test = () => {
 
                             }
                             <SubheaderSeparator />
-                            <h5>Time {paperData.mode == PaperMode.Exam ? 'Remaining' : ''} : <span>{timer} min </span> <br /></h5>
+
                         </SubHeaderLeft>
                         <SubHeaderRight>
-                            <button onClick={() => CompleteResult('End')} className="btn btn-danger"> End </button>
+
+                            <Button
+                                color='info'
+                                icon='Plus'
+                                isLight
+                                onClick={() => navigate("/mcq-bank/analysis/" + resultID)}
+                            >
+                                Show Analysis
+                            </Button>
+                            <Button
+                                color='info'
+                                icon='Plus'
+                                isLight
+                                onClick={() => navigate(`../${LmsFeatures.mcqbank.subMenu.previousattempts.path}`)}
+                            >
+                                Back To List
+                            </Button>
                         </SubHeaderRight>
                     </SubHeader>
                     <Card>
                         <CardHeader borderSize={1}>
                             <CardLabel icon='LocalPolice' iconColor='primary'>
-                                <CardTitle> {paperData.questionPaper ? paperData.questionPaper : "Question Paper"}</CardTitle>
+                                <CardTitle> {paperData.questionPaper ? paperData.questionPaper : "Question Paper"} Answers </CardTitle>
                                 {/* <CardSubTitle>Select a test mode</CardSubTitle> */}
                             </CardLabel>
                         </CardHeader>
@@ -238,10 +148,6 @@ const Test = () => {
                                                 onClick={handleNextQuestion}>
                                                 <Icon icon='FastForward' size='2x' color='primary' />
                                             </button>
-                                            <button className={`p-2 ${currentQuestion?.isPopular ? 'bg-danger' : 'bg-light'}`}
-                                                onClick={handleFlagClick}>
-                                                <Icon icon='Flag' size='2x' color='primary' />
-                                            </button>
                                             <button className='bg-light p-2'>
                                                 <Icon icon='Fullscreen' size='2x' color='primary' />
                                             </button>
@@ -259,8 +165,7 @@ const Test = () => {
 
                                                         <div
                                                             key={index}
-                                                            className={`card my-2 ${paperData.mode == PaperMode.Tutor && currentQuestion.isSolved ? (option.isCorrect ? 'bg-l25-success' : option.IsChecked ? 'bg-l25-danger' : '') : ''}`}
-                                                            onClick={() => handleOptionClick(option.optionText, option.isCorrect)}
+                                                            className={`card my-2 ${currentQuestion.isSolved ? (option.isCorrect ? 'bg-l25-success' : option.IsChecked ? 'bg-l25-danger' : '') : option.isCorrect ? 'bg-l25-warning' : ''}`}
                                                             style={{ cursor: currentQuestion.isSolved ? 'default' : 'pointer' }}>
                                                             <div className='card-body'>
                                                                 <div className='form-check'>
@@ -277,7 +182,7 @@ const Test = () => {
                                                     )
                                                 )}
                                             </div>
-                                            {paperData.mode == PaperMode.Tutor && currentQuestion.isSolved && (
+                                            {currentQuestion.isSolved && (
                                                 <>
                                                     <div className='card-footer'>
                                                         <p className='mb-0'>
@@ -305,4 +210,4 @@ const Test = () => {
     );
 };
 
-export default Test;
+export default QbankAnswers;

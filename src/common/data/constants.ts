@@ -15,6 +15,10 @@ export const QBank_Urls = {
     GetQuestionToSolve: '/services/app/QuestionBankService/GetQuestionToSolve',
     SaveResultDetail: '/services/app/QuestionBankService/SaveResultDetail',
     AddRemoveFavourites: '/services/app/QuestionBankService/AddRemoveFavourites',
+    GetResults: '/services/app/QuestionBankService/GetResults',
+    GetQuestionPapers: '/services/app/QuestionBankService/GetQuestionPapers',
+    CreateTestResultByPaper: '/services/app/QuestionBankService/CreateTestResultByPaper',
+    Completed: '/services/app/QuestionBankService/Completed',
 };
 
 export const Profile_Urls = {

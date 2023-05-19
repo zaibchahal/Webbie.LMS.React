@@ -7,7 +7,7 @@ import Icon from '../../components/icon/Icon';
 import PaginationButtons, { dataPagination, PER_COUNT } from '../../components/PaginationButtons';
 import useSortableData from '../../hooks/useSortableData';
 import useDarkMode from '../../hooks/useDarkMode';
-import { IFavouriteList, getFavouriteList } from '../../services/favourits';
+import { IResultProp, getResultList } from '../../services/QBankService';
 import AuthContext from '../../contexts/authContext';
 import { LmsFeatures } from '../../menu';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
@@ -17,22 +17,15 @@ import { useNavigate } from 'react-router-dom';
 const QuestionBank = () => {
     const { themeStatus, darkModeStatus } = useDarkMode();
     const { session } = useContext(AuthContext);
-    // BEGIN :: Upcoming Events
-    const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
-    const [data, setData] = useState<IFavouriteList[]>([]);
-    const handleUpcomingDetails = () => {
-        setUpcomingEventsInfoOffcanvas(!upcomingEventsInfoOffcanvas);
-    };
+    const [data, setData] = useState<IResultProp[]>([]);
+
 
     const navigate = useNavigate();
 
-    const handleUpcomingEdit = () => {
-    };
-    // END :: Upcoming Events
     useEffect(() => {
         const fetchData = async () => {
-            const d = await getFavouriteList(1, session?.accessToken);
-            setData(d as IFavouriteList[]);
+            const d = await getResultList(session?.userId, session?.accessToken);
+            setData(d as IResultProp[]);
         };
         fetchData();
     }, []);
@@ -66,7 +59,7 @@ const QuestionBank = () => {
                             <table className='table table-modern'>
                                 <thead>
                                     <tr>
-                                        <td style={{ width: 60 }} />
+                                        <th>Action</th>
                                         <th>Mode</th>
                                         <th
                                             onClick={() => requestSort('date')}
@@ -84,20 +77,50 @@ const QuestionBank = () => {
                                 </thead>
                                 <tbody>
                                     {dataPagination(items || [], currentPage, perPage).map((item) => (
-                                        <tr key={item.objectID}>
+                                        <tr key={item.id}>
                                             <td>
-                                                <Button
-                                                    isOutline={!darkModeStatus}
-                                                    color='dark'
-                                                    isLight={darkModeStatus}
-                                                    className={classNames({
-                                                        'border-light': !darkModeStatus,
-                                                    })}
-                                                    icon='Info'
-                                                    onClick={handleUpcomingDetails}
-                                                    aria-label='Detailed information'
-                                                />
+                                                <div>
+                                                    {!item.isComplete && (
+                                                        <>
+                                                            {item.allowReopen || item.questionPaper == null ? (
+                                                                <Button isOutline={!darkModeStatus} color='primary' isLight={darkModeStatus}
+                                                                    className={classNames({ 'border-light': !darkModeStatus, })}
+                                                                    onClick={() => navigate('/mcq-bank/test/' + item.id)}
+                                                                    icon='PlayArrow'
+                                                                    aria-label='Detailed information'
+                                                                />
+                                                            ) : null}
+                                                        </>
+                                                    )}
+
+                                                    {item.isComplete && (item.answerAt == null || item.answerAt < new Date()) && (
+                                                        <>
+                                                            <Button isOutline={!darkModeStatus} color='success' isLight={darkModeStatus}
+                                                                className={classNames({ 'border-light': !darkModeStatus, })}
+                                                                onClick={() => navigate('/mcq-bank/answers/' + item.id)}
+                                                                icon='Preview'
+                                                                aria-label='View Answers'
+                                                            />
+                                                            <Button isOutline={!darkModeStatus} color='success' isLight={darkModeStatus}
+                                                                className={classNames({ 'border-light': !darkModeStatus, })}
+                                                                icon='PieChart'
+                                                                onClick={() => navigate('/mcq-bank/analysis/' + item.id)}
+                                                                aria-label='View Analysis'
+                                                            />
+                                                        </>
+                                                    )}
+
+                                                    {/*{item.questionPaper == null && (*/}
+
+                                                    {/*    <Button isOutline={!darkModeStatus} color='danger' isLight={darkModeStatus}*/}
+                                                    {/*        className={classNames({ 'border-light': !darkModeStatus, })}*/}
+                                                    {/*        icon='Delete'*/}
+                                                    {/*        aria-label='Delete'*/}
+                                                    {/*    />*/}
+                                                    {/*)}*/}
+                                                </div>
                                             </td>
+                                            <td>{item.questionPaper ?? item.mode}</td>
                                             <td>
                                                 <div className='d-flex align-items-center'>
                                                     <span
@@ -111,44 +134,14 @@ const QuestionBank = () => {
                                                         )}>
                                                     </span>
                                                     <span className='text-nowrap'>
-                                                        {dayjs(`${item.created}`).format(
-                                                            'MMM Do YYYY h:mm a',
+                                                        {dayjs(`${item.creationTime}`).format(
+                                                            'MMM DD YYYY h:mm a',
                                                         )}
                                                     </span>
                                                 </div>
                                             </td>
-                                            <td>
-                                                <div>
-                                                    <div>{item.name}</div>
-                                                    <div className='small text-muted'>
-                                                        {item.parentName}
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <Button
-                                                    isOutline={!darkModeStatus}
-                                                    color='info'
-                                                    isLight={darkModeStatus}
-                                                    className={classNames('text-nowrap', {
-                                                        'border-light': !darkModeStatus,
-                                                    })}
-                                                    icon='PlayArrow'
-                                                    onClick={handleUpcomingEdit}>
-                                                    Play
-                                                </Button>
-                                                <Button
-                                                    isOutline={!darkModeStatus}
-                                                    color='danger'
-                                                    isLight={darkModeStatus}
-                                                    className={classNames('text-nowrap', {
-                                                        'border-light': !darkModeStatus,
-                                                    })}
-                                                    icon='Delete'
-                                                    onClick={handleUpcomingEdit}>
-                                                    Remove
-                                                </Button>
-                                            </td>
+                                            <td>{item.isComplete ? (<span className="badge bg-primary">Completed</span>) : (<span className="badge bg-danger">Incomplete</span>)}</td>
+                                            <td>{item.questionCount}</td>
                                         </tr>
                                     ))}
                                 </tbody>

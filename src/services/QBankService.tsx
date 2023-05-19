@@ -98,9 +98,85 @@ export const getQuestionToSolve = async (resultID: number | undefined, userId: n
     }
 };
 
+export const getQuestionPapers = async (userId: number | undefined, accessToken: string | undefined,) => {
+    try {
+        const response = await api.get(
+            QBank_Urls.GetQuestionPapers + '?SID=' + userId,
+            {
+                headers: {
+                    Accept: 'text/plain',
+                    'Content-Type': 'application/json-patch+json',
+                    'X-XSRF-TOKEN': 'null',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                withCredentials: true,
+            },
+        );
+        return (response.data.result || []) as IQuestionPapersProp[];
+    } catch (error: any) {
+        console.log(error);
+        return [] as IQuestionPapersProp[];
+    }
+};
+
+export const getResultList = async (userId: number | undefined, accessToken: string | undefined,) => {
+    try {
+        const response = await api.get(
+            QBank_Urls.GetResults + '?SID=' + userId,
+            {
+                headers: {
+                    Accept: 'text/plain',
+                    'Content-Type': 'application/json-patch+json',
+                    'X-XSRF-TOKEN': 'null',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                withCredentials: true,
+            },
+        );
+        return (response.data.result || []) as IResultProp[];
+    } catch (error: any) {
+        console.log(error);
+        return [] as IResultProp[];
+    }
+};
+
 export const addRemoveFavourites = async (testProp: IFavouriteProp, accessToken: string | undefined) => {
     try {
         const response = await api.post(QBank_Urls.AddRemoveFavourites, testProp, {
+            headers: {
+                Accept: 'text/plain',
+                'Content-Type': 'application/json-patch+json',
+                'X-XSRF-TOKEN': 'null',
+                Authorization: `Bearer ${accessToken}`,
+            },
+            withCredentials: true,
+        });
+        return response.data.result;
+    } catch {
+        return 0;
+    }
+};
+
+export const createTestResultByPaper = async (paperID: number, accessToken: string | undefined) => {
+    try {
+        const response = await api.post(QBank_Urls.CreateTestResultByPaper + "?paperID=" + paperID, {}, {
+            headers: {
+                Accept: 'text/plain',
+                'Content-Type': 'application/json-patch+json',
+                'X-XSRF-TOKEN': 'null',
+                Authorization: `Bearer ${accessToken}`,
+            },
+            withCredentials: true,
+        });
+        return response.data.result;
+    } catch {
+        return 0;
+    }
+};
+
+export const completed = async (id: number, accessToken: string | undefined) => {
+    try {
+        const response = await api.post(QBank_Urls.Completed, { id: id }, {
             headers: {
                 Accept: 'text/plain',
                 'Content-Type': 'application/json-patch+json',
@@ -166,7 +242,7 @@ export interface IQuestionProp {
     answer: string,
     ansExplain: string,
     marks: number,
-    isboolean: boolean,
+    isTrue: boolean,
     isPopular: boolean,
     questOptions: IOptionProp[],
     isSolved: boolean
@@ -181,6 +257,26 @@ export interface IFavouriteProp {
     id: number,
     type: string,//Mcq, Video, Audio, Pdf
     remove: boolean
+}
+
+export interface IQuestionPapersProp {
+
+    id: number,
+    tenantId: number,
+    paperTitle: string,
+    time: number,
+    expiryDT: Date,
+    startDT: Date,
+    answerAt: Date,
+    marks: number,
+    difficultyLevel: number,
+    courseId: number,
+    sectionId: number,
+    packageID: number,
+    pic: string,
+    notes: string,
+    tags: string,
+    isSolved: true,
 }
 
 

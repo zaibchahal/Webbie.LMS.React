@@ -217,6 +217,8 @@ const Lms = {
     // LmsGoogleMeeting: lazy(() => import('../LmsLayout/GoogleMeeting/MeetComponent')),
     LmsTicketChat: lazy(() => import('../LmsLayout/SupportCenter/TicketChat')),
     LmsStudentTest: lazy(() => import('../LmsLayout/QuestionBank/Test')),
+    LmsStudentAnalysis: lazy(() => import('../LmsLayout/QuestionBank/Analysis')),
+    LmsStudentAnswers: lazy(() => import('../LmsLayout/QuestionBank/Answers')),
 
 };
 const location = window.location;
@@ -281,6 +283,14 @@ const presentation: RouteProps[] = [
     {
         path: 'mcq-bank/test/:resultID',
         element: <Lms.LmsStudentTest />,
+    },
+    {
+        path: 'mcq-bank/analysis/:resultID',
+        element: <Lms.LmsStudentAnalysis />,
+    },
+    {
+        path: 'mcq-bank/answers/:resultID',
+        element: <Lms.LmsStudentAnswers />,
     },
     {
         path: LmsFeatures.mycourses.path,
