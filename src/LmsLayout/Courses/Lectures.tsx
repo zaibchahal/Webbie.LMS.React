@@ -32,9 +32,15 @@ const Lectures = (props: {
 	const [check, setCheck] = useState(false);
 	const dispatch = useDispatch<AppDispatch>();
 	useEffect(() => {
-		// dispatch(UpdateVideoSrc(lectures[0].path));
-		console.log(lectures[1].title);
-		// dispatch(UpdateVideoDetails(lectures[0]));
+		GetVideoDetails(
+			lectures[0].id,
+			lectures[0].sectionID,
+			lectures[0].courseID,
+			session?.accessToken,
+		).then((res) => {
+			console.log(res);
+			dispatch(UpdateVideoDetails(res));
+		});
 	}, []);
 
 	const { session } = useContext(AuthContext);
