@@ -1,12 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { initialCourse, initialCourseList, initialLecture } from '../../services/Courses.server';
+import {
+	initialCourses,
+	initialCoursesList,
+	initialLecture,
+	initialCourse,
+	initialVideoDetails,
+} from '../../services/Courses.server';
 
 const InitialState = {
 	isLoading: true,
-	CoursesList: initialCourseList,
-	myCourses: initialCourse,
+	CoursesList: initialCoursesList,
+	myCourses: initialCourses,
+	Course: initialCourse,
 	sectionLectures: initialLecture,
-	videoImageScr: '',
+	videoScr: '',
+	videoDetails: initialVideoDetails,
 };
 
 export const coursesSlicer = createSlice({
@@ -23,7 +31,13 @@ export const coursesSlicer = createSlice({
 			state.sectionLectures = action.payload;
 		},
 		UpdateVideoSrc: (state, action) => {
-			state.videoImageScr = action.payload;
+			state.videoScr = action.payload;
+		},
+		UpdateCourse: (state, action) => {
+			state.Course = action.payload;
+		},
+		UpdateVideoDetails: (state, action) => {
+			state.videoDetails = action.payload;
 		},
 	},
 	extraReducers: (builder) => {
@@ -32,5 +46,12 @@ export const coursesSlicer = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { UpdateCoursesList, UpdateMyCourse, UpdateSectionLectures,UpdateVideoSrc } = coursesSlicer.actions;
+export const {
+	UpdateCoursesList,
+	UpdateMyCourse,
+	UpdateSectionLectures,
+	UpdateVideoSrc,
+	UpdateCourse,
+	UpdateVideoDetails,
+} = coursesSlicer.actions;
 export default coursesSlicer.reducer;

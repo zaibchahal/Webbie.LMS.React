@@ -26,12 +26,17 @@ import SubHeader, {
 } from '../../layout/SubHeader/SubHeader';
 import { demoPagesMenu } from '../../menu';
 import { getStudyPlannerList } from '../../services/StudyPlanner';
-import { getMyCoursesList } from '../../services/Courses.server';
+import { GetCourse, GetSearchContent, getMyCoursesList } from '../../services/Courses.server';
 import AuthContext from '../../contexts/authContext';
 import { useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { useSelector } from 'react-redux';
-import { UpdateCoursesList, UpdateMyCourse, UpdateVideoSrc } from '../../@features/MyCourses/Courses.slice';
+import {
+	UpdateCourse,
+	UpdateCoursesList,
+	UpdateMyCourse,
+	UpdateVideoSrc,
+} from '../../@features/MyCourses/Courses.slice';
 
 interface IItemProps extends HTMLAttributes<HTMLDivElement> {
 	name: string;
@@ -162,19 +167,22 @@ const ProjectManagementsList = () => {
 	const { session } = useContext(AuthContext);
 	const dispatch = useDispatch<AppDispatch>();
 	let myCoursesStore = useSelector((store: RootState) => store.myCourses);
-	const handleOnClickToProjectPage = (item: any) => {
-		dispatch(UpdateMyCourse(item));
-		// dispatch(UpdateVideoSrc(item.));
-
-		navigate('../courses-page');
-		// useCallback(() => navigate(`../courses-page`), [navigate]);
+	const handleOnClickToProjectPage = (CourseId: any) => {
+		GetCourse(CourseId, session?.accessToken).then((res) => {
+			dispatch(UpdateCourse(res));
+			console.log(res);
+			navigate('../courses-page');
+		});
 	};
 
 	useEffect(() => {
 		getMyCoursesList(session?.userId, session?.accessToken).then((res) => {
 			console.log(res);
 			dispatch(UpdateCoursesList(res));
-
+		});
+		GetSearchContent('cha', session?.accessToken).then((res) => {
+			console.log(res);
+			// dispatch(UpdateCoursesList(res));
 		});
 	}, []);
 
@@ -365,7 +373,7 @@ const ProjectManagementsList = () => {
 							percent={65}
 							data-tour='project-item'
 							CourseMinute={item.time % 60}
-							onClick={() => handleOnClickToProjectPage(item)}
+							onClick={() => handleOnClickToProjectPage(item.id)}
 						/>
 					))}
 

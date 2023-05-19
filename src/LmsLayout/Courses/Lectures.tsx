@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Card, {
 	CardHeader,
 	CardLabel,
@@ -10,10 +10,11 @@ import Icon from '../../components/icon/Icon';
 import Badge from '../../components/bootstrap/Badge';
 import useDarkMode from '../../hooks/useDarkMode';
 import FormGroup from '../../components/bootstrap/forms/FormGroup';
-import { ILecture } from '../../services/Courses.server';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store';
-import { UpdateVideoSrc } from '../../@features/MyCourses/Courses.slice';
+import { GetVideoDetails, ILecture, postIsWatched } from '../../services/Courses.server';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store';
+import { UpdateVideoDetails, UpdateVideoSrc } from '../../@features/MyCourses/Courses.slice';
+import AuthContext from '../../contexts/authContext';
 
 const Lectures = (props: {
 	mainHead: string;
@@ -31,12 +32,31 @@ const Lectures = (props: {
 	const [check, setCheck] = useState(false);
 	const dispatch = useDispatch<AppDispatch>();
 	useEffect(() => {
-		dispatch(UpdateVideoSrc(lectures[0].path));
+		// dispatch(UpdateVideoSrc(lectures[0].path));
+		console.log(lectures[1].title);
+		// dispatch(UpdateVideoDetails(lectures[0]));
 	}, []);
-	const handleVideoPlay = (url: string) => {
-		dispatch(UpdateVideoSrc(url));
-		console.log(url);
+
+	const { session } = useContext(AuthContext);
+	let myCourseStore = useSelector((store: RootState) => store.myCourses);
+
+	const handleVideoPlay = (l: ILecture) => {
+		// dispatch(UpdateVideoSrc(l.path));
+		GetVideoDetails(l.id, l.sectionID, l.courseID, session?.accessToken).then((res) => {
+			console.log(res);
+			dispatch(UpdateVideoDetails(res));
+			postIsWatched(l.id, session?.accessToken).then((res) => {
+				console.log(res);
+			});
+		});
 	};
+
+	// const handleIsWatched=()=>{
+	// 	postIsWatched(session?.accessToken).then((res) => {
+	// 		console.log(res);
+	// 		dispatch(UpdateVideoDetails(res));
+	// 	});
+	// }
 
 	return (
 		<div>
@@ -92,13 +112,12 @@ const Lectures = (props: {
 										<input
 											type='checkbox'
 											name=''
-											checked={check}
-											onChange={() => setCheck(!check)}
+											checked={l.isWatched}
 											id=''
 										/>
 									</FormGroup>
 									<div
-										onClick={() => handleVideoPlay(l.path)}
+										onClick={() => handleVideoPlay(l)}
 										className='mt-4 text-decoration-none mx-2'>
 										<div className='col-auto text-decoration-none text-bolder'>
 											<Icon

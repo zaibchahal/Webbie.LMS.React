@@ -31,6 +31,10 @@ export const Student_Urls = {
 	GetKnowladgeBase: API_BASE_URL + '/services/app/KnowledgeBaseService/GetKnowledgeBase',
 	GetAllCoursesList: API_BASE_URL + '/services/app/CourseService/GetAllCourseForStudent',
 	GetMyCoursesList: API_BASE_URL + '/services/app/EnrollmentService/MyCourses',
+	GetSearchContent: API_BASE_URL + '/services/app/SearchService/SearchContent',
+	GetCourse: API_BASE_URL + '/services/app/CourseService/GetCourseDetail',
+	GetVideoDetails: API_BASE_URL + '/services/app/WatchService/GetVideoPath',
+	postIsWatched: API_BASE_URL + '/services/app/WatchService/IsWatched',
 };
 
 export const AppConst = {

@@ -19,6 +19,7 @@ export const getLiveClassList = async (studentID: number, accessToken: string | 
 				withCredentials: true,
 			},
 		);
+		console.log('successfully Get Live Session');
 		return response.data.result || [];
 	} catch {
 		(e: any) => console.log(e + 'errore error');
