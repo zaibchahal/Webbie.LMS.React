@@ -1,6 +1,7 @@
 {
 	"name": "facit",
 	"version": "4.2.0",
+	"homepage": "https://AqibAli137.github.io/Facit-React-App",
 	"private": true,
 	"scripts": {
 		"start": "react-scripts start",
@@ -15,7 +16,10 @@
 		"icon": "svgr SvgIcons -d src/components/icon/svg-icons --typescript",
 		"storybook": "start-storybook -p 6006",
 		"storybook-withoutCache": "start-storybook -p 6006 --no-manager-cache",
-		"build-storybook": "build-storybook"
+		"build-storybook": "build-storybook",
+		
+		"predeploy": "npm run build",
+		"deploy": "gh-pages -d build"
 	},
 	"jest": {
 		"transformIgnorePatterns": [
@@ -162,6 +166,7 @@
 		"eslint-plugin-prettier": "^4.2.1",
 		"eslint-plugin-react": "^7.32.2",
 		"eslint-plugin-react-hooks": "^4.6.0",
+		"gh-pages": "^5.0.0",
 		"prettier": "^2.8.7",
 		"react-scripts": "5.0.1",
 		"sass": "^1.60.0",
