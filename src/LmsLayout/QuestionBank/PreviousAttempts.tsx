@@ -28,7 +28,7 @@ const QuestionBank = () => {
             setData(d as IResultProp[]);
         };
         fetchData();
-    }, []);
+    }, [session?.userId, session?.accessToken]);
 
 
     const [currentPage, setCurrentPage] = useState(1);

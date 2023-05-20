@@ -28,8 +28,8 @@ import useDarkMode from '../../hooks/useDarkMode';
 
 const TicketChat = () => {
 	function getMessages(): IGroupMessages[] | null {
-		if (LmsChat.Group_Chat_Dummy_Data) {
-			return LmsChat.Group_Chat_Dummy_Data;
+		if (LmsChat.GroupChatDummyData) {
+			return LmsChat.GroupChatDummyData;
 		}
 		return null;
 	}

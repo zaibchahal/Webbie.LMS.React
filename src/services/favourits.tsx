@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useContext, useState } from 'react';
 import axios from 'axios';
-import { AppConst, Student_Urls } from '../common/data/constants';
+import { AppConst, STUDENT_URLS } from '../common/data/constants';
 
 export const getFavouriteList = async (type: number, accessToken: string | undefined) => {
     try {
-        const response = await axios.get(Student_Urls.GetFovouritsList + "?ObjectType=" + type,
+        const response = await axios.get(STUDENT_URLS.GetFovouritsList + "?ObjectType=" + type,
             {
                 headers: {
                     Accept: 'text/plain',

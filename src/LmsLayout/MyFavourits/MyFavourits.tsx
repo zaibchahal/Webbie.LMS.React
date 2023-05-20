@@ -1,3 +1,4 @@
+import React from 'react';
 import { LmsFeatures } from '../../menu';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import Card, { CardTabItem } from '../../components/bootstrap/Card';

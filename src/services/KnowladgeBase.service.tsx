@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useContext, useState } from 'react';
 import axios from 'axios';
-import { AppConst, Student_Urls } from '../common/data/constants';
+import { AppConst, STUDENT_URLS } from '../common/data/constants';
 
 export const getKnoladgeBaseList = async (accessToken: string | undefined) => {
 	try {
-		const response = await axios.get(Student_Urls.GetKnowladgeBase, {
+		const response = await axios.get(STUDENT_URLS.GetKnowladgeBase, {
 			headers: {
 				Accept: 'text/plain',
 				'Content-Type': 'application/json-patch+json',

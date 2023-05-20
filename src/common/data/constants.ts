@@ -2,13 +2,13 @@
 export const BASE_URL = 'https://stupefied-proskuriakova.69-10-42-234.plesk.page';
 export const API_BASE_URL = BASE_URL + '/api';
 
-export const Auth_Urls = {
+export const AUTH_URLS = {
     IsTenantAvailable: API_BASE_URL + '/services/app/Account/IsTenantAvailable',
     TokenAuth_Authenticate: API_BASE_URL + '/TokenAuth/Authenticate',
 };
 
 
-export const QBank_Urls = {
+export const QBANK_URLS = {
     GetQuestionCount: '/services/app/QuestionBankService/GetQuestionCount',
     GetSystemQuestionCount: '/services/app/QuestionBankService/GetSystemQuestionCount',
     CreateTestResult: '/services/app/QuestionBankService/CreateTestResult',
@@ -21,7 +21,7 @@ export const QBank_Urls = {
     Completed: '/services/app/QuestionBankService/Completed',
 };
 
-export const Profile_Urls = {
+export const PROFILE_URLS = {
     GetCurrentUserProfileForEdit: API_BASE_URL + '/services/app/Profile/GetCurrentUserProfileForEdit',
     GetProfilePicture: API_BASE_URL + '/services/app/Profile/GetProfilePicture',
     ChangePassword: API_BASE_URL + '/services/app/Profile/ChangePassword',
@@ -31,23 +31,23 @@ export const Profile_Urls = {
     DownloadTempFile: BASE_URL + '/File/DownloadTempFile', //fileToken fileName=ProfilePicture &fileType=image/jpeg &v=1683616970003
 };
 
-export const Student_Urls = {
-	GetFovouritsList: API_BASE_URL + '/services/app/QuestionBankService/GetFovouritsList',
-	GetLiveClassList: API_BASE_URL + '/services/app/LiveSessionService/MyLiveSession',
-	GetTicketList: API_BASE_URL + '/services/app/TicketService/GetTicket',
-	PostTicket: API_BASE_URL + '/services/app/TicketService/CreatUpdateTicket',
-	SupportCategotyDropdown: API_BASE_URL + '/services/app/DropDownService/GetSupportCategory',
-	SupportPriorityDropdown: API_BASE_URL + '/services/app/DropDownService/GetTicketPriority',
-	GetStudyPlannerList: API_BASE_URL + '/services/app/TaskReminderService/GetTaskReminder',
-	PostStudyPlanner: API_BASE_URL + '/services/app/TaskReminderService/CreateTaskReminder',
-	GetFaq: API_BASE_URL + '/services/app/FaqsService/GetFaqs',
-	GetKnowladgeBase: API_BASE_URL + '/services/app/KnowledgeBaseService/GetKnowledgeBase',
-	GetAllCoursesList: API_BASE_URL + '/services/app/CourseService/GetAllCourseForStudent',
-	GetMyCoursesList: API_BASE_URL + '/services/app/EnrollmentService/MyCourses',
-	GetSearchContent: API_BASE_URL + '/services/app/SearchService/SearchContent',
-	GetCourse: API_BASE_URL + '/services/app/CourseService/GetCourseDetail',
-	GetVideoDetails: API_BASE_URL + '/services/app/WatchService/GetVideoPath',
-	postIsWatched: API_BASE_URL + '/services/app/WatchService/IsWatched',
+export const STUDENT_URLS = {
+    GetFovouritsList: API_BASE_URL + '/services/app/QuestionBankService/GetFovouritsList',
+    GetLiveClassList: API_BASE_URL + '/services/app/LiveSessionService/MyLiveSession',
+    GetTicketList: API_BASE_URL + '/services/app/TicketService/GetTicket',
+    PostTicket: API_BASE_URL + '/services/app/TicketService/CreatUpdateTicket',
+    SupportCategotyDropdown: API_BASE_URL + '/services/app/DropDownService/GetSupportCategory',
+    SupportPriorityDropdown: API_BASE_URL + '/services/app/DropDownService/GetTicketPriority',
+    GetStudyPlannerList: API_BASE_URL + '/services/app/TaskReminderService/GetTaskReminder',
+    PostStudyPlanner: API_BASE_URL + '/services/app/TaskReminderService/CreateTaskReminder',
+    GetFaq: API_BASE_URL + '/services/app/FaqsService/GetFaqs',
+    GetKnowladgeBase: API_BASE_URL + '/services/app/KnowledgeBaseService/GetKnowledgeBase',
+    GetAllCoursesList: API_BASE_URL + '/services/app/CourseService/GetAllCourseForStudent',
+    GetMyCoursesList: API_BASE_URL + '/services/app/EnrollmentService/MyCourses',
+    GetSearchContent: API_BASE_URL + '/services/app/SearchService/SearchContent',
+    GetCourse: API_BASE_URL + '/services/app/CourseService/GetCourseDetail',
+    GetVideoDetails: API_BASE_URL + '/services/app/WatchService/GetVideoPath',
+    postIsWatched: API_BASE_URL + '/services/app/WatchService/IsWatched',
 };
 
 export const AppConst = {

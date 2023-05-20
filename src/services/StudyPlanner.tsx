@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useContext, useState } from 'react';
 import axios from 'axios';
-import { AppConst, Student_Urls } from '../common/data/constants';
+import { AppConst, STUDENT_URLS } from '../common/data/constants';
 
 export const getStudyPlannerList = async (
 	userId: number | undefined,
 	accessToken: string | undefined,
 ) => {
 	try {
-		const response = await axios.get(Student_Urls.GetStudyPlannerList + '?UserId=' + userId, {
+		const response = await axios.get(STUDENT_URLS.GetStudyPlannerList + '?UserId=' + userId, {
 			headers: {
 				Accept: 'text/plain',
 				'Content-Type': 'application/json-patch+json',
@@ -28,7 +28,7 @@ export const postStudyPlanner = async (
 	accessToken: string | undefined,
 ) => {
 	try {
-		const response = await axios.post(Student_Urls.PostStudyPlanner, studyPlannerData, {
+		const response = await axios.post(STUDENT_URLS.PostStudyPlanner, studyPlannerData, {
 			headers: {
 				Accept: 'text/plain',
 				'Content-Type': 'application/json-patch+json',

@@ -28,7 +28,7 @@ const PaperList = () => {
             setData(d as IQuestionPapersProp[]);
         };
         fetchData();
-    }, []);
+    }, [session?.userId, session?.accessToken]);
 
 
     const [currentPage, setCurrentPage] = useState(1);

@@ -32,7 +32,7 @@ const FavouritePDF: FC<IFavouritePDFProps> = ({ isFluid }) => {
             setData(d as IFavouriteList[]);
         };
         fetchData();
-    }, []);
+    }, [session?.accessToken]);
 
 
     const [currentPage, setCurrentPage] = useState(1);

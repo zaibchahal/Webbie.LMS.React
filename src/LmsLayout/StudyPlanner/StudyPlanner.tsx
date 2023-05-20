@@ -7,11 +7,11 @@ import { Calendar as DatePicker } from 'react-date-range';
 import USERS, { getUserDataWithuserName, IUserProps } from '../../common/data/userSessionService';
 import eventList, { IEvents } from '../../common/data/events';
 import {
-	CalendarTodayButton,
-	CalendarViewModeButtons,
-	getLabel,
-	getUnitType,
-	getViews,
+    CalendarTodayButton,
+    CalendarViewModeButtons,
+    getLabel,
+    getUnitType,
+    getViews,
 } from '../../components/extras/calendarHelper';
 import SERVICES, { getServiceDataWithServiceName } from '../../common/data/serviceDummyData';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
@@ -23,17 +23,17 @@ import Popovers from '../../components/bootstrap/Popovers';
 import Page from '../../layout/Page/Page';
 import Avatar, { AvatarGroup } from '../../components/Avatar';
 import Card, {
-	CardActions,
-	CardBody,
-	CardHeader,
-	CardLabel,
-	CardSubTitle,
-	CardTitle,
+    CardActions,
+    CardBody,
+    CardHeader,
+    CardLabel,
+    CardSubTitle,
+    CardTitle,
 } from '../../components/bootstrap/Card';
 import OffCanvas, {
-	OffCanvasBody,
-	OffCanvasHeader,
-	OffCanvasTitle,
+    OffCanvasBody,
+    OffCanvasHeader,
+    OffCanvasTitle,
 } from '../../components/bootstrap/OffCanvas';
 import FormGroup from '../../components/bootstrap/forms/FormGroup';
 import Select from '../../components/bootstrap/forms/Select';
@@ -53,365 +53,364 @@ const localizer = dayjsLocalizer(dayjs);
 const now = new Date();
 
 interface IEvent extends IEvents {
-	user?: IUserProps;
-	users?: IUserProps[];
-	color?: TColor;
+    user?: IUserProps;
+    users?: IUserProps[];
+    color?: TColor;
 }
 
 const MyEvent = (data: { event: IEvent }) => {
-	const { darkModeStatus } = useDarkMode();
+    const { darkModeStatus } = useDarkMode();
 
-	const { event } = data;
-	return (
-		<div className='row g-2'>
-			<div className='col text-truncate'>
-				{event?.icon && <Icon icon={event?.icon} size='lg' className='me-2' />}
-				{event?.name}
-			</div>
-			{event?.user?.src && (
-				<div className='col-auto'>
-					<div className='row g-1 align-items-baseline'>
-						<div className='col-auto'>
-							<Avatar src={event?.user?.src} srcSet={event?.user?.srcSet} size={18} />
-						</div>
-						<small
-							className={classNames('col-auto text-truncate', {
-								'text-dark': !darkModeStatus,
-								'text-white': darkModeStatus,
-							})}>
-							{event?.user?.name}
-						</small>
-					</div>
-				</div>
-			)}
-			{event?.users && (
-				<div className='col-auto'>
-					<AvatarGroup size={18}>
-						{event.users.map((user) => (
-							// eslint-disable-next-line react/jsx-props-no-spreading
-							<Avatar key={user.src} {...user} />
-						))}
-					</AvatarGroup>
-				</div>
-			)}
-		</div>
-	);
+    const { event } = data;
+    return (
+        <div className='row g-2'>
+            <div className='col text-truncate'>
+                {event?.icon && <Icon icon={event?.icon} size='lg' className='me-2' />}
+                {event?.name}
+            </div>
+            {event?.user?.src && (
+                <div className='col-auto'>
+                    <div className='row g-1 align-items-baseline'>
+                        <div className='col-auto'>
+                            <Avatar src={event?.user?.src} srcSet={event?.user?.srcSet} size={18} />
+                        </div>
+                        <small
+                            className={classNames('col-auto text-truncate', {
+                                'text-dark': !darkModeStatus,
+                                'text-white': darkModeStatus,
+                            })}>
+                            {event?.user?.name}
+                        </small>
+                    </div>
+                </div>
+            )}
+            {event?.users && (
+                <div className='col-auto'>
+                    <AvatarGroup size={18}>
+                        {event.users.map((user) => (
+                            // eslint-disable-next-line react/jsx-props-no-spreading
+                            <Avatar key={user.src} {...user} />
+                        ))}
+                    </AvatarGroup>
+                </div>
+            )}
+        </div>
+    );
 };
 
 const MyWeekEvent = (data: { event: IEvent }) => {
-	const { darkModeStatus } = useDarkMode();
+    const { darkModeStatus } = useDarkMode();
 
-	const { event } = data;
-	return (
-		<div className='row g-2'>
-			<div className='col-12 text-truncate'>
-				{event?.icon && <Icon icon={event?.icon} size='lg' className='me-2' />}
-				{event?.name}
-			</div>
-			{event?.user && (
-				<div className='col-12'>
-					<div className='row g-1 align-items-baseline'>
-						<div className='col-auto'>
-							{/* eslint-disable-next-line react/jsx-props-no-spreading */}
-							<Avatar {...event?.user} size={18} />
-						</div>
-						<small
-							className={classNames('col-auto text-truncate', {
-								'text-dark': !darkModeStatus,
-								'text-white': darkModeStatus,
-							})}>
-							{event?.user?.name}
-						</small>
-					</div>
-				</div>
-			)}
-			{event?.users && (
-				<div className='col-12'>
-					<AvatarGroup size={18}>
-						{event.users.map((user) => (
-							// eslint-disable-next-line react/jsx-props-no-spreading
-							<Avatar key={user.src} {...user} />
-						))}
-					</AvatarGroup>
-				</div>
-			)}
-		</div>
-	);
+    const { event } = data;
+    return (
+        <div className='row g-2'>
+            <div className='col-12 text-truncate'>
+                {event?.icon && <Icon icon={event?.icon} size='lg' className='me-2' />}
+                {event?.name}
+            </div>
+            {event?.user && (
+                <div className='col-12'>
+                    <div className='row g-1 align-items-baseline'>
+                        <div className='col-auto'>
+                            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                            <Avatar {...event?.user} size={18} />
+                        </div>
+                        <small
+                            className={classNames('col-auto text-truncate', {
+                                'text-dark': !darkModeStatus,
+                                'text-white': darkModeStatus,
+                            })}>
+                            {event?.user?.name}
+                        </small>
+                    </div>
+                </div>
+            )}
+            {event?.users && (
+                <div className='col-12'>
+                    <AvatarGroup size={18}>
+                        {event.users.map((user) => (
+                            // eslint-disable-next-line react/jsx-props-no-spreading
+                            <Avatar key={user.src} {...user} />
+                        ))}
+                    </AvatarGroup>
+                </div>
+            )}
+        </div>
+    );
 };
 
 const MyEventDay = (data: { event: IEvent }) => {
-	const { event } = data;
-	return (
-		<Tooltips
-			title={`${event?.name} / ${dayjs(event.start).format('LT')} - ${dayjs(event.end).format(
-				'LT',
-			)}`}>
-			<div className='row g-2'>
-				{event?.user?.src && (
-					<div className='col-auto'>
-						<Avatar src={event?.user?.src} srcSet={event?.user?.srcSet} size={16} />
-					</div>
-				)}
-				{event?.users && (
-					<div className='col'>
-						<AvatarGroup size={16}>
-							{event.users.map((user) => (
-								// eslint-disable-next-line react/jsx-props-no-spreading
-								<Avatar key={user.src} {...user} />
-							))}
-						</AvatarGroup>
-					</div>
-				)}
-				<small className='col text-truncate'>
-					{event?.icon && <Icon icon={event?.icon} size='lg' className='me-2' />}
-					{event?.name}
-				</small>
-			</div>
-		</Tooltips>
-	);
+    const { event } = data;
+    return (
+        <Tooltips
+            title={`${event?.name} / ${dayjs(event.start).format('LT')} - ${dayjs(event.end).format(
+                'LT',
+            )}`}>
+            <div className='row g-2'>
+                {event?.user?.src && (
+                    <div className='col-auto'>
+                        <Avatar src={event?.user?.src} srcSet={event?.user?.srcSet} size={16} />
+                    </div>
+                )}
+                {event?.users && (
+                    <div className='col'>
+                        <AvatarGroup size={16}>
+                            {event.users.map((user) => (
+                                // eslint-disable-next-line react/jsx-props-no-spreading
+                                <Avatar key={user.src} {...user} />
+                            ))}
+                        </AvatarGroup>
+                    </div>
+                )}
+                <small className='col text-truncate'>
+                    {event?.icon && <Icon icon={event?.icon} size='lg' className='me-2' />}
+                    {event?.name}
+                </small>
+            </div>
+        </Tooltips>
+    );
 };
 
 const CalendarPage = () => {
-	const { darkModeStatus, themeStatus } = useDarkMode();
+    const { darkModeStatus, themeStatus } = useDarkMode();
 
-	const [employeeList, setEmployeeList] = useState({
-		[USERS.JOHN.userName]: true,
-		[USERS.ELLA.userName]: true,
-		[USERS.RYAN.userName]: true,
-		[USERS.GRACE.userName]: true,
-	});
-	// Events
-	const [events, setEvents] = useState(eventList);
+    const [employeeList, setEmployeeList] = useState({
+        [USERS.JOHN.userName]: true,
+        [USERS.ELLA.userName]: true,
+        [USERS.RYAN.userName]: true,
+        [USERS.GRACE.userName]: true,
+    });
+    // Events
+    const [events, setEvents] = useState(eventList);
 
-	const { session } = useContext(AuthContext);
-	const { profilePicture, userData, handleSetProfilePicture } = useContext(AuthContext);
+    const { session } = useContext(AuthContext);
+    const { profilePicture, userData, handleSetProfilePicture } = useContext(AuthContext);
 
-	// FOR DEV
-	useEffect(() => {
-		getStudyPlannerList(session?.userId, session?.accessToken).then((res) => {
-			// console.log(res);
-			setEvents(res.items);
+    // FOR DEV
+    useEffect(() => {
+        getStudyPlannerList(session?.userId, session?.accessToken).then((res) => {
+            // console.log(res);
+            setEvents(res.items);
 
-			const convertedData = res.items.map((data: any) => ({
-				id: data.id,
-				start: dayjs(data.start).startOf('day').add(9, 'hour').toDate(),
-				end: dayjs(data.end).startOf('day').toDate(),
-				color: 'danger',
-				name: data.title,
-				user: userData,
-			}));
-			// console.log(session);
-			// console.log(convertedData);
-			setEvents(convertedData);
-			// console.log(eventList);
-		});
-	}, []);
+            const convertedData = res.items.map((data: any) => ({
+                id: data.id,
+                start: dayjs(data.start).startOf('day').add(9, 'hour').toDate(),
+                end: dayjs(data.end).startOf('day').toDate(),
+                color: 'danger',
+                name: data.title,
+                user: userData,
+            }));
+            // console.log(session);
+            // console.log(convertedData);
+            setEvents(convertedData);
+            // console.log(eventList);
+        });
+    }, [session?.accessToken, session?.userId, userData]);
 
-	const initialEventItem: IEvent = {
-		start: undefined,
-		end: undefined,
-		name: undefined,
-		id: undefined,
-		user: undefined,
-	};
-	// Selected Event
-	const [eventItem, setEventItem] = useState<IEvent>(initialEventItem);
-	// Calendar View Mode
-	const [viewMode, setViewMode] = useState<TView>(Views.MONTH);
-	// Calendar Date
-	const [date, setDate] = useState(new Date());
-	// Item edit panel status
-	const [toggleInfoEventCanvas, setToggleInfoEventCanvas] = useState(false);
-	const setInfoEvent = () => setToggleInfoEventCanvas(!toggleInfoEventCanvas);
-	const [eventAdding, setEventAdding] = useState(false);
+    const initialEventItem: IEvent = {
+        start: undefined,
+        end: undefined,
+        name: undefined,
+        id: undefined,
+        user: undefined,
+    };
+    // Selected Event
+    const [eventItem, setEventItem] = useState<IEvent>(initialEventItem);
+    // Calendar View Mode
+    const [viewMode, setViewMode] = useState<TView>(Views.MONTH);
+    // Calendar Date
+    const [date, setDate] = useState(new Date());
+    // Item edit panel status
+    const [toggleInfoEventCanvas, setToggleInfoEventCanvas] = useState(false);
+    const setInfoEvent = () => setToggleInfoEventCanvas(!toggleInfoEventCanvas);
+    const [eventAdding, setEventAdding] = useState(false);
 
-	// Calendar Unit Type
-	const unitType = getUnitType(viewMode);
-	// Calendar Date Label
-	const calendarDateLabel = getLabel(date, viewMode);
+    // Calendar Unit Type
+    const unitType = getUnitType(viewMode);
+    // Calendar Date Label
+    const calendarDateLabel = getLabel(date, viewMode);
 
-	// Change view mode
-	const handleViewMode = (e: dayjs.ConfigType) => {
-		setDate(dayjs(e).toDate());
-		setViewMode(Views.DAY);
-	};
+    // Change view mode
+    const handleViewMode = (e: dayjs.ConfigType) => {
+        setDate(dayjs(e).toDate());
+        setViewMode(Views.DAY);
+    };
 
-	// View modes; Month, Week, Work Week, Day and Agenda
-	const views = getViews();
+    // View modes; Month, Week, Work Week, Day and Agenda
+    const views = getViews();
 
-	// New Event
-	const handleSelect = ({ start, end }: { start: any; end: any }) => {
-		setEventAdding(true);
-		setEventItem({ start, end });
-	};
+    // New Event
+    const handleSelect = ({ start, end }: { start: any; end: any }) => {
+        setEventAdding(true);
+        setEventItem({ start, end });
+    };
 
-	useEffect(() => {
-		if (eventAdding) {
-			setInfoEvent();
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [eventAdding]);
+    useEffect(() => {
+        if (eventAdding) {
+            setInfoEvent();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [eventAdding]);
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const eventStyleGetter = (
-		event: { color?: TColor },
-		start: any,
-		end: any,
-		isSelected: boolean,
-	) => {
-		const isActiveEvent = start <= now && end >= now;
-		const isPastEvent = end < now;
-		const color = isActiveEvent ? 'success' : event.color;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const eventStyleGetter = (
+        event: { color?: TColor },
+        start: any,
+        end: any,
+        isSelected: boolean,
+    ) => {
+        const isActiveEvent = start <= now && end >= now;
+        const isPastEvent = end < now;
+        const color = isActiveEvent ? 'success' : event.color;
 
-		return {
-			className: classNames({
-				[`bg-l${
-					darkModeStatus ? 'o25' : '10'
-				}-${getRandomBootstrapColor()}-${color} text-${color}`]: color,
-				'border border-success': isActiveEvent,
-				'opacity-50': isPastEvent,
-			}),
-		};
-	};
+        return {
+            className: classNames({
+                [`bg-l${darkModeStatus ? 'o25' : '10'
+                    }-${getRandomBootstrapColor()}-${color} text-${color}`]: color,
+                'border border-success': isActiveEvent,
+                'opacity-50': isPastEvent,
+            }),
+        };
+    };
 
-	const formik = useFormik({
-		initialValues: {
-			eventName: '',
-			eventStart: '',
-			eventEnd: '',
-			eventEmployee: '',
-			eventAllDay: false,
-		},
-		onSubmit: (values) => {
-			if (eventAdding) {
-				setEvents((prevEvents) => [
-					...prevEvents,
-					{
-						id: values.eventStart,
-						...getServiceDataWithServiceName(values.eventName),
-						end: values.eventEnd,
-						start: values.eventStart,
-						user: { ...getUserDataWithuserName(values.eventEmployee) },
-					},
-				]);
-			}
-			setToggleInfoEventCanvas(false);
-			setEventAdding(false);
-			setEventItem(initialEventItem);
-			formik.setValues({
-				eventName: '',
-				eventStart: '',
-				eventEnd: '',
-				eventEmployee: '',
-				eventAllDay: false,
-			});
-		},
-	});
+    const formik = useFormik({
+        initialValues: {
+            eventName: '',
+            eventStart: '',
+            eventEnd: '',
+            eventEmployee: '',
+            eventAllDay: false,
+        },
+        onSubmit: (values) => {
+            if (eventAdding) {
+                setEvents((prevEvents) => [
+                    ...prevEvents,
+                    {
+                        id: values.eventStart,
+                        ...getServiceDataWithServiceName(values.eventName),
+                        end: values.eventEnd,
+                        start: values.eventStart,
+                        user: { ...getUserDataWithuserName(values.eventEmployee) },
+                    },
+                ]);
+            }
+            setToggleInfoEventCanvas(false);
+            setEventAdding(false);
+            setEventItem(initialEventItem);
+            formik.setValues({
+                eventName: '',
+                eventStart: '',
+                eventEnd: '',
+                eventEmployee: '',
+                eventAllDay: false,
+            });
+        },
+    });
 
-	useEffect(() => {
-		if (eventItem)
-			formik.setValues({
-				...formik.values,
-				// @ts-ignore
-				eventId: eventItem.id || null,
-				eventName: eventItem.name || '',
-				eventStart: dayjs(eventItem.start).format(),
-				eventEnd: dayjs(eventItem.end).format(),
-				eventEmployee: eventItem?.user?.userName || '',
-			});
-		return () => {};
-		//	eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [eventItem]);
-	const [newEventName, setNewEventName] = useState('');
-	const { eventName, eventStart, eventEnd, eventEmployee, eventAllDay } = formik.values;
+    useEffect(() => {
+        if (eventItem)
+            formik.setValues({
+                ...formik.values,
+                // @ts-ignore
+                eventId: eventItem.id || null,
+                eventName: eventItem.name || '',
+                eventStart: dayjs(eventItem.start).format(),
+                eventEnd: dayjs(eventItem.end).format(),
+                eventEmployee: eventItem?.user?.userName || '',
+            });
+        return () => { };
+        //	eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [eventItem]);
+    const [newEventName, setNewEventName] = useState('');
+    const { eventName, eventStart, eventEnd, eventEmployee, eventAllDay } = formik.values;
 
-	const InsertData: IStudyPlanner = {
-		tenantId: parseInt(getCookie(AppConst.TenantID)),
-		title: newEventName,
-		description: '',
-		dateFrom: eventStart,
-		dateTo: eventEnd,
-		isFullDay: eventAllDay,
-		isDeleted: false,
-		deleterUserId: 0,
-		deletionTime: '',
-		lastModificationTime: '',
-		lastModifierUserId: 0,
-		creationTime: dayjs().format(),
-		creatorUserId: session?.userId!,
-		id: 0,
-	};
+    const InsertData: IStudyPlanner = {
+        tenantId: parseInt(getCookie(AppConst.TenantID)),
+        title: newEventName,
+        description: '',
+        dateFrom: eventStart,
+        dateTo: eventEnd,
+        isFullDay: eventAllDay,
+        isDeleted: false,
+        deleterUserId: 0,
+        deletionTime: '',
+        lastModificationTime: '',
+        lastModifierUserId: 0,
+        creationTime: dayjs().format(),
+        creatorUserId: session?.userId!,
+        id: 0,
+    };
 
-	const handleSubmitEvent = () => {
-		postStudyPlanner(InsertData, session?.accessToken)
-			.then((res) => {
-				console.log(res);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
-	// END:: Calendar
-	return (
-		<PageWrapper title={demoPagesMenu.appointment.subMenu.dashboard.text}>
-			<SubHeader>
-				<SubHeaderLeft>
-					<Icon icon='Info' className='me-2' size='2x' />
-					<span className='text-muted'>
-						You have
-						<Icon icon='Check Circle ' color='success' className='mx-1' size='lg' /> 12
-						approved appointments and
-						<Icon icon='pending_actions ' color='danger' className='mx-1' size='lg' /> 3
-						pending appointments for today.
-					</span>
-				</SubHeaderLeft>
-				<SubHeaderRight>
-					<Popovers
-						desc={
-							<DatePicker
-								onChange={(item) => setDate(item)}
-								date={date}
-								color={process.env.REACT_APP_PRIMARY_COLOR}
-							/>
-						}
-						placement='bottom-end'
-						className='mw-100'
-						trigger='click'>
-						<Button color='light'>{calendarDateLabel}</Button>
-					</Popovers>
-				</SubHeaderRight>
-			</SubHeader>
-			<Page container='fluid'>
-				<div className='row mb-4 g-3'>
-					{Object.keys(USERS).map((u) => (
-						<div key={USERS[u].userName} className='col-auto'>
-							<Popovers
-								trigger='hover'
-								desc={
-									<>
-										<div className='h6'>{`${USERS[u].name} ${USERS[u].surname}`}</div>
-										<div>
-											<b>Event: </b>
-											{
-												events.filter(
-													(i) => i.user?.userName === USERS[u].userName,
-												).length
-											}
-										</div>
-										<div>
-											<b>Approved: </b>
-											{
-												events.filter(
-													(i) =>
-														i.user?.userName === USERS[u].userName &&
-														i.color === 'info',
-												).length
-											}
-										</div>
-									</>
-								}>
-								<div className='position-relative'>
-									{/* <Avatar
+    const handleSubmitEvent = () => {
+        postStudyPlanner(InsertData, session?.accessToken)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+    // END:: Calendar
+    return (
+        <PageWrapper title={demoPagesMenu.appointment.subMenu.dashboard.text}>
+            <SubHeader>
+                <SubHeaderLeft>
+                    <Icon icon='Info' className='me-2' size='2x' />
+                    <span className='text-muted'>
+                        You have
+                        <Icon icon='Check Circle ' color='success' className='mx-1' size='lg' /> 12
+                        approved appointments and
+                        <Icon icon='pending_actions ' color='danger' className='mx-1' size='lg' /> 3
+                        pending appointments for today.
+                    </span>
+                </SubHeaderLeft>
+                <SubHeaderRight>
+                    <Popovers
+                        desc={
+                            <DatePicker
+                                onChange={(item) => setDate(item)}
+                                date={date}
+                                color={process.env.REACT_APP_PRIMARY_COLOR}
+                            />
+                        }
+                        placement='bottom-end'
+                        className='mw-100'
+                        trigger='click'>
+                        <Button color='light'>{calendarDateLabel}</Button>
+                    </Popovers>
+                </SubHeaderRight>
+            </SubHeader>
+            <Page container='fluid'>
+                <div className='row mb-4 g-3'>
+                    {Object.keys(USERS).map((u) => (
+                        <div key={USERS[u].userName} className='col-auto'>
+                            <Popovers
+                                trigger='hover'
+                                desc={
+                                    <>
+                                        <div className='h6'>{`${USERS[u].name} ${USERS[u].surname}`}</div>
+                                        <div>
+                                            <b>Event: </b>
+                                            {
+                                                events.filter(
+                                                    (i) => i.user?.userName === USERS[u].userName,
+                                                ).length
+                                            }
+                                        </div>
+                                        <div>
+                                            <b>Approved: </b>
+                                            {
+                                                events.filter(
+                                                    (i) =>
+                                                        i.user?.userName === USERS[u].userName &&
+                                                        i.color === 'info',
+                                                ).length
+                                            }
+                                        </div>
+                                    </>
+                                }>
+                                <div className='position-relative'>
+                                    {/* <Avatar
 										srcSet={USERS[u].srcSet}
 										src={USERS[u].src}
 										color={USERS[u].color}
@@ -429,7 +428,7 @@ const CalendarPage = () => {
 											})
 										}
 									/> */}
-									{/* {!!events.filter(
+                                    {/* {!!events.filter(
 										(i) =>
 											i.user?.userName === USERS[u].userName &&
 											i.start &&
@@ -441,213 +440,213 @@ const CalendarPage = () => {
 											<span className='visually-hidden'>Online user</span>
 										</span>
 									)} */}
-								</div>
-							</Popovers>
-						</div>
-					))}
-				</div>
-				<div className='row h-100'>
-					<div className='col-xl-9'>
-						<Card stretch style={{ minHeight: 600 }}>
-							<CardHeader>
-								<CardActions>
-									<CalendarTodayButton
-										unitType={unitType}
-										date={date}
-										setDate={setDate}
-										viewMode={viewMode}
-									/>
-								</CardActions>
-								<CardActions>
-									<CalendarViewModeButtons
-										setViewMode={setViewMode}
-										viewMode={viewMode}
-									/>
-								</CardActions>
-							</CardHeader>
-							<CardBody isScrollable>
-								<Calendar
-									selectable
-									toolbar={false}
-									localizer={localizer}
-									events={events.filter(
-										(i) => i?.user && employeeList[i.user.userName],
-									)}
-									defaultView={Views.WEEK}
-									views={views}
-									view={viewMode}
-									date={date}
-									onNavigate={(_date) => setDate(_date)}
-									scrollToTime={new Date(1970, 1, 1, 6)}
-									defaultDate={new Date()}
-									onSelectEvent={(event) => {
-										setInfoEvent();
-										setEventItem(event);
-									}}
-									onSelectSlot={handleSelect}
-									onView={handleViewMode}
-									onDrillDown={handleViewMode}
-									components={{
-										event: MyEvent, // used by each view (Month, Day, Week)
-										week: {
-											event: MyWeekEvent,
-										},
-										work_week: {
-											event: MyWeekEvent,
-										},
-									}}
-									eventPropGetter={eventStyleGetter}
-								/>
-							</CardBody>
-						</Card>
-					</div>
-					<div className='col-xl-3'>
-						<Card stretch style={{ minHeight: 600 }}>
-							<CardHeader>
-								<CardLabel icon='Today' iconColor='info'>
-									<CardTitle>{dayjs(date).format('MMMM Do YYYY')}</CardTitle>
-									<CardSubTitle>{dayjs(date).fromNow()}</CardSubTitle>
-								</CardLabel>
-								<CardActions>
-									<CalendarTodayButton
-										unitType={Views.DAY}
-										date={date}
-										setDate={setDate}
-										viewMode={Views.DAY}
-									/>
-								</CardActions>
-							</CardHeader>
-							<CardBody isScrollable>
-								<Calendar
-									selectable
-									toolbar={false}
-									localizer={localizer}
-									events={events}
-									defaultView={Views.WEEK}
-									views={views}
-									view={Views.DAY}
-									date={date}
-									scrollToTime={new Date(1970, 1, 1, 6)}
-									defaultDate={new Date()}
-									onSelectEvent={(event) => {
-										setInfoEvent();
-										setEventItem(event);
-									}}
-									onSelectSlot={handleSelect}
-									onView={handleViewMode}
-									onDrillDown={handleViewMode}
-									components={{
-										event: MyEventDay, // used by each view (Month, Day, Week)
-									}}
-									eventPropGetter={eventStyleGetter}
-								/>
-							</CardBody>
-						</Card>
-					</div>
-				</div>
+                                </div>
+                            </Popovers>
+                        </div>
+                    ))}
+                </div>
+                <div className='row h-100'>
+                    <div className='col-xl-9'>
+                        <Card stretch style={{ minHeight: 600 }}>
+                            <CardHeader>
+                                <CardActions>
+                                    <CalendarTodayButton
+                                        unitType={unitType}
+                                        date={date}
+                                        setDate={setDate}
+                                        viewMode={viewMode}
+                                    />
+                                </CardActions>
+                                <CardActions>
+                                    <CalendarViewModeButtons
+                                        setViewMode={setViewMode}
+                                        viewMode={viewMode}
+                                    />
+                                </CardActions>
+                            </CardHeader>
+                            <CardBody isScrollable>
+                                <Calendar
+                                    selectable
+                                    toolbar={false}
+                                    localizer={localizer}
+                                    events={events.filter(
+                                        (i) => i?.user && employeeList[i.user.userName],
+                                    )}
+                                    defaultView={Views.WEEK}
+                                    views={views}
+                                    view={viewMode}
+                                    date={date}
+                                    onNavigate={(_date) => setDate(_date)}
+                                    scrollToTime={new Date(1970, 1, 1, 6)}
+                                    defaultDate={new Date()}
+                                    onSelectEvent={(event) => {
+                                        setInfoEvent();
+                                        setEventItem(event);
+                                    }}
+                                    onSelectSlot={handleSelect}
+                                    onView={handleViewMode}
+                                    onDrillDown={handleViewMode}
+                                    components={{
+                                        event: MyEvent, // used by each view (Month, Day, Week)
+                                        week: {
+                                            event: MyWeekEvent,
+                                        },
+                                        work_week: {
+                                            event: MyWeekEvent,
+                                        },
+                                    }}
+                                    eventPropGetter={eventStyleGetter}
+                                />
+                            </CardBody>
+                        </Card>
+                    </div>
+                    <div className='col-xl-3'>
+                        <Card stretch style={{ minHeight: 600 }}>
+                            <CardHeader>
+                                <CardLabel icon='Today' iconColor='info'>
+                                    <CardTitle>{dayjs(date).format('MMMM Do YYYY')}</CardTitle>
+                                    <CardSubTitle>{dayjs(date).fromNow()}</CardSubTitle>
+                                </CardLabel>
+                                <CardActions>
+                                    <CalendarTodayButton
+                                        unitType={Views.DAY}
+                                        date={date}
+                                        setDate={setDate}
+                                        viewMode={Views.DAY}
+                                    />
+                                </CardActions>
+                            </CardHeader>
+                            <CardBody isScrollable>
+                                <Calendar
+                                    selectable
+                                    toolbar={false}
+                                    localizer={localizer}
+                                    events={events}
+                                    defaultView={Views.WEEK}
+                                    views={views}
+                                    view={Views.DAY}
+                                    date={date}
+                                    scrollToTime={new Date(1970, 1, 1, 6)}
+                                    defaultDate={new Date()}
+                                    onSelectEvent={(event) => {
+                                        setInfoEvent();
+                                        setEventItem(event);
+                                    }}
+                                    onSelectSlot={handleSelect}
+                                    onView={handleViewMode}
+                                    onDrillDown={handleViewMode}
+                                    components={{
+                                        event: MyEventDay, // used by each view (Month, Day, Week)
+                                    }}
+                                    eventPropGetter={eventStyleGetter}
+                                />
+                            </CardBody>
+                        </Card>
+                    </div>
+                </div>
 
-				<OffCanvas
-					setOpen={(status: boolean) => {
-						setToggleInfoEventCanvas(status);
-						setEventAdding(status);
-					}}
-					isOpen={toggleInfoEventCanvas}
-					titleId='canvas-title'>
-					<OffCanvasHeader
-						setOpen={(status: boolean) => {
-							setToggleInfoEventCanvas(status);
-							setEventAdding(status);
-						}}
-						className='p-4'>
-						<OffCanvasTitle id='canvas-title'>
-							{eventAdding ? 'Add Event' : 'Edit Event'}
-						</OffCanvasTitle>
-					</OffCanvasHeader>
-					<OffCanvasBody className='p-4'>
-						<div className='row g-4'>
-							{/* Name */}
-							<div className='col-12'>
-								<FormGroup id='eventName' label='Name'>
-									<Input
-										name='Name of Event'
-										className='border-0 shadow-none bg-transparent'
-										placeholder='Enter Event Name'
-										onChange={(e: any) => setNewEventName(e.target.value)}
-										value={newEventName}
-									/>
-								</FormGroup>
-							</div>
-							{/* Date */}
-							<div className='col-12'>
-								<Card className='mb-0 bg-l10-info' shadow='sm'>
-									<CardHeader className='bg-l25-info'>
-										<CardLabel icon='DateRange' iconColor='info'>
-											<CardTitle className='text-info'>
-												Date Options
-											</CardTitle>
-										</CardLabel>
-									</CardHeader>
-									<CardBody>
-										<div className='row g-3'>
-											<div className='col-12'>
-												<FormGroup id='eventAllDay'>
-													<Checks
-														type='switch'
-														value='true'
-														label='All day event'
-														checked={formik.values.eventAllDay}
-														onChange={formik.handleChange}
-													/>
-												</FormGroup>
-											</div>
-											<div className='col-12'>
-												<FormGroup
-													id='eventStart'
-													label={
-														formik.values.eventAllDay
-															? 'Date'
-															: 'Start Date'
-													}>
-													<Input
-														type={
-															formik.values.eventAllDay
-																? 'date'
-																: 'datetime-local'
-														}
-														value={
-															formik.values.eventAllDay
-																? dayjs(
-																		formik.values.eventStart,
-																  ).format('YYYY-MM-DD')
-																: dayjs(
-																		formik.values.eventStart,
-																  ).format('YYYY-MM-DDTHH:mm')
-														}
-														onChange={formik.handleChange}
-													/>
-												</FormGroup>
-											</div>
+                <OffCanvas
+                    setOpen={(status: boolean) => {
+                        setToggleInfoEventCanvas(status);
+                        setEventAdding(status);
+                    }}
+                    isOpen={toggleInfoEventCanvas}
+                    titleId='canvas-title'>
+                    <OffCanvasHeader
+                        setOpen={(status: boolean) => {
+                            setToggleInfoEventCanvas(status);
+                            setEventAdding(status);
+                        }}
+                        className='p-4'>
+                        <OffCanvasTitle id='canvas-title'>
+                            {eventAdding ? 'Add Event' : 'Edit Event'}
+                        </OffCanvasTitle>
+                    </OffCanvasHeader>
+                    <OffCanvasBody className='p-4'>
+                        <div className='row g-4'>
+                            {/* Name */}
+                            <div className='col-12'>
+                                <FormGroup id='eventName' label='Name'>
+                                    <Input
+                                        name='Name of Event'
+                                        className='border-0 shadow-none bg-transparent'
+                                        placeholder='Enter Event Name'
+                                        onChange={(e: any) => setNewEventName(e.target.value)}
+                                        value={newEventName}
+                                    />
+                                </FormGroup>
+                            </div>
+                            {/* Date */}
+                            <div className='col-12'>
+                                <Card className='mb-0 bg-l10-info' shadow='sm'>
+                                    <CardHeader className='bg-l25-info'>
+                                        <CardLabel icon='DateRange' iconColor='info'>
+                                            <CardTitle className='text-info'>
+                                                Date Options
+                                            </CardTitle>
+                                        </CardLabel>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <div className='row g-3'>
+                                            <div className='col-12'>
+                                                <FormGroup id='eventAllDay'>
+                                                    <Checks
+                                                        type='switch'
+                                                        value='true'
+                                                        label='All day event'
+                                                        checked={formik.values.eventAllDay}
+                                                        onChange={formik.handleChange}
+                                                    />
+                                                </FormGroup>
+                                            </div>
+                                            <div className='col-12'>
+                                                <FormGroup
+                                                    id='eventStart'
+                                                    label={
+                                                        formik.values.eventAllDay
+                                                            ? 'Date'
+                                                            : 'Start Date'
+                                                    }>
+                                                    <Input
+                                                        type={
+                                                            formik.values.eventAllDay
+                                                                ? 'date'
+                                                                : 'datetime-local'
+                                                        }
+                                                        value={
+                                                            formik.values.eventAllDay
+                                                                ? dayjs(
+                                                                    formik.values.eventStart,
+                                                                ).format('YYYY-MM-DD')
+                                                                : dayjs(
+                                                                    formik.values.eventStart,
+                                                                ).format('YYYY-MM-DDTHH:mm')
+                                                        }
+                                                        onChange={formik.handleChange}
+                                                    />
+                                                </FormGroup>
+                                            </div>
 
-											{!formik.values.eventAllDay && (
-												<div className='col-12'>
-													<FormGroup id='eventEnd' label='End Date'>
-														<Input
-															type='datetime-local'
-															value={dayjs(
-																formik.values.eventEnd,
-															).format('YYYY-MM-DDTHH:mm')}
-															onChange={formik.handleChange}
-														/>
-													</FormGroup>
-												</div>
-											)}
-										</div>
-									</CardBody>
-								</Card>
-							</div>
-							{/* Employee */}
-							<div className='col-12'>
-								{/* <Card className='mb-0 bg-l10-dark' shadow='sm'>
+                                            {!formik.values.eventAllDay && (
+                                                <div className='col-12'>
+                                                    <FormGroup id='eventEnd' label='End Date'>
+                                                        <Input
+                                                            type='datetime-local'
+                                                            value={dayjs(
+                                                                formik.values.eventEnd,
+                                                            ).format('YYYY-MM-DDTHH:mm')}
+                                                            onChange={formik.handleChange}
+                                                        />
+                                                    </FormGroup>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </CardBody>
+                                </Card>
+                            </div>
+                            {/* Employee */}
+                            <div className='col-12'>
+                                {/* <Card className='mb-0 bg-l10-dark' shadow='sm'>
 									<CardHeader className='bg-l25-dark'>
 										<CardLabel icon='Person Add' iconColor='dark'>
 											<CardTitle>Employee Options</CardTitle>
@@ -671,23 +670,23 @@ const CalendarPage = () => {
 										</FormGroup>
 									</CardBody>
 								</Card> */}
-							</div>
-							<div className='col'>
-								<Button
-									color='info'
-									type='submit'
-									onClick={() => {
-										handleSubmitEvent();
-									}}>
-									Save
-								</Button>
-							</div>
-						</div>
-					</OffCanvasBody>
-				</OffCanvas>
-			</Page>
-		</PageWrapper>
-	);
+                            </div>
+                            <div className='col'>
+                                <Button
+                                    color='info'
+                                    type='submit'
+                                    onClick={() => {
+                                        handleSubmitEvent();
+                                    }}>
+                                    Save
+                                </Button>
+                            </div>
+                        </div>
+                    </OffCanvasBody>
+                </OffCanvas>
+            </Page>
+        </PageWrapper>
+    );
 };
 
 export default CalendarPage;

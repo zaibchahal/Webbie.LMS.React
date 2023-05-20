@@ -32,7 +32,7 @@ const FavouriteVideos: FC<IFavouriteVideosProps> = ({ isFluid }) => {
             setData(d as IFavouriteList[]);
         };
         fetchData();
-    }, []);
+    }, [session?.accessToken]);
 
 
     const [currentPage, setCurrentPage] = useState(1);

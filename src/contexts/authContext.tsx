@@ -1,7 +1,7 @@
-import React, { createContext, FC, ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { createContext, FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { IUserProps, ISessionProps } from '../common/data/userSessionService';
-import { AppConst, Profile_Urls } from '../common/data/constants';
+import { AppConst, PROFILE_URLS } from '../common/data/constants';
 import axios from 'axios';
 
 export interface IAuthContextProps {
@@ -33,12 +33,10 @@ export const AuthContextProvider: FC<IAuthContextProviderProps> = ({ children })
     const [userData, setProfileData] = useState<IUserProps>(getDataFromStorege(AppConst.CurrentUser) as IUserProps);
     const [profilePicture, setProfilePicture] = useState<string>(localStorage.getItem(AppConst.ProfilePic) || '');
 
-
-    const handleSetSession = (data: ISessionProps) => {
+    const handleSetSession = useCallback((data: ISessionProps) => {
         setSession(data);
         localStorage.setItem(AppConst.CurrentSession, JSON.stringify(data));
-
-    };
+    }, []);
 
     const handleLogout = () => {
         setSession({} as ISessionProps);
@@ -49,48 +47,48 @@ export const AuthContextProvider: FC<IAuthContextProviderProps> = ({ children })
         localStorage.setItem(AppConst.ProfilePic, '');
     };
 
-    const handleSetProfileData = async (token: string) => {
+    const handleSetProfilePicture = useCallback(async (token: string | undefined) => {
         try {
             if (!token) {
                 token = session.accessToken;
             }
-            handleSetProfilePicture(token);
-            const response = await axios.get(Profile_Urls.GetCurrentUserProfileForEdit, {
+            const response = await axios.get(PROFILE_URLS.GetProfilePicture, {
                 headers: {
                     Accept: 'text/plain',
                     'Content-Type': 'application/json-patch+json',
                     'X-XSRF-TOKEN': 'null',
                     Authorization: `Bearer ${token}`
                 },
-            })
-            var data = response.data.result;
-            setProfileData(data as IUserProps);
-            localStorage.setItem(AppConst.CurrentUser, JSON.stringify(data));
-        } catch {
-            localStorage.setItem(AppConst.CurrentUser, JSON.stringify({}));
-        }
-    };
-
-    const handleSetProfilePicture = async (token: string | undefined) => {
-        try {
-            if (!token) {
-                token = session.accessToken;
-            }
-            const response = await axios.get(Profile_Urls.GetProfilePicture, {
-                headers: {
-                    Accept: 'text/plain',
-                    'Content-Type': 'application/json-patch+json',
-                    'X-XSRF-TOKEN': 'null',
-                    Authorization: `Bearer ${token}`
-                },
-            })
+            });
             var data = `data:image/png;base64,${response.data.result.profilePicture}`;
             setProfilePicture(data);
             localStorage.setItem(AppConst.ProfilePic, data);
         } catch {
             localStorage.setItem(AppConst.ProfilePic, '');
         }
-    };
+    }, [session.accessToken]);
+
+    const handleSetProfileData = useCallback(async (token: string) => {
+        try {
+            if (!token) {
+                token = session.accessToken;
+            }
+            handleSetProfilePicture(token);
+            const response = await axios.get(PROFILE_URLS.GetCurrentUserProfileForEdit, {
+                headers: {
+                    Accept: 'text/plain',
+                    'Content-Type': 'application/json-patch+json',
+                    'X-XSRF-TOKEN': 'null',
+                    Authorization: `Bearer ${token}`
+                },
+            });
+            var data = response.data.result;
+            setProfileData(data as IUserProps);
+            localStorage.setItem(AppConst.CurrentUser, JSON.stringify(data));
+        } catch {
+            localStorage.setItem(AppConst.CurrentUser, JSON.stringify({}));
+        }
+    }, [handleSetProfilePicture, session.accessToken]);
 
 
     const value = useMemo(
@@ -104,7 +102,7 @@ export const AuthContextProvider: FC<IAuthContextProviderProps> = ({ children })
             profilePicture,
             handleLogout
         }),
-        [session, userData, handleSetSession, handleSetProfileData],
+        [session, userData, handleSetSession, handleSetProfileData, handleSetProfilePicture, profilePicture],
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

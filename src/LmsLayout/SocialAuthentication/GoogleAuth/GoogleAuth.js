@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { GoogleLogin } from 'react-google-login';
 import Button from '../../../components/bootstrap/Button';
 import { FaGoogle } from 'react-icons/fa';
 
 const GoogleAuth = () => {
-    const [loggedIn, setLoggedIn] = useState(false);
+    //const [loggedIn, setLoggedIn] = useState(false);
 
     const onSuccess = (response) => {
         localStorage.setItem('accessToken', response.accessToken);
-        setLoggedIn(true);
+        //setLoggedIn(true);
     };
 
     const onFailure = (error) => {
         console.error(error);
     };
     const signOut = () => {
-        var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-            console.log('User signed out.');
-        });
+        //var auth2 = gapi.auth2.getAuthInstance();
+        //auth2.signOut().then(function () {
+        //    console.log('User signed out.');
+        //});
     }
     var isLoggedIn = localStorage.getItem('accessToken');
 

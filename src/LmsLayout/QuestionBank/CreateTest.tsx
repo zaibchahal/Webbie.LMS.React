@@ -5,7 +5,7 @@ import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import { LmsFeatures } from '../../menu';
 import { ISystemProp, IQuestionModeProp, getQuestionCount, getSystemQuestionCount, createTestResult, ICreateTestProp } from '../../services/QBankService';
 import './style.css';
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../contexts/authContext';
 import { PaperMode } from '../../common/data/constants';
 const CreateTest = () => {
@@ -29,7 +29,7 @@ const CreateTest = () => {
             setSystems(SystemQuestionCount);
         };
         fetchData();
-    }, []);
+    }, [session?.userId, session?.accessToken]);
 
     const handleTestModeChange = (e: any) => {
         const selectedTestMode = e.target.value;

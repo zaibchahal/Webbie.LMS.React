@@ -6,7 +6,7 @@ import './style.css';
 import Breadcrumb from '../../components/bootstrap/Breadcrumb';
 import SubHeader, { SubHeaderLeft, SubheaderSeparator, SubHeaderRight } from '../../layout/SubHeader/SubHeader';
 import Icon from '../../components/icon/Icon';
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { saveResultDetail, getQuestionToSolve, IQuestionProp, IResultProp, addRemoveFavourites, completed } from '../../services/QBankService';
 import AuthContext from '../../contexts/authContext';
 import { PaperMode } from '../../common/data/constants';
@@ -35,7 +35,7 @@ const QbankAnswers = () => {
             setCurrentQuestion(data.details[0]);
         };
         fetchData();
-    }, []);
+    }, [session?.accessToken, resultID, session?.userId]);
 
 
     //#region Move next Prev or GotoQuestion

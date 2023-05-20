@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useContext } from 'react';
+import React, { FC, useState, useEffect, useContext, useMemo } from 'react';
 import classNames from 'classnames';
 import Pass from '../../assets/img/lms/pass.png';
 import Fail from '../../assets/img/lms/fail.png';
@@ -29,6 +29,57 @@ const QbankAnalysis = () => {
     const [per, setPer] = useState(0);
 
 
+    const chartOptions: ApexOptions = useMemo(() => {
+        // Initialize the chartOptions object here
+        return {
+            chart: {
+                type: 'donut',
+                height: 350,
+            },
+            stroke: {
+                width: 0,
+            },
+            labels: ['In-Correct', 'Correct'],
+            dataLabels: {
+                enabled: false,
+            },
+            colors: ['#ff8080', '#80ff80'],
+            plotOptions: {
+                pie: {
+                    expandOnClick: true,
+                    donut: {
+                        labels: {
+                            show: true,
+                            name: {
+                                show: true,
+                                fontSize: '24px',
+                                fontFamily: 'Poppins',
+                                fontWeight: 900,
+                                offsetY: 0,
+                                formatter(val) {
+                                    return val;
+                                },
+                            },
+                            value: {
+                                show: true,
+                                fontSize: '16px',
+                                fontFamily: 'Poppins',
+                                fontWeight: 900,
+                                offsetY: 16,
+                                formatter(val) {
+                                    return val;
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            legend: {
+                show: true,
+                position: 'bottom',
+            },
+        };
+    }, []);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -55,57 +106,8 @@ const QbankAnalysis = () => {
             });
         };
         fetchData();
-    }, []);
+    }, [chartOptions, session?.userId, session?.accessToken, resultID]);
 
-
-    const chartOptions: ApexOptions = {
-        chart: {
-            type: 'donut',
-            height: 350,
-        },
-        stroke: {
-            width: 0,
-        },
-        labels: ['In-Correct', 'Correct'],
-        dataLabels: {
-            enabled: false,
-        },
-        colors: ['#ff8080', '#80ff80'],
-        plotOptions: {
-            pie: {
-                expandOnClick: true,
-                donut: {
-                    labels: {
-                        show: true,
-                        name: {
-                            show: true,
-                            fontSize: '24px',
-                            fontFamily: 'Poppins',
-                            fontWeight: 900,
-                            offsetY: 0,
-                            formatter(val) {
-                                return val;
-                            },
-                        },
-                        value: {
-                            show: true,
-                            fontSize: '16px',
-                            fontFamily: 'Poppins',
-                            fontWeight: 900,
-                            offsetY: 16,
-                            formatter(val) {
-                                return val;
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        legend: {
-            show: true,
-            position: 'bottom',
-        },
-    };
 
 
     const [state, setState] = useState<IChartOptions>({

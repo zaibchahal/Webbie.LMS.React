@@ -15,7 +15,7 @@ import AuthContext from '../../../contexts/authContext';
 import USERS from '../../../common/data/userSessionService';
 import Spinner from '../../../components/bootstrap/Spinner';
 import Alert from '../../../components/bootstrap/Alert';
-import { AppConst, Auth_Urls } from '../../../common/data/constants';
+import { AppConst, AUTH_URLS } from '../../../common/data/constants';
 import { setCookie, getCookie } from '../../../common/data/helper';
 import axios from 'axios';
 
@@ -69,7 +69,7 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
         setIsLoading(true);
         try {
             const response = await axios.post(
-                Auth_Urls.IsTenantAvailable,
+                AUTH_URLS.IsTenantAvailable,
                 { tenancyName: tenancyName },
                 {
                     headers: {
@@ -105,7 +105,7 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
         setIsLoading(true);
         try {
             const response = await axios.post(
-                Auth_Urls.TokenAuth_Authenticate,
+                AUTH_URLS.TokenAuth_Authenticate,
                 {
                     userNameOrEmailAddress: values.loginuserName,
                     password: values.loginPassword,
@@ -145,7 +145,7 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
 
     const handleOnChangeTenant = useCallback(() => {
         checkTenantAvailability(tenantName);
-    }, [navigate, tenantName]);
+    }, [tenantName]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTenantName(e.target.value);

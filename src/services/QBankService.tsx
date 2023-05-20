@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useContext, useState } from 'react';
 import axios from 'axios';
-import { AppConst, QBank_Urls } from '../common/data/constants';
+import { AppConst, QBANK_URLS } from '../common/data/constants';
 import api from './baseService';
 
 export const getQuestionCount = async (userId: number | undefined, accessToken: string | undefined,) => {
     try {
         const response = await api.get(
-            QBank_Urls.GetQuestionCount + '?SID=' + userId,
+            QBANK_URLS.GetQuestionCount + '?SID=' + userId,
             {
                 headers: {
                     Accept: 'text/plain',
@@ -25,7 +25,7 @@ export const getQuestionCount = async (userId: number | undefined, accessToken: 
 export const getSystemQuestionCount = async (userId: number | undefined, accessToken: string | undefined,) => {
     try {
         const response = await api.get(
-            QBank_Urls.GetSystemQuestionCount + '?SID=' + userId,
+            QBANK_URLS.GetSystemQuestionCount + '?SID=' + userId,
             {
                 headers: {
                     Accept: 'text/plain',
@@ -44,7 +44,7 @@ export const getSystemQuestionCount = async (userId: number | undefined, accessT
 
 export const createTestResult = async (testProp: ICreateTestProp, accessToken: string | undefined) => {
     try {
-        const response = await api.post(QBank_Urls.CreateTestResult, testProp, {
+        const response = await api.post(QBANK_URLS.CreateTestResult, testProp, {
             headers: {
                 Accept: 'text/plain',
                 'Content-Type': 'application/json-patch+json',
@@ -61,7 +61,7 @@ export const createTestResult = async (testProp: ICreateTestProp, accessToken: s
 
 export const saveResultDetail = async (testProp: IResultDetailProp, accessToken: string | undefined) => {
     try {
-        const response = await api.post(QBank_Urls.SaveResultDetail, testProp, {
+        const response = await api.post(QBANK_URLS.SaveResultDetail, testProp, {
             headers: {
                 Accept: 'text/plain',
                 'Content-Type': 'application/json-patch+json',
@@ -80,7 +80,7 @@ export const saveResultDetail = async (testProp: IResultDetailProp, accessToken:
 export const getQuestionToSolve = async (resultID: number | undefined, userId: number | undefined, accessToken: string | undefined,) => {
     try {
         const response = await api.get(
-            QBank_Urls.GetQuestionToSolve + '?ID=' + resultID + '&SID=' + userId,
+            QBANK_URLS.GetQuestionToSolve + '?ID=' + resultID + '&SID=' + userId,
             {
                 headers: {
                     Accept: 'text/plain',
@@ -101,7 +101,7 @@ export const getQuestionToSolve = async (resultID: number | undefined, userId: n
 export const getQuestionPapers = async (userId: number | undefined, accessToken: string | undefined,) => {
     try {
         const response = await api.get(
-            QBank_Urls.GetQuestionPapers + '?SID=' + userId,
+            QBANK_URLS.GetQuestionPapers + '?SID=' + userId,
             {
                 headers: {
                     Accept: 'text/plain',
@@ -122,7 +122,7 @@ export const getQuestionPapers = async (userId: number | undefined, accessToken:
 export const getResultList = async (userId: number | undefined, accessToken: string | undefined,) => {
     try {
         const response = await api.get(
-            QBank_Urls.GetResults + '?SID=' + userId,
+            QBANK_URLS.GetResults + '?SID=' + userId,
             {
                 headers: {
                     Accept: 'text/plain',
@@ -142,7 +142,7 @@ export const getResultList = async (userId: number | undefined, accessToken: str
 
 export const addRemoveFavourites = async (testProp: IFavouriteProp, accessToken: string | undefined) => {
     try {
-        const response = await api.post(QBank_Urls.AddRemoveFavourites, testProp, {
+        const response = await api.post(QBANK_URLS.AddRemoveFavourites, testProp, {
             headers: {
                 Accept: 'text/plain',
                 'Content-Type': 'application/json-patch+json',
@@ -159,7 +159,7 @@ export const addRemoveFavourites = async (testProp: IFavouriteProp, accessToken:
 
 export const createTestResultByPaper = async (paperID: number, accessToken: string | undefined) => {
     try {
-        const response = await api.post(QBank_Urls.CreateTestResultByPaper + "?paperID=" + paperID, {}, {
+        const response = await api.post(QBANK_URLS.CreateTestResultByPaper + "?paperID=" + paperID, {}, {
             headers: {
                 Accept: 'text/plain',
                 'Content-Type': 'application/json-patch+json',
@@ -176,7 +176,7 @@ export const createTestResultByPaper = async (paperID: number, accessToken: stri
 
 export const completed = async (id: number, accessToken: string | undefined) => {
     try {
-        const response = await api.post(QBank_Urls.Completed, { id: id }, {
+        const response = await api.post(QBANK_URLS.Completed, { id: id }, {
             headers: {
                 Accept: 'text/plain',
                 'Content-Type': 'application/json-patch+json',

@@ -7,7 +7,7 @@ export interface IGroupMessages {
 	user: IUserProps;
 	isReply?: boolean;
 }
-export const Group_Chat_Dummy_Data: IGroupMessages[] = [
+export const GroupChatDummyData: IGroupMessages[] = [
 	{
 		id: 1,
 		messages: [
@@ -57,7 +57,7 @@ export const Group_Chat_Dummy_Data: IGroupMessages[] = [
 ];
 
 const LmsChat: { [key: string]: IGroupMessages[] } = {
-	Group_Chat_Dummy_Data,
+	GroupChatDummyData,
 };
 
 export default LmsChat;

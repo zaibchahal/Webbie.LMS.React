@@ -5,7 +5,7 @@ import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import './style.css';
 import SubHeader, { SubHeaderLeft, SubheaderSeparator, SubHeaderRight } from '../../layout/SubHeader/SubHeader';
 import Icon from '../../components/icon/Icon';
-import { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { saveResultDetail, getQuestionToSolve, IQuestionProp, IResultProp, addRemoveFavourites, completed } from '../../services/QBankService';
 import AuthContext from '../../contexts/authContext';
 import { PaperMode } from '../../common/data/constants';
@@ -21,9 +21,51 @@ const Test = () => {
     const [timer, settimer] = useState("");
     const [allowEnd, setallowEnd] = useState(false);
 
+    const CompleteResult = useCallback(async (type: string) => {
+        const data = await completed(parseInt(resultID || ""), session?.accessToken);
+        navigate("/mcq-bank/analysis/" + resultID);
+    }, [navigate, resultID, session?.accessToken]);
 
     useEffect(() => {
         const fetchData = async () => {
+
+            //#region Timer
+            function startTimer(pData: IResultProp) {
+                const dt = new Date().getTime();
+                const minutes = pData.timeGiven ?? 40;
+                const countDownDate = new Date(dt + minutes * 60000).getTime();
+
+                const interval = setInterval(function () {
+                    var dtt = new Date().getTime();
+                    const now = new Date(dtt - pData.timeElapsed * 60000).getTime();
+                    var distance;
+
+                    if (pData.mode === PaperMode.Tutor) {
+                        distance = now - dt;
+                    } else {
+                        distance = countDownDate - now;
+                    }
+
+                    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var remainingMinutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    settimer(display(hours) + ":" + display(remainingMinutes) + ":" + display(seconds));
+                    if (distance < 0) {
+                        clearInterval(interval);
+                        setallowEnd(true);
+                        settimer("00:00:00");
+                        CompleteResult("TimeUp");
+                    }
+                }, 1000);
+            }
+
+            function display(time: number) {
+                return time < 10 ? "0" + time : time.toString();
+            }
+
+            //#endregion
+
             const data = await getQuestionToSolve(parseInt(resultID || ""), session?.userId, session?.accessToken);
             data.details.map((detail, i) => {
                 detail.questOptions.map((o, oi) => {
@@ -49,7 +91,7 @@ const Test = () => {
 
         };
         fetchData();
-    }, []);
+    }, [resultID, session?.accessToken, session?.userId, CompleteResult]);
 
     //#region  Handle Add to Favourite
 
@@ -59,9 +101,9 @@ const Test = () => {
         addFavourites();
         setpaperData((prevValue) => {
             const updatedDetails = [...prevValue.details];
-            const currentQuestion = updatedDetails[currentQuestionIndex];
-            currentQuestion.isPopular = newStatus;
-            setCurrentQuestion(currentQuestion);
+            const cQuestion = updatedDetails[currentQuestionIndex];
+            cQuestion.isPopular = newStatus;
+            setCurrentQuestion(cQuestion);
             return { ...prevValue, details: updatedDetails };
         });
     };
@@ -83,13 +125,13 @@ const Test = () => {
         setpaperData((prevValue) => {
             if ((!prevValue.details[currentQuestionIndex].isSolved || paperData.mode === PaperMode.Exam)) {
                 const updatedDetails = [...prevValue.details];
-                const currentQuestion = updatedDetails[currentQuestionIndex];
-                currentQuestion.isSolved = true;
-                currentQuestion.questOptions.forEach((option) => {
+                const cQuestion = updatedDetails[currentQuestionIndex];
+                cQuestion.isSolved = true;
+                cQuestion.questOptions.forEach((option) => {
                     option.IsChecked = answer.trim() === option.optionText?.trim();
                 });
 
-                setCurrentQuestion(currentQuestion);
+                setCurrentQuestion(cQuestion);
                 saveResult(answer.trim(), isTrue);
                 return { ...prevValue, details: updatedDetails };
             }
@@ -101,10 +143,6 @@ const Test = () => {
         const data = await saveResultDetail({ answer: answer, isTrue: isTrue, questionID: currentQuestion.questionId, resultID: parseInt(resultID || "") }, session?.accessToken);
     };
 
-    const CompleteResult = async (type: string) => {
-        const data = await completed(parseInt(resultID || ""), session?.accessToken);
-        navigate("/mcq-bank/analysis/" + resultID);
-    };
 
     //#endregion
 
@@ -136,42 +174,6 @@ const Test = () => {
 
     //#endregion
 
-    //#region Timer
-    function startTimer(pData: IResultProp) {
-        const dt = new Date().getTime();
-        const minutes = pData.timeGiven ?? 40;
-        const countDownDate = new Date(dt + minutes * 60000).getTime();
-
-        const interval = setInterval(function () {
-            var dtt = new Date().getTime();
-            const now = new Date(dtt - pData.timeElapsed * 60000).getTime();
-            var distance;
-
-            if (pData.mode === PaperMode.Tutor) {
-                distance = now - dt;
-            } else {
-                distance = countDownDate - now;
-            }
-
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var remainingMinutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            settimer(display(hours) + ":" + display(remainingMinutes) + ":" + display(seconds));
-            if (distance < 0) {
-                clearInterval(interval);
-                setallowEnd(true);
-                settimer("00:00:00");
-                CompleteResult("TimeUp");
-            }
-        }, 1000);
-    }
-
-    function display(time: number) {
-        return time < 10 ? "0" + time : time.toString();
-    }
-
-    //#endregion
 
     return (
         <>

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useContext, useState } from 'react';
 import axios from 'axios';
-import { AppConst, Student_Urls } from '../common/data/constants';
+import { AppConst, STUDENT_URLS } from '../common/data/constants';
 
 export const getMyCoursesList = async (
 	userId: number | undefined,
@@ -8,7 +8,7 @@ export const getMyCoursesList = async (
 ) => {
 	try {
 		const response = await axios.post(
-			Student_Urls.GetMyCoursesList,
+			STUDENT_URLS.GetMyCoursesList,
 			{
 				filter: null,
 				studentID: userId,
@@ -36,7 +36,7 @@ export const GetSearchContent = async (
 ) => {
 	try {
 		const response = await axios.post(
-			Student_Urls.GetSearchContent,
+			STUDENT_URLS.GetSearchContent,
 			{
 				text: searchString,
 			},
@@ -59,7 +59,7 @@ export const GetSearchContent = async (
 
 export const GetCourse = async (CourseId: number | undefined, accessToken: string | undefined) => {
 	try {
-		const response = await axios.get(Student_Urls.GetCourse + '?ID=' + CourseId, {
+		const response = await axios.get(STUDENT_URLS.GetCourse + '?ID=' + CourseId, {
 			headers: {
 				Accept: 'text/plain',
 				'Content-Type': 'application/json-patch+json',
@@ -83,7 +83,7 @@ export const GetVideoDetails = async (
 ) => {
 	try {
 		const response = await axios.get(
-			Student_Urls.GetVideoDetails +
+			STUDENT_URLS.GetVideoDetails +
 				'?VideoID=' +
 				VideoId +
 				'&SecID=' +
@@ -113,7 +113,7 @@ export const postIsWatched = async (
 ) => {
 	try {
 		const response = await axios.post(
-			Student_Urls.postIsWatched,
+			STUDENT_URLS.postIsWatched,
 			{
 				videoID: VideId,
 				isCompleted: true,
