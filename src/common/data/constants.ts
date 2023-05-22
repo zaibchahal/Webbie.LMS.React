@@ -1,5 +1,5 @@
-// export const BASE_URL = 'https://localhost:44302';
-export const BASE_URL = 'https://stupefied-proskuriakova.69-10-42-234.plesk.page';
+export const BASE_URL = 'https://localhost:44302';
+//export const BASE_URL = 'https://stupefied-proskuriakova.69-10-42-234.plesk.page';
 export const API_BASE_URL = BASE_URL + '/api';
 
 export const AUTH_URLS = {
