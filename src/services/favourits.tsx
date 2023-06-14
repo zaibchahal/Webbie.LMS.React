@@ -1,19 +1,10 @@
 import React, { useEffect, useRef, useContext, useState } from 'react';
-import axios from 'axios';
+import api from './baseService';
 import { AppConst, STUDENT_URLS } from '../common/data/constants';
 
-export const getFavouriteList = async (type: number, accessToken: string | undefined) => {
+export const getFavouriteList = async (type: number) => {
     try {
-        const response = await axios.get(STUDENT_URLS.GetFovouritsList + "?ObjectType=" + type,
-            {
-                headers: {
-                    Accept: 'text/plain',
-                    'Content-Type': 'application/json-patch+json',
-                    'X-XSRF-TOKEN': 'null',
-                    Authorization: `Bearer ${accessToken}`
-                },
-                withCredentials: true,
-            })
+        const response = await api.get(STUDENT_URLS.GetFovouritsList + "?ObjectType=" + type)
         return response.data.result || [];
     } catch {
         return [];

@@ -4,8 +4,8 @@ import classNames from 'classnames';
 import { ISubHeaderProps } from '../SubHeader/SubHeader';
 import { IPageProps } from '../Page/Page';
 import { useNavigate } from 'react-router-dom';
-import AuthContext from '../../contexts/authContext';
 import { demoPagesMenu } from '../../menu';
+import { store } from '../../store';
 
 interface IPageWrapperProps {
     isProtected?: boolean;
@@ -29,11 +29,15 @@ const PageWrapper = forwardRef<HTMLDivElement, IPageWrapperProps>(
                 .setAttribute('content', description || process.env.REACT_APP_META_DESC || '');
         });
 
-        const { session, userData } = useContext(AuthContext);
+        let myStore = store.getState().session;
 
         const navigate = useNavigate();
         useEffect(() => {
-            if (isProtected && Object.keys(session || {}).length == 0 && Object.keys(userData || {}).length == 0) {
+            if (
+                isProtected &&
+                Object.keys(myStore.Session || {}).length == 0 &&
+                Object.keys(myStore.User || {}).length == 0
+            ) {
                 navigate(`../${demoPagesMenu.login.path}`);
             }
             return () => { };

@@ -1,5 +1,7 @@
-import axios from 'axios';
-import { API_BASE_URL } from '../common/data/constants';
+import axios, { AxiosRequestHeaders } from 'axios';
+import { API_BASE_URL, AppConst } from '../common/data/constants';
+import { getCookie } from '../common/data/helper';
+import { store } from '../store';
 
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -10,23 +12,39 @@ const api = axios.create({
 api.interceptors.response.use(
     (response) => response,
     (error) => {
+        if (error.code && error.code === "ERR_NETWORK") {
+            jzSwal.error('Server is not available');
+        }
         if (error.response.status === 401) {
-            // Show your message here, e.g., using a notification library or modifying the app state
-            console.log('Unauthorized request');
+            jzSwal.error('Need To Login Again');
+        }
+        if (error.response.status === 500) {
+            console.log(error.response.data);
         }
         return Promise.reject(error);
     }
 );
-
 // Add a request interceptor
 api.interceptors.request.use(
     (config) => {
-        // You can modify the request config here if needed
+        const accessToken = store.getState().session.Session.accessToken;
+        const tenantId = getCookie(AppConst.TenantID);
+
+        if (config.headers) {
+            config.headers = {
+                ...config.headers,
+                Accept: 'text/plain',
+                "Abp.TenantId": tenantId,
+                "Content-Type": 'application/json-patch+json',
+                "X-XSRF-TOKEN": 'null',
+                Authorization: `Bearer ${accessToken}`,
+            } as unknown as AxiosRequestHeaders;
+        }
+        config.withCredentials = true;
         return config;
     },
     (error) => {
         return Promise.reject(error);
     }
 );
-
 export default api;

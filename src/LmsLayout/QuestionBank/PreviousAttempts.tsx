@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useContext } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import Card, { CardActions, CardBody, CardHeader, CardLabel, CardTitle, } from '../../components/bootstrap/Card';
@@ -8,7 +8,6 @@ import PaginationButtons, { dataPagination, PER_COUNT } from '../../components/P
 import useSortableData from '../../hooks/useSortableData';
 import useDarkMode from '../../hooks/useDarkMode';
 import { IResultProp, getResultList } from '../../services/QBankService';
-import AuthContext from '../../contexts/authContext';
 import { LmsFeatures } from '../../menu';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import Page from '../../layout/Page/Page';
@@ -16,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 const QuestionBank = () => {
     const { themeStatus, darkModeStatus } = useDarkMode();
-    const { session } = useContext(AuthContext);
+
     const [data, setData] = useState<IResultProp[]>([]);
 
 
@@ -24,11 +23,11 @@ const QuestionBank = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const d = await getResultList(session?.userId, session?.accessToken);
+            const d = await getResultList();
             setData(d as IResultProp[]);
         };
         fetchData();
-    }, [session?.userId, session?.accessToken]);
+    }, []);
 
 
     const [currentPage, setCurrentPage] = useState(1);

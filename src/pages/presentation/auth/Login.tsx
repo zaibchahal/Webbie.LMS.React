@@ -12,11 +12,15 @@ import Logo from '../../../components/Logo';
 import useDarkMode from '../../../hooks/useDarkMode';
 import { useFormik } from 'formik';
 import AuthContext from '../../../contexts/authContext';
-import USERS from '../../../common/data/userSessionService';
 import Spinner from '../../../components/bootstrap/Spinner';
 import Alert from '../../../components/bootstrap/Alert';
+import { getCookie, setCookie, coerceToArrayBuffer, coerceToBase64Url } from '../../../common/data/helper';
 import { AppConst, AUTH_URLS } from '../../../common/data/constants';
-import { setCookie, getCookie } from '../../../common/data/helper';
+import USERS from '../../../common/data/userSessionService';
+import { useToasts } from 'react-toast-notifications';
+import Toasts from '../../../components/bootstrap/Toasts';
+import { useDispatch } from 'react-redux';
+import api from '../../../services/baseService';
 import axios from 'axios';
 
 interface ILoginHeaderProps {
@@ -26,17 +30,18 @@ const LoginHeader: FC<ILoginHeaderProps> = ({ isNewUser }) => {
     if (isNewUser) {
         return (
             <>
-                <div className='text-center h1 fw-bold mt-5'>Create Account,</div>
-                <div className='text-center h4 text-muted mb-5'>Sign up to get started!</div>
+                <div className='text-center h1 fw-bold mt-5'>Select Tenant</div>
+                <div className='text-center h4 text-muted mb-5'>Select Your Tenant to get started!</div>
+            </>
+        );
+    } else {
+        return (
+            <>
+                <div className='text-center h1 fw-bold mt-5'>Welcome,</div>
+                <div className='text-center h4 text-muted mb-5'>Sign in to continue!</div>
             </>
         );
     }
-    return (
-        <>
-            <div className='text-center h1 fw-bold mt-5'>Welcome,</div>
-            <div className='text-center h4 text-muted mb-5'>Sign in to continue!</div>
-        </>
-    );
 };
 
 interface ILoginProps {
@@ -44,17 +49,17 @@ interface ILoginProps {
 }
 const Login: FC<ILoginProps> = ({ isSignUp }) => {
     const { handleSetSession, handleSetProfileData } = useContext(AuthContext);
-
     const { darkModeStatus } = useDarkMode();
-
+    const { addToast } = useToasts();
     const [signInPassword, setSignInPassword] = useState<boolean>(false);
-    const [tenantChangeError, settenantChangeError] = useState<boolean>(false);
     const [tenantStatus, setTenantStatus] = useState<boolean>(!!isSignUp);
     const [tenantName, setTenantName] = useState('');
     const [invalidFeedback, setinvalidFeedback] = useState('');
 
     const navigate = useNavigate();
-    const handleOnClick = useCallback(() => navigate('/'), [navigate]);
+    const dispatch = useDispatch();
+
+
     useEffect(() => {
         const tenantIdFromCookie = getCookie(AppConst.TenantID);
         const tenantNameFromCookie = getCookie(AppConst.TenantName);
@@ -65,17 +70,26 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
         }
     }, []);
 
-    const checkTenantAvailability = async (tenancyName: string) => {
+    const showErrorAlert = useCallback((msg: any, e: any) => {
+        let footermsg = '';
+        if (e) { footermsg = e.toString(); }
+        addToast(
+            <Toasts title={msg} icon='Error' iconColor='danger' > {footermsg} </Toasts>,
+            { autoDismiss: true, },
+        )
+    }, [addToast])
+    const checkTenantAvailability = useCallback(async (tenancyName: string) => {
         setIsLoading(true);
         try {
-            const response = await axios.post(
+            console.log("XSRF-TOKEN", getCookie("XSRF-TOKEN"));
+            const response = await api.post(
                 AUTH_URLS.IsTenantAvailable,
                 { tenancyName: tenancyName },
                 {
                     headers: {
                         Accept: 'text/plain',
                         'Content-Type': 'application/json-patch+json',
-                        'X-XSRF-TOKEN': 'null',
+                        'X-XSRF-TOKEN': getCookie("XSRF-TOKEN"),
                     },
                     withCredentials: true,
                 },
@@ -89,63 +103,48 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
                 setCookie(AppConst.TenantName, tenancyName, 3000);
                 setSignInPassword(false);
                 setTenantStatus(false);
-                settenantChangeError(false);
             } else {
-                console.log('Tenant is not available');
-                settenantChangeError(true);
+                showErrorAlert("Not Found", "No tenant found for this name")
             }
         } catch (error) {
             console.log(error);
         }
         setIsLoading(false);
-    };
+    }, [showErrorAlert]);
+
+
 
     const SubmitLoginForm = async (values: any) => {
         setinvalidFeedback('');
         setIsLoading(true);
         try {
-            const response = await axios.post(
+            const response = await api.post(
                 AUTH_URLS.TokenAuth_Authenticate,
                 {
                     userNameOrEmailAddress: values.loginuserName,
                     password: values.loginPassword,
                     rememberClient: true,
                 },
-                {
-                    headers: {
-                        Accept: 'text/plain',
-                        'Abp.TenantId': getCookie(AppConst.TenantID),
-                        'Content-Type': 'application/json-patch+json',
-                        'X-XSRF-TOKEN': 'null',
-                    },
-                    withCredentials: true,
-                },
             );
 
             const data = await response.data;
 
             if (data.success) {
-                if (handleSetSession) {
-                    handleSetSession(data.result);
-                }
-                if (handleSetProfileData) {
-                    handleSetProfileData(data.result.accessToken);
-                }
-                handleOnClick();
+                await MakeCredentialOptions(data.result.accessToken)
             } else {
                 formik.setFieldError('loginPassword', data.error.message);
             }
         } catch (error: any) {
             console.log(error);
             if (error.response) setinvalidFeedback(error.response.data.error.message);
-            else setinvalidFeedback(error.code + "  " + error.message);
+            else setinvalidFeedback(error.code + '  ' + error.message);
         }
         setIsLoading(false);
     };
 
     const handleOnChangeTenant = useCallback(() => {
         checkTenantAvailability(tenantName);
-    }, [tenantName]);
+    }, [tenantName, checkTenantAvailability]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTenantName(e.target.value);
@@ -178,8 +177,181 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const handleContinue = () => {
+        StartFidoAuthentitcation();
+    };
+
+    const handleAddDeviceFido = () => {
         setSignInPassword(true);
     };
+
+
+    //#region Register Credentials
+
+    async function MakeCredentialOptions(accToken: string) {
+        // send to server for registering
+        let makeCredentialOptions;
+        setIsLoading(true);
+        try {
+            const response = await axios.post(AUTH_URLS.MakeCredentialOptions, {}, {
+                headers: {
+                    Accept: 'text/plain',
+                    "Abp.TenantId": getCookie(AppConst.TenantID),
+                    "Content-Type": 'application/json-patch+json',
+                    "X-XSRF-TOKEN": 'null',
+                    Authorization: `Bearer ${accToken}`,
+                }
+            });
+
+            const data = await response.data;
+
+            makeCredentialOptions = JSON.parse(data.result.options);
+            if (makeCredentialOptions.status !== "ok") {
+                console.log("Error creating credential options");
+                return;
+            }
+            createNewCredentialon(makeCredentialOptions, data.result.token);
+
+        } catch (error: any) {
+            console.log(error);
+            if (error.response) setinvalidFeedback(error.response.data.error.message);
+            else setinvalidFeedback(error.code + '  ' + error.message);
+        }
+    }
+
+    async function createNewCredentialon(makeCredentialOptions: any, token: any) {
+        makeCredentialOptions.extensions.credProps = true;
+        makeCredentialOptions.challenge = coerceToArrayBuffer(makeCredentialOptions.challenge);
+        makeCredentialOptions.user.id = coerceToArrayBuffer(makeCredentialOptions.user.id);
+        makeCredentialOptions.excludeCredentials = makeCredentialOptions.excludeCredentials.map((c: any) => {
+            c.id = coerceToArrayBuffer(c.id);
+            return c;
+        });
+
+        if (makeCredentialOptions.authenticatorSelection.authenticatorAttachment === null) makeCredentialOptions.authenticatorSelection.authenticatorAttachment = undefined;
+
+        let newCredential;
+        try {
+            newCredential = await navigator.credentials.create({
+                publicKey: makeCredentialOptions
+            });
+        } catch (e) {
+            showErrorAlert("Unable to create new Credentials", e);
+        } finally {
+            setIsLoading(false);
+        }
+
+        registerNewCredential(newCredential, token);
+    }
+
+    async function registerNewCredential(newCredential: any, token: any) {
+        // Move data into Arrays incase it is super long
+        let attestationObject = new Uint8Array(newCredential.response.attestationObject);
+        let clientDataJSON = new Uint8Array(newCredential.response.clientDataJSON);
+        let rawId = new Uint8Array(newCredential.rawId);
+
+        const data = {
+            id: newCredential.id,
+            rawId: coerceToBase64Url(rawId),
+            type: newCredential.type,
+            extensions: newCredential.getClientExtensionResults(),
+            response: {
+                AttestationObject: coerceToBase64Url(attestationObject),
+                clientDataJSON: coerceToBase64Url(clientDataJSON)
+            }
+        };
+
+        const response = await api.post(AUTH_URLS.MakeCredential + '?jdata=' + JSON.stringify(data) + '&token=' + token, {});
+        const res = await response.data.result;
+
+        if (res.status !== "ok") {
+            showErrorAlert(res.errorMessage, null);
+            return;
+        } else {
+            setSignInPassword(false);
+        }
+        setIsLoading(false);
+    }
+
+
+    //#endregion
+
+
+    //#region Login By Credentials
+    async function StartFidoAuthentitcation() {
+        setIsLoading(true);
+        const response = await api.post(AUTH_URLS.AssertionOptionsPost + "?username=" + formik.values.loginuserName, {});
+        var result = await response.data.result;
+
+        // show options error to user
+        if (!result.options) {
+            showErrorAlert(result.errorMessage, "Error creating assertion options");
+            setIsLoading(false);
+            return;
+        }
+        const makeAssertionOptions = JSON.parse(result.options);
+        makeAssertionOptions.challenge = coerceToArrayBuffer(makeAssertionOptions.challenge);
+        // fix escaping. Change this to coerce
+        makeAssertionOptions.allowCredentials.forEach(function (listItem: any) {
+            listItem.id = coerceToArrayBuffer(listItem.id);
+        });
+
+        // ask browser for credentials (browser will ask connected authenticators)
+        let credential;
+        try {
+            credential = await navigator.credentials.get({ publicKey: makeAssertionOptions })
+        } catch (err: any) {
+            showErrorAlert("Error Creating Credentials", err.message ? err.message : err);
+            return;
+        } finally {
+            setIsLoading(false);
+        }
+        verifyAssertionWithServer(credential, result.token);
+    }
+
+
+    async function verifyAssertionWithServer(assertedCredential: any, token: string) {
+        try {
+
+            // Move data into Arrays incase it is super long
+            let authData = new Uint8Array(assertedCredential.response.authenticatorData);
+            let clientDataJSON = new Uint8Array(assertedCredential.response.clientDataJSON);
+            let rawId = new Uint8Array(assertedCredential.rawId);
+            let sig = new Uint8Array(assertedCredential.response.signature);
+            const data = {
+                id: assertedCredential.id,
+                rawId: coerceToBase64Url(rawId),
+                type: assertedCredential.type,
+                extensions: assertedCredential.getClientExtensionResults(),
+                response: {
+                    authenticatorData: coerceToBase64Url(authData),
+                    clientDataJSON: coerceToBase64Url(clientDataJSON),
+                    signature: coerceToBase64Url(sig)
+                }
+            };
+
+
+            const response = await api.post(AUTH_URLS.AuthenticateFido + "?jdata=" + JSON.stringify(data) + '&token=' + token, {});
+
+            const res = await response.data;
+            if (res.success) {
+                if (handleSetSession) {
+                    handleSetSession(res.result, dispatch);
+                }
+                if (handleSetProfileData) {
+                    handleSetProfileData(res.result.accessToken, dispatch);
+                }
+                console.log("login successfull", res.result);
+                navigate('/');
+            } else {
+                showErrorAlert("Request to server failed", res.error);
+                setIsLoading(false);
+            }
+        } catch (err) {
+            showErrorAlert("Log In Failed", err);
+        }
+    }
+
+    //#endregion
 
     return (
         <PageWrapper
@@ -240,7 +412,7 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
                                 </div>
 
                                 <LoginHeader isNewUser={tenantStatus} />
-                                {!tenantStatus && (
+                                {!tenantStatus && false && (
                                     <>
                                         <Alert isLight icon='Lock' isDismissible>
                                             <div className='row'>
@@ -249,18 +421,6 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
                                                 </div>
                                                 <div className='col-12'>
                                                     <strong>Password:</strong> {USERS.JOHN.password}
-                                                </div>
-                                            </div>
-                                        </Alert>
-                                    </>
-                                )}
-                                {tenantChangeError && (
-                                    <>
-                                        <Alert isLight color='danger' icon='Error' isDismissible>
-                                            <div className='row'>
-                                                <div className='col-12'>
-                                                    <strong>Not Found:</strong> Tenant not found for
-                                                    "{tenantName}"
                                                 </div>
                                             </div>
                                         </Alert>
@@ -341,7 +501,7 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
                                                         onBlur={formik.handleBlur}
                                                     />
                                                 </FormGroup>
-                                                <div className="text-danger">{invalidFeedback}</div>
+                                                <div className='text-danger'>{invalidFeedback}</div>
                                             </div>
                                             <div className='col-12'>
                                                 {!signInPassword ? (
@@ -363,7 +523,7 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
                                                         {isLoading && (
                                                             <Spinner isSmall inButton isGrow />
                                                         )}
-                                                        Login
+                                                        Verify & Add
                                                     </Button>
                                                 )}
                                             </div>
@@ -371,7 +531,7 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
                                     )}
 
                                     {/* BEGIN :: Social Login */}
-                                    {!signInPassword && (
+                                    {!signInPassword && !tenantStatus && (
                                         <>
                                             <div className='col-12 mt-3 text-center text-muted'>
                                                 OR
@@ -384,22 +544,10 @@ const Login: FC<ILoginProps> = ({ isSignUp }) => {
                                                         'border-light': !darkModeStatus,
                                                         'border-dark': darkModeStatus,
                                                     })}
-                                                    icon='CustomApple'
-                                                    onClick={handleOnClick}>
-                                                    Sign in with Apple
-                                                </Button>
-                                            </div>
-                                            <div className='col-12'>
-                                                <Button
-                                                    isOutline
-                                                    color={darkModeStatus ? 'light' : 'dark'}
-                                                    className={classNames('w-100 py-3', {
-                                                        'border-light': !darkModeStatus,
-                                                        'border-dark': darkModeStatus,
-                                                    })}
-                                                    icon='CustomGoogle'
-                                                    onClick={handleOnClick}>
-                                                    Continue with Google
+                                                    icon='Lock'
+                                                    isDisable={!formik.values.loginuserName}
+                                                    onClick={handleAddDeviceFido}>
+                                                    Add account on this device
                                                 </Button>
                                             </div>
                                         </>

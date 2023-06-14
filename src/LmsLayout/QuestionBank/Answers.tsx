@@ -3,12 +3,10 @@ import Card, { CardActions, CardBody, CardFooter, CardHeader, CardLabel, CardSub
 import Page from '../../layout/Page/Page';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import './style.css';
-import Breadcrumb from '../../components/bootstrap/Breadcrumb';
 import SubHeader, { SubHeaderLeft, SubheaderSeparator, SubHeaderRight } from '../../layout/SubHeader/SubHeader';
 import Icon from '../../components/icon/Icon';
-import React, { useContext, useEffect, useState } from 'react';
-import { saveResultDetail, getQuestionToSolve, IQuestionProp, IResultProp, addRemoveFavourites, completed } from '../../services/QBankService';
-import AuthContext from '../../contexts/authContext';
+import React, { useEffect, useState } from 'react';
+import { getQuestionToSolve, IQuestionProp, IResultProp } from '../../services/QBankService';
 import { PaperMode } from '../../common/data/constants';
 import Button from '../../components/bootstrap/Button';
 import { LmsFeatures } from '../../menu';
@@ -16,7 +14,7 @@ import { LmsFeatures } from '../../menu';
 
 const QbankAnswers = () => {
     const navigate = useNavigate();
-    const { session } = useContext(AuthContext);
+
     const { resultID } = useParams();
     const [paperData, setpaperData] = useState<IResultProp>({} as IResultProp);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -25,7 +23,7 @@ const QbankAnswers = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await getQuestionToSolve(parseInt(resultID || ""), session?.userId, session?.accessToken);
+            const data = await getQuestionToSolve(parseInt(resultID || ""));
             data.details.map((detail, i) => {
                 detail.questOptions.map((o, oi) => {
                     o.IsChecked = detail.answer?.trim() == o.optionText?.trim();
@@ -35,7 +33,7 @@ const QbankAnswers = () => {
             setCurrentQuestion(data.details[0]);
         };
         fetchData();
-    }, [session?.accessToken, resultID, session?.userId]);
+    }, [resultID]);
 
 
     //#region Move next Prev or GotoQuestion

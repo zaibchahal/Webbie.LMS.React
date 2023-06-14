@@ -32,7 +32,7 @@ import { LmsFeatures, demoPagesMenu } from '../../menu';
 import { useNavigate } from 'react-router-dom';
 import { AppConst } from '../../common/data/constants';
 import { getCookie } from '../../common/data/helper';
-import AuthContext from '../../contexts/authContext';
+
 import {
     ITicket,
     getCategotyDropdown,
@@ -93,7 +93,6 @@ const Ticket = () => {
     const [perPage, setPerPage] = useState(PER_COUNT['5']);
     const Navigate = useNavigate();
     const { themeStatus } = useDarkMode();
-    const { session } = useContext(AuthContext);
     const [TicketList, setTicketList] = useState<ITicket[]>([]);
     const { items, requestSort, getClassNamesFor } = useSortableData(TicketList as ITicket[], null);
 
@@ -105,16 +104,16 @@ const Ticket = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const d = await getTicketList(session?.userId, 1, session?.accessToken);
+            const d = await getTicketList(0);
             setTicketList(d.items as ITicket[]);
-            const dropCategory = await getCategotyDropdown(session?.accessToken);
+            const dropCategory = await getCategotyDropdown();
             dispatch(UpdateCategoryList(dropCategory));
-            const dropPriority = await getPriorityDropdown(session?.accessToken);
+            const dropPriority = await getPriorityDropdown();
             setDropdownCategory(dropCategory);
             setDropdownPriority(dropPriority);
         };
         fetchData();
-    }, [dispatch, session?.userId, session?.accessToken]);
+    }, [dispatch]);
 
     const [date, setDate] = useState<Date>(new Date());
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
@@ -145,7 +144,7 @@ const Ticket = () => {
     };
 
     const HandleSubmitTicket = async () => {
-        await postTicket(TicketData, session?.accessToken);
+        await postTicket(TicketData);
     };
 
     const handleCategory = (e: any) => {

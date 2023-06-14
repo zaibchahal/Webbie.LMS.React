@@ -13,7 +13,7 @@ import { demoPagesMenu } from '../../menu';
 import useDarkMode from '../../hooks/useDarkMode';
 import useTourStep from '../../hooks/useTourStep';
 import { getKnoladgeBaseList } from '../../services/KnowladgeBase.service';
-import AuthContext from '../../contexts/authContext';
+
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
@@ -107,7 +107,6 @@ const Item: FC<IKnowledgeBase> = ({
 const KnowledgeGridPage = () => {
     const { darkModeStatus } = useDarkMode();
     let kbState = useSelector((store: RootState) => store.knowladgeBaseStore);
-    const { session } = useContext(AuthContext);
     const [filterableData, setFilterableData] = useState(kbState.kBList);
     const [knowladgeBaseList, setKnowladgeBaseList] = useState(kbState.kBList);
     let commonState = useSelector((store: RootState) => store.common);
@@ -118,11 +117,11 @@ const KnowledgeGridPage = () => {
     }, [kbState]);
 
     useEffect(() => {
-        getKnoladgeBaseList(session?.accessToken).then((res) => {
+        getKnoladgeBaseList().then((res) => {
             dispatch(UpdatekBList(res.items));
             console.log(res.items);
         });
-    }, [session?.accessToken, dispatch]);
+    }, [, dispatch]);
 
     const searchAndFilterData = (searchValue: string, category: string) => {
         let tempData = kbState.kBList;

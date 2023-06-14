@@ -8,7 +8,7 @@ import PaginationButtons, { dataPagination, PER_COUNT } from '../../components/P
 import useSortableData from '../../hooks/useSortableData';
 import useDarkMode from '../../hooks/useDarkMode';
 import { IQuestionPapersProp, getQuestionPapers, createTestResultByPaper } from '../../services/QBankService';
-import AuthContext from '../../contexts/authContext';
+
 import { LmsFeatures } from '../../menu';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import Page from '../../layout/Page/Page';
@@ -16,7 +16,6 @@ import { useNavigate } from 'react-router-dom';
 
 const PaperList = () => {
     const { themeStatus, darkModeStatus } = useDarkMode();
-    const { session } = useContext(AuthContext);
     const [data, setData] = useState<IQuestionPapersProp[]>([]);
 
 
@@ -24,11 +23,11 @@ const PaperList = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const d = await getQuestionPapers(session?.userId, session?.accessToken);
+            const d = await getQuestionPapers();
             setData(d as IQuestionPapersProp[]);
         };
         fetchData();
-    }, [session?.userId, session?.accessToken]);
+    }, []);
 
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -37,7 +36,7 @@ const PaperList = () => {
 
     const handleGenerateTest = (paperid: number) => {
         const postData = async () => {
-            const resultID = await createTestResultByPaper(paperid, session?.accessToken);
+            const resultID = await createTestResultByPaper(paperid);
             navigate("/mcq-bank/test/" + resultID);
         };
         postData();

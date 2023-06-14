@@ -1,17 +1,16 @@
-import React, { createContext, FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { createContext, FC, ReactNode, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { IUserProps, ISessionProps } from '../common/data/userSessionService';
-import { AppConst, PROFILE_URLS } from '../common/data/constants';
-import axios from 'axios';
+import { ISessionProps } from '../common/data/userSessionService';
+import { PROFILE_URLS } from '../common/data/constants';
+import { store } from '../store';
+import { UpdateSession, clearSession, UpdateUser, UpdatePic } from '../@features/Authentication/auth.slice';
+import api from '../services/baseService';
 
 export interface IAuthContextProps {
-    userData: Partial<IUserProps>;
-    session: Partial<ISessionProps>;
-    profilePicture: string;
-    handleSetSession: (data: ISessionProps) => void;
-    handleSetProfileData: (token: string) => void;
-    handleSetProfilePicture: (token: string | undefined) => void;
-    handleLogout: () => void;
+    handleSetSession: (data: ISessionProps, dispatch: any) => void;
+    handleSetProfileData: (token: string, dispatch: any) => void;
+    handleSetProfilePicture: (dispatch: any) => void;
+    handleLogout: (dispatch: any) => void;
 
 }
 const AuthContext = createContext<Partial<IAuthContextProps>>({});
@@ -20,89 +19,47 @@ interface IAuthContextProviderProps {
     children: ReactNode;
 }
 export const AuthContextProvider: FC<IAuthContextProviderProps> = ({ children }) => {
-
-    const getDataFromStorege = (Key: string) => {
-        try {
-            return JSON.parse(localStorage.getItem(Key) || '{}')
-        } catch {
-            return {};
-        }
-    }
-
-    const [session, setSession] = useState<ISessionProps>(getDataFromStorege(AppConst.CurrentSession) as ISessionProps);
-    const [userData, setProfileData] = useState<IUserProps>(getDataFromStorege(AppConst.CurrentUser) as IUserProps);
-    const [profilePicture, setProfilePicture] = useState<string>(localStorage.getItem(AppConst.ProfilePic) || '');
-
-    const handleSetSession = useCallback((data: ISessionProps) => {
-        setSession(data);
-        localStorage.setItem(AppConst.CurrentSession, JSON.stringify(data));
+    const handleSetSession = useCallback((data: ISessionProps, dispatch: any) => {
+        dispatch(UpdateSession(data));
     }, []);
 
-    const handleLogout = () => {
-        setSession({} as ISessionProps);
-        setProfileData({} as IUserProps);
-        setProfilePicture("");
-        localStorage.setItem(AppConst.CurrentSession, JSON.stringify({}));
-        localStorage.setItem(AppConst.CurrentUser, JSON.stringify({}));
-        localStorage.setItem(AppConst.ProfilePic, '');
+    const handleLogout = (dispatch: any) => {
+        dispatch(clearSession());
     };
 
-    const handleSetProfilePicture = useCallback(async (token: string | undefined) => {
+    const handleSetProfilePicture = useCallback(async (dispatch: any) => {
         try {
-            if (!token) {
-                token = session.accessToken;
-            }
-            const response = await axios.get(PROFILE_URLS.GetProfilePicture, {
-                headers: {
-                    Accept: 'text/plain',
-                    'Content-Type': 'application/json-patch+json',
-                    'X-XSRF-TOKEN': 'null',
-                    Authorization: `Bearer ${token}`
-                },
-            });
+            const response = await api.get(PROFILE_URLS.GetProfilePicture);
             var data = `data:image/png;base64,${response.data.result.profilePicture}`;
-            setProfilePicture(data);
-            localStorage.setItem(AppConst.ProfilePic, data);
+            dispatch(UpdatePic(data));
         } catch {
-            localStorage.setItem(AppConst.ProfilePic, '');
-        }
-    }, [session.accessToken]);
 
-    const handleSetProfileData = useCallback(async (token: string) => {
+        }
+    }, []);
+
+    const handleSetProfileData = useCallback(async (token: string, dispatch: any) => {
         try {
             if (!token) {
-                token = session.accessToken;
+                token = store.getState().session.Session.accessToken;
             }
-            handleSetProfilePicture(token);
-            const response = await axios.get(PROFILE_URLS.GetCurrentUserProfileForEdit, {
-                headers: {
-                    Accept: 'text/plain',
-                    'Content-Type': 'application/json-patch+json',
-                    'X-XSRF-TOKEN': 'null',
-                    Authorization: `Bearer ${token}`
-                },
-            });
+            handleSetProfilePicture(dispatch);
+            const response = await api.get(PROFILE_URLS.GetCurrentUserProfileForEdit);
             var data = response.data.result;
-            setProfileData(data as IUserProps);
-            localStorage.setItem(AppConst.CurrentUser, JSON.stringify(data));
+            dispatch(UpdateUser(data));
         } catch {
-            localStorage.setItem(AppConst.CurrentUser, JSON.stringify({}));
+
         }
-    }, [handleSetProfilePicture, session.accessToken]);
+    }, [handleSetProfilePicture]);
 
 
     const value = useMemo(
         () => ({
-            session,
-            setSession,
-            userData,
             handleSetSession,
             handleSetProfileData,
             handleSetProfilePicture,
-            profilePicture,
             handleLogout
         }),
-        [session, userData, handleSetSession, handleSetProfileData, handleSetProfilePicture, profilePicture],
+        [handleSetSession, handleSetProfileData, handleSetProfilePicture],
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

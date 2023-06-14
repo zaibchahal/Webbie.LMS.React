@@ -35,13 +35,15 @@ import {
 } from '@microsoft/signalr';
 import { API_BASE_URL, AppConst, BASE_URL } from '../../common/data/constants';
 import { getCookie } from '../../common/data/helper';
-import AuthContext from '../../contexts/authContext';
+
 import Badge from '../../components/bootstrap/Badge';
 import useDarkMode from '../../hooks/useDarkMode';
+import { store } from '../../store';
 
 const LiveClassPage = () => {
     const navigate = useNavigate();
-
+    var userID = store.getState().session.Session.userId;
+    var User = store.getState().session.User;
     const TABS: { [key: string]: IUserProps } = {
         CHLOE: USERS.CHLOE,
         GRACE: USERS.GRACE,
@@ -105,7 +107,6 @@ const LiveClassPage = () => {
         setMessageValue('');
     };
 
-    const { session } = useContext(AuthContext);
 
     const sendMessage = (messageData: any, callback: any) => {
         if (!connection || connection.state !== HubConnectionState.Connected) {
@@ -116,11 +117,11 @@ const LiveClassPage = () => {
         connection
             .invoke('sendMessage', {
                 tenantId: getCookie(AppConst.TenantID),
-                userId: session?.userId,
+                userId: userID,
                 chatGroupId: 1,
                 message: messageData,
                 tenancyName: getCookie(AppConst.TenantName),
-                userName: '',
+                userName: User.name,
                 profilePictureId: 12,
             })
             .then(function (result) {

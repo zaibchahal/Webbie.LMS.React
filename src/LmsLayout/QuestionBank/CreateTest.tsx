@@ -5,12 +5,10 @@ import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import { LmsFeatures } from '../../menu';
 import { ISystemProp, IQuestionModeProp, getQuestionCount, getSystemQuestionCount, createTestResult, ICreateTestProp } from '../../services/QBankService';
 import './style.css';
-import React, { useContext, useEffect, useState } from 'react';
-import AuthContext from '../../contexts/authContext';
+import React, { useEffect, useState } from 'react';
 import { PaperMode } from '../../common/data/constants';
 const CreateTest = () => {
     const navigate = useNavigate();
-    const { session } = useContext(AuthContext);
 
     const [questionModes, setQuestionModes] = useState<IQuestionModeProp[]>([]);
     const [systems, setSystems] = useState<ISystemProp[]>([]);
@@ -23,13 +21,13 @@ const CreateTest = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const questmodedata = await getQuestionCount(session?.userId, session?.accessToken);
-            const SystemQuestionCount = await getSystemQuestionCount(session?.userId, session?.accessToken);
+            const questmodedata = await getQuestionCount();
+            const SystemQuestionCount = await getSystemQuestionCount();
             setQuestionModes(questmodedata);
             setSystems(SystemQuestionCount);
         };
         fetchData();
-    }, [session?.userId, session?.accessToken]);
+    }, []);
 
     const handleTestModeChange = (e: any) => {
         const selectedTestMode = e.target.value;
@@ -112,7 +110,7 @@ const CreateTest = () => {
                     mode: testMode,
                     questionMode: questionMode,
                     systems: systems.map((system) => system.id).join(',')
-                } as ICreateTestProp, session?.accessToken);
+                } as ICreateTestProp);
 
             navigate("/mcq-bank/test/" + resultID);
         };

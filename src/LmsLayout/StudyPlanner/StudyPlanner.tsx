@@ -44,10 +44,11 @@ import Tooltips from '../../components/bootstrap/Tooltips';
 import useDarkMode from '../../hooks/useDarkMode';
 import { TColor } from '../../type/color-type';
 import { IStudyPlanner, getStudyPlannerList, postStudyPlanner } from '../../services/StudyPlanner';
-import AuthContext from '../../contexts/authContext';
+
 import { getCookie } from '../../common/data/helper';
 import { AppConst } from '../../common/data/constants';
 import { getRandomBootstrapColor } from '../knowledge/helper/dummyKnowledgeData';
+import { store } from '../../store';
 
 const localizer = dayjsLocalizer(dayjs);
 const now = new Date();
@@ -173,7 +174,7 @@ const MyEventDay = (data: { event: IEvent }) => {
 
 const CalendarPage = () => {
     const { darkModeStatus, themeStatus } = useDarkMode();
-
+    let userData = store.getState().session.User;
     const [employeeList, setEmployeeList] = useState({
         [USERS.JOHN.userName]: true,
         [USERS.ELLA.userName]: true,
@@ -183,12 +184,10 @@ const CalendarPage = () => {
     // Events
     const [events, setEvents] = useState(eventList);
 
-    const { session } = useContext(AuthContext);
-    const { profilePicture, userData, handleSetProfilePicture } = useContext(AuthContext);
 
     // FOR DEV
     useEffect(() => {
-        getStudyPlannerList(session?.userId, session?.accessToken).then((res) => {
+        getStudyPlannerList().then((res) => {
             // console.log(res);
             setEvents(res.items);
 
@@ -205,7 +204,7 @@ const CalendarPage = () => {
             setEvents(convertedData);
             // console.log(eventList);
         });
-    }, [session?.accessToken, session?.userId, userData]);
+    }, [userData]);
 
     const initialEventItem: IEvent = {
         start: undefined,
@@ -337,12 +336,12 @@ const CalendarPage = () => {
         lastModificationTime: '',
         lastModifierUserId: 0,
         creationTime: dayjs().format(),
-        creatorUserId: session?.userId!,
+        creatorUserId: parseInt(userData.id),
         id: 0,
     };
 
     const handleSubmitEvent = () => {
-        postStudyPlanner(InsertData, session?.accessToken)
+        postStudyPlanner(InsertData)
             .then((res) => {
                 console.log(res);
             })

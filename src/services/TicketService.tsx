@@ -1,22 +1,12 @@
 import React, { useEffect, useRef, useContext, useState } from 'react';
-import axios from 'axios';
+import api from './baseService';
 import { AppConst, STUDENT_URLS } from '../common/data/constants';
+import { store } from '../store';
 
-export const getTicketList = async (
-    userId: number | undefined,
-    issueTo: number,
-    accessToken: string | undefined,
-) => {
+const userId = store.getState().session.Session.userId;
+export const getTicketList = async (issueTo: number) => {
     try {
-        const response = await axios.get(STUDENT_URLS.GetTicketList, {
-            headers: {
-                Accept: 'text/plain',
-                'Content-Type': 'application/json-patch+json',
-                'X-XSRF-TOKEN': 'null',
-                Authorization: `Bearer ${accessToken}`,
-            },
-            withCredentials: true,
-        });
+        const response = await api.get(STUDENT_URLS.GetTicketList, { IssuedTo: issueTo, UserID: userId } as any);
         console.log(response.data.result);
         return response.data.result || [];
     } catch {
@@ -24,51 +14,27 @@ export const getTicketList = async (
     }
 };
 
-export const postTicket = async (TicketData: ITicket, accessToken: string | undefined) => {
+export const postTicket = async (TicketData: ITicket) => {
     try {
-        const response = await axios.post(STUDENT_URLS.PostTicket, TicketData, {
-            headers: {
-                Accept: 'text/plain',
-                'Content-Type': 'application/json-patch+json',
-                'X-XSRF-TOKEN': 'null',
-                Authorization: `Bearer ${accessToken}`,
-            },
-            withCredentials: true,
-        });
+        const response = await api.post(STUDENT_URLS.PostTicket, TicketData);
         return response;
     } catch {
         return [];
     }
 };
 
-export const getCategotyDropdown = async (accessToken: string | undefined) => {
+export const getCategotyDropdown = async () => {
     try {
-        const response = await axios.get(STUDENT_URLS.SupportCategotyDropdown, {
-            headers: {
-                Accept: 'text/plain',
-                'Content-Type': 'application/json-patch+json',
-                'X-XSRF-TOKEN': 'null',
-                Authorization: `Bearer ${accessToken}`,
-            },
-            withCredentials: true,
-        });
+        const response = await api.get(STUDENT_URLS.SupportCategotyDropdown);
         return response.data.result || [];
     } catch {
         return [];
     }
 };
 
-export const getPriorityDropdown = async (accessToken: string | undefined) => {
+export const getPriorityDropdown = async () => {
     try {
-        const response = await axios.get(STUDENT_URLS.SupportPriorityDropdown, {
-            headers: {
-                Accept: 'text/plain',
-                'Content-Type': 'application/json-patch+json',
-                'X-XSRF-TOKEN': 'null',
-                Authorization: `Bearer ${accessToken}`,
-            },
-            withCredentials: true,
-        });
+        const response = await api.get(STUDENT_URLS.SupportPriorityDropdown);
         return response.data.result || [];
     } catch {
         return [];

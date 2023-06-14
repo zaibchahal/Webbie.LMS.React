@@ -27,7 +27,7 @@ import SubHeader, {
 import { demoPagesMenu } from '../../menu';
 import { getStudyPlannerList } from '../../services/StudyPlanner';
 import { GetCourse, GetSearchContent, getMyCoursesList } from '../../services/Courses.server';
-import AuthContext from '../../contexts/authContext';
+
 import { useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { useSelector } from 'react-redux';
@@ -164,11 +164,10 @@ const ProjectManagementsList = () => {
     // 	[navigate],
     // );
 
-    const { session } = useContext(AuthContext);
     const dispatch = useDispatch<AppDispatch>();
     let myCoursesStore = useSelector((store: RootState) => store.myCourses);
     const handleOnClickToProjectPage = (CourseId: any) => {
-        GetCourse(CourseId, session?.accessToken).then((res) => {
+        GetCourse(CourseId).then((res) => {
             dispatch(UpdateCourse(res));
             console.log(res);
             navigate('../courses-page');
@@ -176,15 +175,15 @@ const ProjectManagementsList = () => {
     };
 
     useEffect(() => {
-        getMyCoursesList(session?.userId, session?.accessToken).then((res) => {
+        getMyCoursesList().then((res) => {
             console.log(res);
             dispatch(UpdateCoursesList(res));
         });
-        GetSearchContent('cha', session?.accessToken).then((res) => {
+        GetSearchContent('cha').then((res) => {
             console.log(res);
             // dispatch(UpdateCoursesList(res));
         });
-    }, [session?.accessToken, session?.userId, dispatch]);
+    }, [, dispatch]);
 
     return (
         <PageWrapper title={demoPagesMenu.projectManagement.subMenu.list.text}>

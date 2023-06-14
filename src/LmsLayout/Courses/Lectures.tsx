@@ -14,7 +14,7 @@ import { GetVideoDetails, ILecture, postIsWatched } from '../../services/Courses
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { UpdateVideoDetails, UpdateVideoSrc } from '../../@features/MyCourses/Courses.slice';
-import AuthContext from '../../contexts/authContext';
+
 
 const Lectures = (props: {
     mainHead: string;
@@ -26,38 +26,32 @@ const Lectures = (props: {
     const totallectures = props.totallectures;
     const totaltime = props.totaltime;
     const lectures = props.lectures;
-    const { session } = useContext(AuthContext);
     const { darkModeStatus } = useDarkMode();
     const [show, setShow] = useState(false);
     const [check, setCheck] = useState(false);
     const dispatch = useDispatch<AppDispatch>();
     useEffect(() => {
-        GetVideoDetails(
-            lectures[0].id,
-            lectures[0].sectionID,
-            lectures[0].courseID,
-            session?.accessToken,
-        ).then((res) => {
+        GetVideoDetails(lectures[0].id, lectures[0].sectionID, lectures[0].courseID).then((res) => {
             console.log(res);
             dispatch(UpdateVideoDetails(res));
         });
-    }, [dispatch, session?.accessToken, session?.userId, lectures]);
+    }, [dispatch, lectures]);
 
     let myCourseStore = useSelector((store: RootState) => store.myCourses);
 
     const handleVideoPlay = (l: ILecture) => {
         // dispatch(UpdateVideoSrc(l.path));
-        GetVideoDetails(l.id, l.sectionID, l.courseID, session?.accessToken).then((res) => {
+        GetVideoDetails(l.id, l.sectionID, l.courseID).then((res) => {
             console.log(res);
             dispatch(UpdateVideoDetails(res));
-            postIsWatched(l.id, session?.accessToken).then((res2) => {
+            postIsWatched(l.id).then((res2) => {
                 console.log(res2);
             });
         });
     };
 
     // const handleIsWatched=()=>{
-    // 	postIsWatched(session?.accessToken).then((res) => {
+    // 	postIsWatched().then((res) => {
     // 		console.log(res);
     // 		dispatch(UpdateVideoDetails(res));
     // 	});

@@ -40,10 +40,9 @@ import { Calendar as DatePicker } from 'react-date-range';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import { LmsFeatures, demoPagesMenu } from '../../menu';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { AppConst, BASE_URL } from '../../common/data/constants';
 import { getCookie } from '../../common/data/helper';
-import AuthContext from '../../contexts/authContext';
+
 import { ILiveClassList, getLiveClassList } from '../../services/LiveClasses';
 import NoData from '../no-data/NoData';
 
@@ -87,7 +86,6 @@ const LiveCourses = () => {
     const [perPage, setPerPage] = useState(PER_COUNT['5']);
     const Navigate = useNavigate();
     const { themeStatus } = useDarkMode();
-    const { session } = useContext(AuthContext);
     const [liveClassList, setLiveClassList] = useState<ILiveClassList[]>([]);
     const { items, requestSort, getClassNamesFor } = useSortableData(
         liveClassList as ILiveClassList[],
@@ -96,13 +94,13 @@ const LiveCourses = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            await getLiveClassList(3, session?.accessToken).then((res: any) => {
+            await getLiveClassList(3).then((res: any) => {
                 setLiveClassList(res as ILiveClassList[]);
             });
             // useSortableData(d.items as ILiveClassList[], null);
         };
         fetchData();
-    }, [session?.accessToken]);
+    }, []);
 
     const [date, setDate] = useState<Date>(new Date());
     return (

@@ -29,7 +29,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import Ticket from './Tickets';
 import { getFaqList } from '../../services/FAQ.service';
-import AuthContext from '../../contexts/authContext';
+
 import { getRandomBootstrapColor } from '../knowledge/helper/dummyKnowledgeData';
 import Label from '../../components/bootstrap/forms/Label';
 import FormGroup from '../../components/bootstrap/forms/FormGroup';
@@ -50,7 +50,6 @@ const HTMLStringComponent: React.FC<HTMLStringProps> = ({ htmlString }) => {
 };
 
 const SupportCenter = () => {
-    const { session } = useContext(AuthContext);
     const { darkModeStatus } = useDarkMode();
     const [filterableData, setFilterableData] = useState([]);
     let commonState = useSelector((store: RootState) => store.common);
@@ -70,10 +69,10 @@ const SupportCenter = () => {
     const [faqList, setFaqlist] = useState([]);
 
     useEffect(() => {
-        getFaqList(session?.accessToken).then((res) => {
+        getFaqList().then((res) => {
             setFaqlist(res.items);
         });
-    }, [session?.accessToken]);
+    }, []);
 
     return (
         <PageWrapper title={LmsFeatures.supportcenter.text}>

@@ -1,75 +1,39 @@
-import React, { useEffect, useRef, useContext, useState } from 'react';
-import axios from 'axios';
-import { AppConst, QBANK_URLS } from '../common/data/constants';
+import React from 'react';
+import { QBANK_URLS } from '../common/data/constants';
+import { store } from '../store';
 import api from './baseService';
 
-export const getQuestionCount = async (userId: number | undefined, accessToken: string | undefined,) => {
+const userId = store.getState().session.Session.userId;
+export const getQuestionCount = async () => {
     try {
-        const response = await api.get(
-            QBANK_URLS.GetQuestionCount + '?SID=' + userId,
-            {
-                headers: {
-                    Accept: 'text/plain',
-                    'Content-Type': 'application/json-patch+json',
-                    'X-XSRF-TOKEN': 'null',
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                withCredentials: true,
-            },
-        );
+
+        const response = await api.get(QBANK_URLS.GetQuestionCount + '?SID=' + userId);
         return (response.data.result || []) as IQuestionModeProp[];
     } catch {
         return [];
     }
 };
-export const getSystemQuestionCount = async (userId: number | undefined, accessToken: string | undefined,) => {
+export const getSystemQuestionCount = async () => {
     try {
-        const response = await api.get(
-            QBANK_URLS.GetSystemQuestionCount + '?SID=' + userId,
-            {
-                headers: {
-                    Accept: 'text/plain',
-                    'Content-Type': 'application/json-patch+json',
-                    'X-XSRF-TOKEN': 'null',
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                withCredentials: true,
-            },
-        );
+        const response = await api.get(QBANK_URLS.GetSystemQuestionCount + '?SID=' + userId);
         return (response.data.result || []) as ISystemProp[];
     } catch {
         return [];
     }
 };
 
-export const createTestResult = async (testProp: ICreateTestProp, accessToken: string | undefined) => {
+export const createTestResult = async (testProp: ICreateTestProp) => {
     try {
-        const response = await api.post(QBANK_URLS.CreateTestResult, testProp, {
-            headers: {
-                Accept: 'text/plain',
-                'Content-Type': 'application/json-patch+json',
-                'X-XSRF-TOKEN': 'null',
-                Authorization: `Bearer ${accessToken}`,
-            },
-            withCredentials: true,
-        });
+        const response = await api.post(QBANK_URLS.CreateTestResult, testProp);
         return response.data.result;
     } catch {
         return 0;
     }
 };
 
-export const saveResultDetail = async (testProp: IResultDetailProp, accessToken: string | undefined) => {
+export const saveResultDetail = async (testProp: IResultDetailProp) => {
     try {
-        const response = await api.post(QBANK_URLS.SaveResultDetail, testProp, {
-            headers: {
-                Accept: 'text/plain',
-                'Content-Type': 'application/json-patch+json',
-                'X-XSRF-TOKEN': 'null',
-                Authorization: `Bearer ${accessToken}`,
-            },
-            withCredentials: true,
-        });
+        const response = await api.post(QBANK_URLS.SaveResultDetail, testProp);
         return response.data.result;
     } catch {
         return 0;
@@ -77,20 +41,9 @@ export const saveResultDetail = async (testProp: IResultDetailProp, accessToken:
 };
 
 
-export const getQuestionToSolve = async (resultID: number | undefined, userId: number | undefined, accessToken: string | undefined,) => {
+export const getQuestionToSolve = async (resultID: number | undefined,) => {
     try {
-        const response = await api.get(
-            QBANK_URLS.GetQuestionToSolve + '?ID=' + resultID + '&SID=' + userId,
-            {
-                headers: {
-                    Accept: 'text/plain',
-                    'Content-Type': 'application/json-patch+json',
-                    'X-XSRF-TOKEN': 'null',
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                withCredentials: true,
-            },
-        );
+        const response = await api.get(QBANK_URLS.GetQuestionToSolve + '?ID=' + resultID + '&SID=' + userId);
         return (response.data.result || {}) as IResultProp;
     } catch (error: any) {
         console.log(error);
@@ -98,20 +51,9 @@ export const getQuestionToSolve = async (resultID: number | undefined, userId: n
     }
 };
 
-export const getQuestionPapers = async (userId: number | undefined, accessToken: string | undefined,) => {
+export const getQuestionPapers = async () => {
     try {
-        const response = await api.get(
-            QBANK_URLS.GetQuestionPapers + '?SID=' + userId,
-            {
-                headers: {
-                    Accept: 'text/plain',
-                    'Content-Type': 'application/json-patch+json',
-                    'X-XSRF-TOKEN': 'null',
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                withCredentials: true,
-            },
-        );
+        const response = await api.get(QBANK_URLS.GetQuestionPapers + '?SID=' + userId);
         return (response.data.result || []) as IQuestionPapersProp[];
     } catch (error: any) {
         console.log(error);
@@ -119,20 +61,9 @@ export const getQuestionPapers = async (userId: number | undefined, accessToken:
     }
 };
 
-export const getResultList = async (userId: number | undefined, accessToken: string | undefined,) => {
+export const getResultList = async () => {
     try {
-        const response = await api.get(
-            QBANK_URLS.GetResults + '?SID=' + userId,
-            {
-                headers: {
-                    Accept: 'text/plain',
-                    'Content-Type': 'application/json-patch+json',
-                    'X-XSRF-TOKEN': 'null',
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                withCredentials: true,
-            },
-        );
+        const response = await api.get(QBANK_URLS.GetResults + '?SID=' + userId);
         return (response.data.result || []) as IResultProp[];
     } catch (error: any) {
         console.log(error);
@@ -140,51 +71,27 @@ export const getResultList = async (userId: number | undefined, accessToken: str
     }
 };
 
-export const addRemoveFavourites = async (testProp: IFavouriteProp, accessToken: string | undefined) => {
+export const addRemoveFavourites = async (testProp: IFavouriteProp) => {
     try {
-        const response = await api.post(QBANK_URLS.AddRemoveFavourites, testProp, {
-            headers: {
-                Accept: 'text/plain',
-                'Content-Type': 'application/json-patch+json',
-                'X-XSRF-TOKEN': 'null',
-                Authorization: `Bearer ${accessToken}`,
-            },
-            withCredentials: true,
-        });
+        const response = await api.post(QBANK_URLS.AddRemoveFavourites, testProp);
         return response.data.result;
     } catch {
         return 0;
     }
 };
 
-export const createTestResultByPaper = async (paperID: number, accessToken: string | undefined) => {
+export const createTestResultByPaper = async (paperID: number) => {
     try {
-        const response = await api.post(QBANK_URLS.CreateTestResultByPaper + "?paperID=" + paperID, {}, {
-            headers: {
-                Accept: 'text/plain',
-                'Content-Type': 'application/json-patch+json',
-                'X-XSRF-TOKEN': 'null',
-                Authorization: `Bearer ${accessToken}`,
-            },
-            withCredentials: true,
-        });
+        const response = await api.post(QBANK_URLS.CreateTestResultByPaper + "?paperID=" + paperID, {});
         return response.data.result;
     } catch {
         return 0;
     }
 };
 
-export const completed = async (id: number, accessToken: string | undefined) => {
+export const completed = async (id: number) => {
     try {
-        const response = await api.post(QBANK_URLS.Completed, { id: id }, {
-            headers: {
-                Accept: 'text/plain',
-                'Content-Type': 'application/json-patch+json',
-                'X-XSRF-TOKEN': 'null',
-                Authorization: `Bearer ${accessToken}`,
-            },
-            withCredentials: true,
-        });
+        const response = await api.post(QBANK_URLS.Completed, { id: id });
         return response.data.result;
     } catch {
         return 0;

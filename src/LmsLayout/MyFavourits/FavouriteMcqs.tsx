@@ -8,14 +8,13 @@ import PaginationButtons, { dataPagination, PER_COUNT } from '../../components/P
 import useSortableData from '../../hooks/useSortableData';
 import useDarkMode from '../../hooks/useDarkMode';
 import { IFavouriteList, getFavouriteList } from '../../services/favourits';
-import AuthContext from '../../contexts/authContext';
+
 
 interface IFavouriteMcqsProps {
     isFluid?: boolean;
 }
 const FavouriteMcqs: FC<IFavouriteMcqsProps> = ({ isFluid }) => {
     const { themeStatus, darkModeStatus } = useDarkMode();
-    const { session } = useContext(AuthContext);
     // BEGIN :: Upcoming Events
     const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
     const [data, setData] = useState<IFavouriteList[]>([]);
@@ -28,11 +27,11 @@ const FavouriteMcqs: FC<IFavouriteMcqsProps> = ({ isFluid }) => {
     // END :: Upcoming Events
     useEffect(() => {
         const fetchData = async () => {
-            const d = await getFavouriteList(0, session?.accessToken);
+            const d = await getFavouriteList(0);
             setData(d as IFavouriteList[]);
         };
         fetchData();
-    }, [session?.accessToken]);
+    }, []);
 
 
     const [currentPage, setCurrentPage] = useState(1);

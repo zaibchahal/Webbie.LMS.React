@@ -8,7 +8,7 @@ import Icon from '../../components/icon/Icon';
 import useSortableData from '../../hooks/useSortableData';
 import useDarkMode from '../../hooks/useDarkMode';
 import { IQuestionPapersProp, getQuestionPapers, createTestResultByPaper, getQuestionToSolve, IResultProp } from '../../services/QBankService';
-import AuthContext from '../../contexts/authContext';
+
 import { LmsFeatures } from '../../menu';
 import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import Page from '../../layout/Page/Page';
@@ -19,7 +19,7 @@ import { ApexOptions } from 'apexcharts';
 const QbankAnalysis = () => {
     const { themeStatus, darkModeStatus } = useDarkMode();
     const { resultID } = useParams();
-    const { session } = useContext(AuthContext);
+
     const [paperData, setpaperData] = useState<IResultProp>({} as IResultProp);
     const [correct, setcorrect] = useState(0);
     const [incorrect, setincorrect] = useState(0);
@@ -84,7 +84,7 @@ const QbankAnalysis = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await getQuestionToSolve(parseInt(resultID || ""), session?.userId, session?.accessToken);
+            const data = await getQuestionToSolve(parseInt(resultID || ""));
             setpaperData(data);
 
             const incorrectcount = data.details.filter(question => !question.isTrue).length;
@@ -106,7 +106,7 @@ const QbankAnalysis = () => {
             });
         };
         fetchData();
-    }, [chartOptions, session?.userId, session?.accessToken, resultID]);
+    }, [chartOptions, resultID]);
 
 
 

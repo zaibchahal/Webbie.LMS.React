@@ -10,12 +10,17 @@ import Collapse from '../../components/bootstrap/Collapse';
 import { NavigationLine } from '../Navigation/Navigation';
 import Icon from '../../components/icon/Icon';
 import useNavigationItemHandle from '../../hooks/useNavigationItemHandle';
+
+import { store } from '../../store';
+import { useDispatch } from 'react-redux';
 import AuthContext from '../../contexts/authContext';
-import { ISessionProps, IUserProps } from '../../common/data/userSessionService';
 
 const User = () => {
-    const { userData, handleLogout, profilePicture } = useContext(AuthContext);
+    const { handleLogout } = useContext(AuthContext);
+    const dispatch = useDispatch();
 
+    let myStore = store.getState().session;
+    let userData = myStore.User;
     const navigate = useNavigate();
     const handleItem = useNavigationItemHandle();
     const { darkModeStatus, setDarkModeStatus } = useDarkMode();
@@ -31,12 +36,7 @@ const User = () => {
                 role='presentation'
                 onClick={() => setCollapseStatus(!collapseStatus)}>
                 <div className='user-avatar'>
-                    <img
-                        src={profilePicture}
-                        alt='Avatar'
-                        width={128}
-                        height={128}
-                    />
+                    <img src={myStore.ProfilePicture} alt='Avatar' width={128} height={128} />
                 </div>
                 <div className='user-info'>
                     <div className='user-name d-flex align-items-center d-flex justify-content-between'>
@@ -124,7 +124,9 @@ const User = () => {
                             role='presentation'
                             className='navigation-item cursor-pointer'
                             onClick={() => {
-                                if (handleLogout) { handleLogout(); }
+                                if (handleLogout) {
+                                    handleLogout(dispatch);
+                                }
                                 navigate(`../${demoPagesMenu.login.path}`);
                             }}>
                             <span className='navigation-link navigation-link-pill'>

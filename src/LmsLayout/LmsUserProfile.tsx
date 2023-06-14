@@ -51,10 +51,13 @@ import axios, { AxiosError } from 'axios';
 import { AppConst, PROFILE_URLS } from '../common/data/constants';
 import AuthContext from '../contexts/authContext';
 import { FaFacebook, FaGithub, FaGoogle, FaTwitter } from 'react-icons/fa';
+import api from '../services/baseService';
+import { useDispatch } from 'react-redux';
+import { store } from '../store';
 const LmsUserProfile = () => {
-    const { session } = useContext(AuthContext);
+    const dispatch = useDispatch();
     const { themeStatus } = useDarkMode();
-    const { profilePicture, userData, handleSetProfilePicture } = useContext(AuthContext);
+    const { handleSetProfilePicture } = useContext(AuthContext);
 
     /**
      * Common
@@ -75,15 +78,7 @@ const LmsUserProfile = () => {
     const handleChangePassword = async () => {
         setIsLoading(true);
         try {
-            const response = await axios.post(PROFILE_URLS.ChangePassword, pswformik.values, {
-                headers: {
-                    Accept: 'text/plain',
-                    'Content-Type': 'application/json-patch+json',
-                    'X-XSRF-TOKEN': 'null',
-                    Authorization: `Bearer ${session?.accessToken}`,
-                },
-                withCredentials: true,
-            });
+            const response = await api.post(PROFILE_URLS.ChangePassword, pswformik.values);
             var data = response.data.result;
 
             showNotification(
@@ -120,42 +115,26 @@ const LmsUserProfile = () => {
             formData.append('FileName', (image as any).name);
             formData.append('FileToken', t);
 
-            var res = await axios
-                .post(PROFILE_URLS.UploadProfilePicture, formData, {
-                    headers: {
-                        Authorization: `Bearer ${session?.accessToken}`,
-                    },
-                    withCredentials: true,
-                })
+            var res = await api.post(PROFILE_URLS.UploadProfilePicture, formData)
                 .then((res2) => {
                     const result = res2.data.result;
                     console.log(result);
                     if (res2.data.success) {
-                        axios
-                            .put(
-                                PROFILE_URLS.UpdateProfilePicture,
-                                {
-                                    fileToken: t,
-                                    x: 0,
-                                    y: 0,
-                                    width: result.width,
-                                    height: result.height,
-                                    useGravatarProfilePicture: false,
-                                },
-                                {
-                                    headers: {
-                                        Accept: 'text/plain',
-                                        'Content-Type': 'application/json-patch+json',
-                                        'X-XSRF-TOKEN': 'null',
-                                        Authorization: `Bearer ${session?.accessToken}`,
-                                    },
-                                    withCredentials: true,
-                                },
-                            )
+                        api.put(
+                            PROFILE_URLS.UpdateProfilePicture,
+                            {
+                                fileToken: t,
+                                x: 0,
+                                y: 0,
+                                width: result.width,
+                                height: result.height,
+                                useGravatarProfilePicture: false,
+                            }
+                        )
                             .then((res3) => {
                                 if (res3.data.success) {
                                     if (handleSetProfilePicture)
-                                        handleSetProfilePicture(session?.accessToken);
+                                        handleSetProfilePicture(dispatch);
                                 }
                             });
                     }
@@ -165,22 +144,18 @@ const LmsUserProfile = () => {
         }
         setIsLoading(false);
     }
-    const data = userData || {};
+    const data = store.getState().session.User;
+    const profilePicture = store.getState().session.ProfilePicture;
 
     const formik = useFormik({
         initialValues: {
             firstName: data.name || '',
             lastName: data.surname || '',
             displayName: data.username || '',
-            address: '',
             emailAddress: data.emailAddress || '',
-            phone: data.phoneNumber || '',
             currentPassword: '',
             newPassword: '',
-            confirmPassword: '',
-            checkOne: true,
-            checkTwo: false,
-            checkThree: true,
+            confirmPassword: ''
         },
         validate,
         onSubmit: () => {
@@ -263,7 +238,7 @@ const LmsUserProfile = () => {
                         ]}
                     />
                     <SubheaderSeparator />
-                    <span className='text-muted'>{userData?.name + ' ' + userData?.surname}</span>
+                    <span className='text-muted'>{data?.name + ' ' + data?.surname}</span>
                 </SubHeaderLeft>
                 <SubHeaderRight>
                     <Button
@@ -392,25 +367,6 @@ const LmsUserProfile = () => {
                                             />
                                         </FormGroup>
                                     </div>
-                                    <div className='col-6'>
-                                        <FormGroup
-                                            id='address'
-                                            label='Address'
-                                            isFloating
-                                            formText='This will be how your name will be displayed in the account section and in reviews'>
-                                            <Input
-                                                placeholder='Address'
-                                                autoComplete='userName'
-                                                onChange={formik.handleChange}
-                                                onBlur={formik.handleBlur}
-                                                value={formik.values.address}
-                                                isValid={formik.isValid}
-                                                isTouched={formik.touched.address}
-                                                invalidFeedback={formik.errors.address}
-                                                validFeedback='Looks good!'
-                                            />
-                                        </FormGroup>
-                                    </div>
                                 </div>
                             </CardBody>
                         </Card>
@@ -460,23 +416,23 @@ const LmsUserProfile = () => {
                                     {/* {EmailVerification &&
 
 									} */}
-                                    <div className='col-md-6'>
-                                        <FormGroup id='phone' label='Phone Number' isFloating>
-                                            <Input
-                                                type='tel'
-                                                placeholder='Phone Number'
-                                                autoComplete='tel'
-                                                onChange={formik.handleChange}
-                                                onBlur={formik.handleBlur}
-                                                value={formik.values.phone}
-                                                isValid={formik.isValid}
-                                                isTouched={formik.touched.phone}
-                                                invalidFeedback={formik.errors.phone}
-                                                validFeedback='Looks good!'
-                                            />
-                                        </FormGroup>
-                                        <Verifynumber />
-                                    </div>
+                                    {/*<div className='col-md-6'>*/}
+                                    {/*    <FormGroup id='phone' label='Phone Number' isFloating>*/}
+                                    {/*        <Input*/}
+                                    {/*            type='tel'*/}
+                                    {/*            placeholder='Phone Number'*/}
+                                    {/*            autoComplete='tel'*/}
+                                    {/*            onChange={formik.handleChange}*/}
+                                    {/*            onBlur={formik.handleBlur}*/}
+                                    {/*            value={formik.values.phone}*/}
+                                    {/*            isValid={formik.isValid}*/}
+                                    {/*            isTouched={formik.touched.phone}*/}
+                                    {/*            invalidFeedback={formik.errors.phone}*/}
+                                    {/*            validFeedback='Looks good!'*/}
+                                    {/*        />*/}
+                                    {/*    </FormGroup>*/}
+                                    {/*    <Verifynumber />*/}
+                                    {/*</div>*/}
                                 </div>
                             </CardBody>
                         </Card>

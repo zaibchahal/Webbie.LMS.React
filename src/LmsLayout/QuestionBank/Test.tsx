@@ -5,15 +5,13 @@ import PageWrapper from '../../layout/PageWrapper/PageWrapper';
 import './style.css';
 import SubHeader, { SubHeaderLeft, SubheaderSeparator, SubHeaderRight } from '../../layout/SubHeader/SubHeader';
 import Icon from '../../components/icon/Icon';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { saveResultDetail, getQuestionToSolve, IQuestionProp, IResultProp, addRemoveFavourites, completed } from '../../services/QBankService';
-import AuthContext from '../../contexts/authContext';
 import { PaperMode } from '../../common/data/constants';
 
 
 const Test = () => {
     const navigate = useNavigate();
-    const { session } = useContext(AuthContext);
     const { resultID } = useParams();
     const [paperData, setpaperData] = useState<IResultProp>({} as IResultProp);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -22,9 +20,9 @@ const Test = () => {
     const [allowEnd, setallowEnd] = useState(false);
 
     const CompleteResult = useCallback(async (type: string) => {
-        const data = await completed(parseInt(resultID || ""), session?.accessToken);
+        const data = await completed(parseInt(resultID || ""));
         navigate("/mcq-bank/analysis/" + resultID);
-    }, [navigate, resultID, session?.accessToken]);
+    }, [navigate, resultID]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -66,7 +64,7 @@ const Test = () => {
 
             //#endregion
 
-            const data = await getQuestionToSolve(parseInt(resultID || ""), session?.userId, session?.accessToken);
+            const data = await getQuestionToSolve(parseInt(resultID || ""));
             data.details.map((detail, i) => {
                 detail.questOptions.map((o, oi) => {
                     o.IsChecked = detail.answer?.trim() == o.optionText?.trim();
@@ -91,7 +89,7 @@ const Test = () => {
 
         };
         fetchData();
-    }, [resultID, session?.accessToken, session?.userId, CompleteResult]);
+    }, [resultID, CompleteResult]);
 
     //#region  Handle Add to Favourite
 
@@ -113,7 +111,7 @@ const Test = () => {
             id: currentQuestion.questionId,
             remove: currentQuestion.isPopular,
             type: 'Mcq',
-        }, session?.accessToken);
+        });
     };
 
     //#endregion
@@ -140,7 +138,7 @@ const Test = () => {
     };
 
     const saveResult = async (answer: string, isTrue: boolean) => {
-        const data = await saveResultDetail({ answer: answer, isTrue: isTrue, questionID: currentQuestion.questionId, resultID: parseInt(resultID || "") }, session?.accessToken);
+        const data = await saveResultDetail({ answer: answer, isTrue: isTrue, questionID: currentQuestion.questionId, resultID: parseInt(resultID || "") });
     };
 
 
